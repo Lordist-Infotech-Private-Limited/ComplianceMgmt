@@ -4,8 +4,11 @@ using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySql.Data.MySqlClient;
+using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -86,6 +89,10 @@ namespace ComplianceMgmt.Api
             });
 
             builder.Services.AddProblemDetails();
+
+            // Register DbContextFactory only
+            builder.Services.AddTransient(x =>
+              new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Register SamadhaanDapperDbContext for DI
             builder.Services.AddScoped<ComplianceMgmtDbContext>();

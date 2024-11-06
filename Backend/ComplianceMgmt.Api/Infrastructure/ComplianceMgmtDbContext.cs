@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
 
 namespace ComplianceMgmt.Api.Infrastructure
@@ -16,7 +16,7 @@ namespace ComplianceMgmt.Api.Infrastructure
 
         public IDbConnection CreateConnection()
         {
-            return new SqlConnection(_connectionString);
+            return new MySqlConnection(_connectionString);
         }
     }
 }

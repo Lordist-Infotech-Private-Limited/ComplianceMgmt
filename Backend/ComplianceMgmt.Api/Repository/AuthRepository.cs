@@ -2,7 +2,6 @@
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +13,28 @@ namespace ComplianceMgmt.Api.Repository
 {
     public class AuthRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IAuthRepository
     {
-        public async Task<User> Login(User loginUser)
+        public async Task<IEnumerable<ServerDetails>> Login(User loginUser)
+        {
+            IEnumerable<ServerDetails> user = null;
+            string sql = "SELECT * FROM stg_hfc.tbl_serverdetails";
+
+            using (var connection = context.CreateConnection())
+            {
+                try
+                {
+                    user = await connection.QueryAsync<ServerDetails>(sql);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                return user;
+            }
+        }
+
+
+        public async Task<User> LoginOld(User loginUser)
         {
             User user = null;
             string sql = "SELECT Email, PasswordHash, Name, UserID, RoleID, ClientID, BranchID, IsActive, EmployeeID FROM Users WHERE Email = @Email AND IsActive = 1";
