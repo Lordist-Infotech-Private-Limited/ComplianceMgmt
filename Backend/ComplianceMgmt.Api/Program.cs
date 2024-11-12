@@ -50,6 +50,8 @@ namespace ComplianceMgmt.Api
             // Register Auth Service that handles JWT creation and validation
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
+            // Add other services
+            builder.Services.AddScoped<IRecordCountRepository, RecordCountRepository>();
 
             // Add config for JWT bearer token
             builder.Services.AddAuthentication(opt =>

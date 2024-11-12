@@ -5,7 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const password = document.getElementById('password').value;
 
     // Replace with your API endpoint
-    const apiUrl = 'https://localhost:7275/api/Auth/Login';
+    const apiUrl = 'https://localhost:7275/Auth/Login';
 
     fetch(apiUrl, {
         method: 'POST',

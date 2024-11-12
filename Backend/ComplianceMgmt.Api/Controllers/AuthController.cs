@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace ComplianceMgmt.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController(IAuthRepository authService) : ControllerBase
     {
