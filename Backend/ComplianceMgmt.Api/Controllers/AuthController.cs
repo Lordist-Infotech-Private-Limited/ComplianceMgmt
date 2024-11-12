@@ -17,11 +17,10 @@ namespace ComplianceMgmt.Api.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginUser user)
         {
-            var loggedInUser = await _authService.Login(new User
+            var loggedInUser = await _authService.Login(new LoginUser
             {
-                Email = user.UserName,
-                PasswordHash = user.Password,
-                LastLoginDate = DateTime.Now
+                MailId = user.MailId,
+                Password = user.Password,
             });
 
             if (loggedInUser != null)
@@ -47,7 +46,7 @@ namespace ComplianceMgmt.Api.Controllers
             {
                 return BadRequest(new { message = "User name needs to entered" });
             }
-            else if (String.IsNullOrEmpty(user.PasswordHash))
+            else if (String.IsNullOrEmpty(user.Password))
             {
                 return BadRequest(new { message = "Password needs to entered" });
             }
@@ -56,12 +55,11 @@ namespace ComplianceMgmt.Api.Controllers
 
             var registeredUser = await _authService.Register(new User
             {
-                Name = user.Name,
-                PasswordHash = user.PasswordHash,
-                RoleId = user.RoleID,
-                Email = user.Email,
-                LastLoginDate = DateTime.Now,
-                PhoneNumber = user.PhoneNumber,
+                UserName = user.Name,
+                Password = user.Password,
+                MailId = user.MailId,
+                LastLogin = DateTime.Now,
+                MobileNo = user.PhoneNumber,
             });
 
             // Return responses

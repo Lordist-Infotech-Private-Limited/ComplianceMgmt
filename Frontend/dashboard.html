@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table, .table th, .table td {
+            border: 1px solid black;
+        }
+        .table th, .table td {
+            padding: 8px;
+            text-align: center;
+        }
+        .expandable-row {
+            display: none;
+        }
+        .expanded .expandable-row {
+            display: table-row;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<!-- Reference Date and Fetch Data Button -->
+<div>
+    <label for="referenceDate">Reference Date:</label>
+    <input type="date" id="referenceDate">
+    <button onclick="fetchData()">Fetch Data</button>
+</div>
+
+<!-- Data Table -->
+<table class="table" id="dataTable">
+    <thead>
+        <tr>
+            <th>MSG Structure</th>
+            <th>Total No of Records</th>
+            <th>Success Records</th>
+            <th>Constraint Rejection</th>
+            <th>Business Rejection</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Rows for Borrower Details -->
+        <tr onclick="toggleExpandRow(this)">
+            <td>Borrower Details</td>
+            <td>10000</td>
+            <td>+9000</td>
+            <td>+500</td>
+            <td>+500</td>
+        </tr>
+        <tr class="expandable-row">
+            <td colspan="5">
+                <!-- Expanded Content -->
+                <div class="expanded-content">
+                    <label for="pageSize">Page Size:</label>
+                    <select id="pageSize">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                    <button>Download</button>
+                    <button>Upload</button>
+                    <label for="rejectionReason">Rejection Reason:</label>
+                    <input type="text" id="rejectionReason">
+                    <input type="text" placeholder="Search...">
+                    <!-- Add more details here if necessary -->
+                </div>
+            </td>
+        </tr>
+
+        <!-- Rows for other MSG Structures -->
+        <tr onclick="toggleExpandRow(this)">
+            <td>Co Borrower Details</td>
+            <td>12000</td>
+            <td>+10000</td>
+            <td>+1500</td>
+            <td>+500</td>
+        </tr>
+        <tr class="expandable-row">
+            <td colspan="5">
+                <!-- Expanded Content (reusable content structure) -->
+                <div class="expanded-content">
+                    <label for="pageSize">Page Size:</label>
+                    <select id="pageSize">
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                    <button>Download</button>
+                    <button>Upload</button>
+                    <label for="rejectionReason">Rejection Reason:</label>
+                    <input type="text" id="rejectionReason">
+                    <input type="text" placeholder="Search...">
+                </div>
+            </td>
+        </tr>
+
+        <!-- Repeat for each row as required -->
+        <!-- ... other rows follow the same structure ... -->
+    </tbody>
+</table>
+
+<script>
+    function fetchData() {
+        const referenceDate = document.getElementById('referenceDate').value;
+        // Make a service call here to fetch data based on referenceDate
+        console.log('Fetching data for date:', referenceDate);
+    }
+
+    function toggleExpandRow(row) {
+        const expandedRow = row.nextElementSibling;
+        expandedRow.classList.toggle('expanded');
+    }
+</script>
+
+</body>
+</html>

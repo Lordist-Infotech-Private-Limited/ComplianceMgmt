@@ -13,22 +13,19 @@ namespace ComplianceMgmt.Api.Repository
 {
     public class AuthRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IAuthRepository
     {
-        public async Task<IEnumerable<ServerDetails>> Login(User loginUser)
+        public async Task<User> Login(LoginUser loginUser)
         {
-            IEnumerable<ServerDetails> user = null;
-            string sql = "SELECT * FROM stg_hfc.tbl_serverdetails";
-
+            User user = null;
+            string sql = "SELECT UserID, LoginId, UserName, MailId, MobileNo, Designation, CreatedBy, CreateDate, UpdatedBy,UpdatedDate, Password, IsActive, LastLogin FROM usermaster WHERE MailId = @MailId AND IsActive = 1";
             using (var connection = context.CreateConnection())
             {
                 try
                 {
-                    user = await connection.QueryAsync<ServerDetails>(sql);
+                    user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { loginUser.MailId });
                 }
                 catch (Exception ex)
                 {
-
                 }
-
                 return user;
             }
         }
@@ -41,7 +38,7 @@ namespace ComplianceMgmt.Api.Repository
 
             using (var connection = context.CreateConnection())
             {
-                user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { loginUser.Email });
+                user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { loginUser.MailId });
 
                 if (user == null)
                 {
@@ -49,18 +46,18 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // Fetch the user's Role
-                user.Role = await GetUserRole(connection, user.RoleId);
+                //user.Role = await GetUserRole(connection, user.RoleId);
 
                 // Verify password
-                if (!BCrypt.Net.BCrypt.Verify(loginUser.PasswordHash, user.PasswordHash))
+                if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password))
                 {
                     return null; // Password mismatch
                 }
 
                 // Generate tokens and update user
-                user.AccessToken = GenerateAccessToken(user);
-                user.RefreshToken = GenerateRefreshToken();
-                user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiration
+                //user.AccessToken = GenerateAccessToken(user);
+                //user.RefreshToken = GenerateRefreshToken();
+                //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiration
 
                 // Update the user in the database with new tokens
                 await UpdateUserTokens(connection, user);
@@ -81,14 +78,14 @@ namespace ComplianceMgmt.Api.Repository
             {
                 user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
 
-                if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
-                {
-                    return null; // Invalid refresh token
-                }
+                //if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
+                //{
+                //    return null; // Invalid refresh token
+                //}
 
-                // Refresh tokens
-                user.AccessToken = GenerateAccessToken(user);
-                user.RefreshToken = GenerateRefreshToken();
+                //// Refresh tokens
+                //user.AccessToken = GenerateAccessToken(user);
+                //user.RefreshToken = GenerateRefreshToken();
 
                 // Update the tokens in the database
                 await UpdateUserTokens(connection, user);
@@ -99,24 +96,23 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<User> Register(User registerUser)
         {
-            registerUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.PasswordHash);
+            registerUser.Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
 
-            string sql = @"INSERT INTO Users ( PasswordHash, RoleID, IsActive, Email) 
-                       VALUES ( @PasswordHash, @RoleID, @IsActive, @Email);
+            string sql = @"INSERT INTO Users ( Password, RoleID, IsActive, Email) 
+                       VALUES ( @Password, @RoleID, @IsActive, @Email);
                        SELECT CAST(SCOPE_IDENTITY() as int);";
 
             using (var connection = context.CreateConnection())
             {
                 var userId = await connection.QuerySingleAsync<int>(sql, new
                 {
-                    registerUser.Email,
-                    registerUser.PasswordHash,
-                    registerUser.RoleId,
+                    registerUser.MailId,
+                    registerUser.Password,
+                    //registerUser.RoleId,
                     IsActive = true
                 });
 
-                registerUser.UserId = userId;
-
+                registerUser.UserID = userId;
                 return registerUser;
             }
         }
@@ -128,11 +124,11 @@ namespace ComplianceMgmt.Api.Repository
 
             var claims = new List<Claim>
             {
-                new (ClaimTypes.Name, user.Email),                      // Username claim
-                new (ClaimTypes.GivenName, user.Name),                    // User's given name
-                new (ClaimTypes.Role, user.Role?.RoleName ?? string.Empty), // User's role name
-                new (ClaimTypes.NameIdentifier, user.UserId.ToString()),   // User ID
-                new ("RoleID", user.Role?.RoleId.ToString() ?? string.Empty) // Role ID as a claim
+                new (ClaimTypes.Name, user.MailId),                      // Username claim
+                new (ClaimTypes.GivenName, user.UserName),                    // User's given name
+                //new (ClaimTypes.Role, user.Role?.RoleName ?? string.Empty), // User's role name
+                new (ClaimTypes.NameIdentifier, user.UserID.ToString()),   // User ID
+                //new ("RoleID", user.Role?.RoleId.ToString() ?? string.Empty) // Role ID as a claim
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -190,11 +186,11 @@ namespace ComplianceMgmt.Api.Repository
 
             await connection.ExecuteAsync(updateSql, new
             {
-                user.AccessToken,
-                user.RefreshToken,
-                user.RefreshTokenExpiry,
+                //user.AccessToken,
+                //user.RefreshToken,
+                //user.RefreshTokenExpiry,
                 user.IsActive,
-                user.UserId
+                user.UserID
             });
         }
 
