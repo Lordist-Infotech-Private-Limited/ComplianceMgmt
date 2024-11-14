@@ -4,6 +4,7 @@ using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -34,6 +35,7 @@ namespace ComplianceMgmt.Api
                     });
             });
 
+            builder.Services.AddOpenApi();
 
             // Add services to the container.
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -167,7 +169,7 @@ namespace ComplianceMgmt.Api
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.MapOpenApi();
             app.UseSwagger();
             app.UseSwaggerUI();
 
