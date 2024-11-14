@@ -8,7 +8,7 @@ namespace ComplianceMgmt.Api.Controllers
     public class DashboardController(IRecordCountRepository recordCountRepository) : ControllerBase
     {
         [HttpGet("GetRecordCount")]
-        public async Task<IActionResult> GetRecordCount([FromQuery] DateTime date, [FromQuery] string tableName)
+        public async Task<IActionResult> GetRecordCount([FromQuery] DateOnly date, [FromQuery] string tableName)
         {
             try
             {

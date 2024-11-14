@@ -2,6 +2,6 @@
 {
     public interface IRecordCountRepository
     {
-        Task<long> GetRecordCountAsync(DateTime date, string tableName);
+        Task<long> GetRecordCountAsync(DateOnly date, string tableName);
     }
 }

@@ -7,12 +7,15 @@ namespace ComplianceMgmt.Api.Repository
 {
     public class RecordCountRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IRecordCountRepository
     {
-        public async Task<long> GetRecordCountAsync(DateTime date, string tableName)
+        public async Task<long> GetRecordCountAsync(DateOnly date, string tableName)
         {
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("V_DDATE", date, DbType.Date);
+
+                // Format the date as MM/dd/yyyy
+                var formattedDate = date.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                parameters.Add("V_DDATE", formattedDate, DbType.Date);
                 parameters.Add("V_TABLENAME", tableName, DbType.String);
                 parameters.Add("V_RECORDCOUNT", dbType: DbType.Int64, direction: ParameterDirection.Output);
                 using (var connection = context.CreateConnection())
