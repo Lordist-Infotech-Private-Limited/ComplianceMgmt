@@ -3,7 +3,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     const mailId = document.getElementById('mailId').value;
     const password = document.getElementById('password').value;
-
+    const errorMessage = document.getElementById('error-message');
+    
     // Replace with your API endpoint
     const apiUrl = 'https://localhost:7275/Auth/Login';
 
