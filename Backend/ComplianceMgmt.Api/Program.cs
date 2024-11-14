@@ -109,7 +109,7 @@ namespace ComplianceMgmt.Api
                 //c.OperationFilter<FileUploadOperation>(); // Add this custom operation filter
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Samadhaan JWT Auth Api",
+                    Title = "Compliance Mgmt JWT Auth Api",
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
