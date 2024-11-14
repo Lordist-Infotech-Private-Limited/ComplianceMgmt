@@ -64,12 +64,13 @@
             mainRow.onclick = () => toggleExpandRow(mainRow);
 
             mainRow.innerHTML = `
-                <td>${item.msgStructure}</td>
-                <td>${item.totalRecords}</td>
-                <td>+${item.successRecords}</td>
-                <td>+${item.constraintRejection}</td>
-                <td>+${item.businessRejection}</td>
+                <td>${item.MsgStructure}</td>
+                <td>${item.TotalRecords}</td>
+                <td>+${item.SuccessRecords}</td>
+                <td>+${item.ConstraintRejection}</td>
+                <td>+${item.BusinessRejection}</td>
             `;
+
 
             // Expandable row
             const expandableRow = document.createElement('tr');
@@ -100,11 +101,10 @@
 
     async function fetchData() {
     const referenceDate = document.getElementById('referenceDate').value;
-    const tableName = 'stgborrowerdetail'; // You can dynamically get this from elsewhere in your UI if needed.
     console.log('Fetching data for date:', referenceDate);
     
     // Properly encode the URL parameters
-    const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}&tableName=${encodeURIComponent(tableName)}`;
+    const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
     
     try {
         const response = await fetch(url, {

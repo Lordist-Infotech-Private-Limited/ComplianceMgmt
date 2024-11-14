@@ -1,7 +1,9 @@
-﻿namespace ComplianceMgmt.Api.IRepository
+﻿using ComplianceMgmt.Api.Models;
+
+namespace ComplianceMgmt.Api.IRepository
 {
     public interface IRecordCountRepository
     {
-        Task<long> GetRecordCountAsync(DateOnly date, string tableName);
+        Task<IEnumerable<TableSummary>> GetRecordCountAsync(DateOnly date);
     }
 }

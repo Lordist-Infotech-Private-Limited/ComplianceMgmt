@@ -1,30 +1,56 @@
 ﻿using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
+using ComplianceMgmt.Api.Models;
 using Dapper;
-using System.Data;
 
 namespace ComplianceMgmt.Api.Repository
 {
     public class RecordCountRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IRecordCountRepository
     {
-        public async Task<long> GetRecordCountAsync(DateOnly date, string tableName)
+        public async Task<IEnumerable<TableSummary>> GetRecordCountAsync(DateOnly date)
         {
             try
             {
-                var parameters = new DynamicParameters();
-
-                // Format the date as MM/dd/yyyy
                 var formattedDate = date.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
-                parameters.Add("V_DDATE", formattedDate, DbType.Date);
-                parameters.Add("V_TABLENAME", tableName, DbType.String);
-                parameters.Add("V_RECORDCOUNT", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
                 using (var connection = context.CreateConnection())
                 {
                     // Call the stored procedure
-                    await connection.ExecuteAsync("spGetRecordCount", parameters, commandType: CommandType.StoredProcedure);
+                    var summaries = new List<TableSummary>();
+
+                    // List of tables to summarize
+                    var tables = new List<string>
+                    {
+                        "stgborrowerdetail",
+                        "stgborrowerloan",
+                        "stgborrowermortgage",
+                        "stgborrowermortgageother",
+                        "stgcoborrowerdetails"
+                    };
+
+                    foreach (var table in tables)
+                    {
+                        // Query for each table, parameterized with @Date
+                        var query = $@"
+                                    SELECT 
+                                        '{table}' AS MsgStructure,
+                                        COUNT(*) AS TotalRecords,
+                                        SUM(CASE WHEN IsValidated = 1 THEN 1 ELSE 0 END) AS SuccessRecords,
+                                        SUM(CASE WHEN IsValidated = 0 AND RejectedReason IS NOT NULL THEN 1 ELSE 0 END) AS ConstraintRejection,
+                                        SUM(CASE WHEN IsValidated = 0 AND RejectedReason IS NULL THEN 1 ELSE 0 END) AS BusinessRejection
+                                    FROM {table}
+                                    WHERE Date = @Date";
+
+                        // Execute query and add result to summaries list
+                        var summary = await connection.QueryFirstOrDefaultAsync<TableSummary>(query, new { Date = formattedDate });
+                        if (summary != null)
+                        {
+                            summaries.Add(summary);
+                        }
+                    }
+
+                    return summaries;
                 }
-                // Retrieve the output parameter value
-                return parameters.Get<long>("V_RECORDCOUNT");
             }
             catch (Exception ex)
             {

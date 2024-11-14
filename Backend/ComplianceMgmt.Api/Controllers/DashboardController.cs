@@ -8,12 +8,12 @@ namespace ComplianceMgmt.Api.Controllers
     public class DashboardController(IRecordCountRepository recordCountRepository) : ControllerBase
     {
         [HttpGet("GetRecordCount")]
-        public async Task<IActionResult> GetRecordCount([FromQuery] DateOnly date, [FromQuery] string tableName)
+        public async Task<IActionResult> GetRecordCount([FromQuery] DateOnly date)
         {
             try
             {
-                var recordCount = await recordCountRepository.GetRecordCountAsync(date, tableName);
-                return Ok(new { Date = date, TableName = tableName, RecordCount = recordCount });
+                var result = await recordCountRepository.GetRecordCountAsync(date);
+                return Ok(result);
             }
             catch (Exception ex)
             {
