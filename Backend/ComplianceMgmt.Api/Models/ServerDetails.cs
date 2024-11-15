@@ -1,15 +1,14 @@
 ﻿namespace ComplianceMgmt.Api.Models
 {
-    public class ServerDetails
+    public class ServerDetail
     {
-        public int Nid { get; set; }
-        public string SserverIp { get; set; }
-        public string SserverName { get; set; }
-        public string SserverPassword { get; set; }
-        public string SserverPort { get; set; }
-        public string SdbName { get; set; }
-        public string SdatabaseType { get; set; }
-        public DateTime NlastupdatedTime { get; set; }
-
+        public int Id { get; set; }
+        public string ServerIp { get; set; }
+        public string ServerName { get; set; }
+        public string ServerPassword { get; set; }
+        public string ServerPort { get; set; }
+        public string DbName { get; set; }
+        public string DatabaseType { get; set; }
+        public DateTime LastUpdatedTime { get; set; }
     }
 }

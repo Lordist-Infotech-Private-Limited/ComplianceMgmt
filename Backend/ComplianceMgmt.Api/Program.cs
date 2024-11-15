@@ -4,7 +4,6 @@ using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
@@ -54,6 +53,7 @@ namespace ComplianceMgmt.Api
 
             // Add other services
             builder.Services.AddScoped<IRecordCountRepository, RecordCountRepository>();
+            builder.Services.AddScoped<IServerDetailRepository, ServerDetailRepository>();
 
             // Add config for JWT bearer token
             builder.Services.AddAuthentication(opt =>
