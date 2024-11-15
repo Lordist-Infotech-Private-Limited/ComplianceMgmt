@@ -16,9 +16,49 @@
             padding: 8px;
             text-align: center;
         }
-        .expandable-row {
+
+        /* Modal Styles */
+        .modal {
             display: none;
-            background-color: #f9f9f9;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .modal-body label,
+        .modal-body input,
+        .modal-body select,
+        .modal-body button {
+            display: block;
+            margin: 10px 0;
+        }
+        .modal-body input,
+        .modal-body select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -49,95 +89,93 @@
     </tbody>
 </table>
 
-<script>
-    // Sample data array to be iterated
-    const data = [];  // Will be populated by the POST call
+<!-- Modal -->
+<div id="dataModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Details</h2>
+            <button onclick="closeModal()">X</button>
+        </div>
+        <div class="modal-body">
+            <label for="pageSize">Page Size:</label>
+            <select>
+                <option>10</option>
+                <option>20</option>
+                <option>50</option>
+            </select>
+            <button>Download</button>
+            <button>Upload</button>
+            <label for="rejectionReason">Rejection Reason:</label>
+            <input type="text" placeholder="Rejection Reason">
+            <input type="text" placeholder="Search...">
+        </div>
+    </div>
+</div>
 
-    // Function to dynamically create rows based on data array
+<script>
+    const data = []; // Will be populated by the POST call
+
     function populateTable() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '';  // Clear existing rows
+        tableBody.innerHTML = ''; // Clear existing rows
 
-        data.forEach(item => {
-            // Main row
+        data.forEach((item, index) => {
             const mainRow = document.createElement('tr');
-            mainRow.onclick = () => toggleExpandRow(mainRow);
+            mainRow.onclick = () => showModal(item);
 
             mainRow.innerHTML = `
                 <td>${item.MsgStructure}</td>
                 <td>${item.TotalRecords}</td>
-                <td>+${item.SuccessRecords}</td>
-                <td>+${item.ConstraintRejection}</td>
-                <td>+${item.BusinessRejection}</td>
+                <td>${item.SuccessRecords}</td>
+                <td>${item.ConstraintRejection}</td>
+                <td>${item.BusinessRejection}</td>
             `;
-
-
-            // Expandable row
-            const expandableRow = document.createElement('tr');
-            expandableRow.className = 'expandable-row';
-            expandableRow.innerHTML = `
-                <td colspan="5">
-                    <div class="expanded-content">
-                        <label for="pageSize">Page Size:</label>
-                        <select>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                        </select>
-                        <button>Download</button>
-                        <button>Upload</button>
-                        <label for="rejectionReason">Rejection Reason:</label>
-                        <input type="text" placeholder="Rejection Reason">
-                        <input type="text" placeholder="Search...">
-                    </div>
-                </td>
-            `;
-
-            // Append both rows to the table body
             tableBody.appendChild(mainRow);
-            tableBody.appendChild(expandableRow);
         });
     }
 
     async function fetchData() {
-    const referenceDate = document.getElementById('referenceDate').value;
-    console.log('Fetching data for date:', referenceDate);
-    
-    // Properly encode the URL parameters
-    const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
-    
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+        const referenceDate = document.getElementById('referenceDate').value;
+        console.log('Fetching data for date:', referenceDate);
+        
+        const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
+        
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
             }
-        });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            const result = await response.json();
+            data.length = 0; // Clear current data
+            data.push(...result); // Populate the data array with the response
+            populateTable(); // Populate the table with new data
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
-
-        const result = await response.json();
-        data.length = 0;  // Clear current data
-        data.push(...result);  // Populate the data array with the response
-        populateTable();  // Populate the table with new data
-
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
-
-    function toggleExpandRow(row) {
-        // Get the next row which is the expandable row
-        const expandedRow = row.nextElementSibling;
-
-        // Toggle the display of the expandable row
-        expandedRow.style.display = expandedRow.style.display === "table-row" ? "none" : "table-row";
     }
 
-    // Initial population of the table
-    populateTable();
+    function showModal(item) {
+        const modal = document.getElementById('dataModal');
+        modal.style.display = 'flex'; // Show the modal
+
+        // Populate the modal content dynamically (if needed)
+        const modalBody = modal.querySelector('.modal-body');
+        modalBody.querySelector('input[placeholder="Rejection Reason"]').value = '';
+        modalBody.querySelector('input[placeholder="Search..."]').value = '';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('dataModal');
+        modal.style.display = 'none'; // Hide the modal
+    }
 </script>
 
 </body>
