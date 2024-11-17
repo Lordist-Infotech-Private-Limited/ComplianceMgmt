@@ -12,7 +12,7 @@ namespace ComplianceMgmt.Api.Controllers
         {
             try
             {
-                //var result1 = recordCountRepository.FetchDataFromClientDatabasesAsync();
+                var result1 = recordCountRepository.FetchDataFromClientDatabasesAsync();
                 var result = await recordCountRepository.GetRecordCountAsync(date);
                 return Ok(result);
             }
