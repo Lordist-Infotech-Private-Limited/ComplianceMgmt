@@ -104,33 +104,32 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task BulkInsertAsync(string connectionString, List<StgBorrowerDetail> borrowerDetails)
         {
-            using (var connection = new MySqlConnection(connectionString))
+            using var connection = new MySqlConnection(connectionString);
+            await connection.OpenAsync();
+
+            var insertQuery = new StringBuilder();
+            insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
+            insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
+            insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
+            insertQuery.Append("VALUES ");
+
+            var parameters = new List<MySqlParameter>();
+            int counter = 0;
+
+            foreach (var borrower in borrowerDetails)
             {
-                await connection.OpenAsync();
+                insertQuery.Append($"(@RowNo{counter}, @Date{counter}, @BankId{counter}, @Cin{counter}, @BName{counter}, @BDob{counter}, ");
+                insertQuery.Append($"@SBCitizenship{counter}, @BPanNo{counter}, @Aadhaar{counter}, @IdType{counter}, @IdNumber{counter}, ");
+                insertQuery.Append($"@BMonthlyIncome{counter}, @BReligion{counter}, @BCast{counter}, @BGender{counter}, @BOccupation{counter}, ");
+                insertQuery.Append($"@IsValidated{counter}, @RejectedReason{counter}, @ValidatedDate{counter})");
 
-                var insertQuery = new StringBuilder();
-                insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
-                insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
-                insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
-                insertQuery.Append("VALUES ");
+                if (counter < borrowerDetails.Count - 1)
+                    insertQuery.Append(", ");
 
-                var parameters = new List<MySqlParameter>();
-                int counter = 0;
-
-                foreach (var borrower in borrowerDetails)
-                {
-                    insertQuery.Append($"(@RowNo{counter}, @Date{counter}, @BankId{counter}, @Cin{counter}, @BName{counter}, @BDob{counter}, ");
-                    insertQuery.Append($"@SBCitizenship{counter}, @BPanNo{counter}, @Aadhaar{counter}, @IdType{counter}, @IdNumber{counter}, ");
-                    insertQuery.Append($"@BMonthlyIncome{counter}, @BReligion{counter}, @BCast{counter}, @BGender{counter}, @BOccupation{counter}, ");
-                    insertQuery.Append($"@IsValidated{counter}, @RejectedReason{counter}, @ValidatedDate{counter})");
-
-                    if (counter < borrowerDetails.Count - 1)
-                        insertQuery.Append(", ");
-
-                    // Add parameters for this borrower
-                    parameters.AddRange(
-                    [
-                        new MySqlParameter($"@RowNo{counter}", borrower.RowNo),
+                // Add parameters for this borrower
+                parameters.AddRange(
+                [
+                    new MySqlParameter($"@RowNo{counter}", borrower.RowNo),
                         new MySqlParameter($"@Date{counter}", borrower.Date),
                         new MySqlParameter($"@BankId{counter}", borrower.BankId),
                         new MySqlParameter($"@Cin{counter}", borrower.Cin),
@@ -151,17 +150,14 @@ namespace ComplianceMgmt.Api.Repository
                         new MySqlParameter($"@ValidatedDate{counter}", borrower.ValidatedDate ?? (object)DBNull.Value),
                     ]);
 
-                    counter++;
-                }
-
-                insertQuery.Append(";");
-
-                using (var command = new MySqlCommand(insertQuery.ToString(), connection))
-                {
-                    command.Parameters.AddRange(parameters.ToArray());
-                    await command.ExecuteNonQueryAsync();
-                }
+                counter++;
             }
+
+            insertQuery.Append(";");
+
+            using var command = new MySqlCommand(insertQuery.ToString(), connection);
+            command.Parameters.AddRange(parameters.ToArray());
+            await command.ExecuteNonQueryAsync();
         }
     }
 }
