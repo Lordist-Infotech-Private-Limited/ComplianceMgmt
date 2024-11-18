@@ -8,5 +8,4 @@
         public int ConstraintRejection { get; set; }
         public int BusinessRejection { get; set; }
     }
-
 }

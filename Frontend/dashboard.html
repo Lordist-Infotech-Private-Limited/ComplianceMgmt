@@ -1,20 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Dashboard</title>
+    <title>Interactive Dashboard with Loader</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .actions input,
+        .actions button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .actions button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .actions button:hover {
+            background-color: #0056b3;
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
+            margin: 20px 0;
         }
-        .table, .table th, .table td {
-            border: 1px solid black;
+
+        .table,
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
         }
-        .table th, .table td {
-            padding: 8px;
+
+        .table th,
+        .table td {
+            padding: 10px;
             text-align: center;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+        }
+
+        /* Loader Styles */
+        .loader {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Modal Styles */
@@ -29,203 +106,410 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
-            background-color: #fff;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
-            max-width: 500px;
             width: 90%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            text-align: left;
         }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 10px;
         }
+
         .modal-header h2 {
             margin: 0;
         }
-        .modal-body label,
-        .modal-body input,
-        .modal-body select,
-        .modal-body button {
-            display: block;
-            margin: 10px 0;
+
+        .modal-header button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
         }
-        .modal-body input,
-        .modal-body select {
-            width: 100%;
+
+        /* Input styles for modals */
+        .modal-body input {
+            width: 50%;
             padding: 8px;
-            box-sizing: border-box;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        /* General table styling */
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .responsive-table th,
+        .responsive-table td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .responsive-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        /* Wrapping table in a scrollable container */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling for iOS */
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .responsive-table {
+                font-size: 12px;
+            }
+
+            .responsive-table th,
+            .responsive-table td {
+                padding: 6px;
+            }
+
+            .actions {
+                text-align: center;
+            }
+        }
+
+        /* Button styling */
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #004085;
         }
     </style>
 </head>
+
 <body>
-
-<h2>Dashboard</h2>
-
-<!-- Reference Date and Fetch Data Button -->
-<div>
-    <label for="referenceDate">Reference Date:</label>
-    <input type="date" id="referenceDate" name="referenceDate">
-    <button onclick="fetchData()">Fetch Data</button>
-</div>
-
-<!-- Data Table -->
-<table class="table" id="dataTable">
-    <thead>
-        <tr>
-            <th>Table Name</th>
-            <th>Total No of Records</th>
-            <th>Success Records</th>
-            <th>Constraint Rejection</th>
-            <th>Business Rejection</th>
-        </tr>
-    </thead>
-    <tbody id="tableBody">
-        <!-- Rows will be inserted here dynamically -->
-    </tbody>
-</table>
-
-<!-- Modal -->
-<div id="dataModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Details</h2>
-            <button onclick="closeModal()">X</button>
+    <h2>Interactive Dashboard</h2>
+    <div class="container">
+        <!-- Input Section -->
+        <div class="actions">
+            <input type="date" id="referenceDate">
+            <button onclick="fetchData()">Fetch Data</button>
         </div>
-        <div class="modal-body">
-            <label for="pageSize">Page Size:</label>
-            <select>
-                <option>10</option>
-                <option>20</option>
-                <option>50</option>
-            </select>
-            <button>Download</button>
-            <button>Upload</button>
-            <label for="rejectionReason">Rejection Reason:</label>
-            <input type="text" placeholder="Rejection Reason">
-            <input type="text" placeholder="Search...">
+
+        <!-- Loader -->
+        <div id="loader" class="loader"></div>
+
+        <!-- Data Table -->
+        <table class="table" id="dataTable">
+            <thead>
+                <tr>
+                    <th>Table Name</th>
+                    <th>Total Records</th>
+                    <th>Success</th>
+                    <th>Constraint Rejection</th>
+                    <th>Business Rejection</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Modal 1 (Edit Individual Record) -->
+    <div id="editRecordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Record</h2>
+                <button onclick="closeEditModal()">X</button>
+            </div>
+            <div class="modal-body">
+                <label for="editSuccess">Success Records:</label>
+                <input type="number" id="editSuccess">
+                <label for="editConstraint">Constraint Rejection:</label>
+                <input type="number" id="editConstraint">
+                <label for="editBusiness">Business Rejection:</label>
+                <input type="number" id="editBusiness">
+                <button onclick="saveRecord()">Save</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const data = []; // Will be populated by the POST call
+    <!-- Modal 2 (View and Edit All Records) -->
+    <div id="viewAllRecordsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>All Records</h2>
+                <button onclick="closeViewAllModal()">X</button>
+            </div>
+            <div class="table-container">
+                <table id="borrowerTable" class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Row No</th>
+                            <th>Date</th>
+                            <th>Bank ID</th>
+                            <th>CIN</th>
+                            <th>Name</th>
+                            <th>DOB</th>
+                            <th>Citizenship</th>
+                            <th>PAN No</th>
+                            <th>Aadhaar</th>
+                            <th>Monthly Income</th>
+                            <th>Religion</th>
+                            <th>Gender</th>
+                            <th>Occupation</th>
+                            <th>Validated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="borrowerTableBody"></tbody>
+                </table>
+            </div>
+            <br>
+            <div class="actions">
+                <button onclick="saveAllRecords()">Save Changes</button>
+            </div>
+        </div>
+    </div>
 
-    function populateTable() {
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = ''; // Clear existing rows
+    <script>
+        // Check if the app is running locally (development) or on a live server (production)
+        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
-        data.forEach((item, index) => {
-            const mainRow = document.createElement('tr');
-            // mainRow.onclick = () => showModal(item);
+        // Set the base URL for the API based on the environment
+        const apiBaseUrl = isLocal ? "https://localhost:5001/BorrowerDetail/GetBorrowerDetail" : "https://adfapi.lordist.in/BorrowerDetail/GetBorrowerDetail";
+        const data = []; // Mock data to simulate API response
+        let editRecordIndex = -1; // To keep track of which record is being edited
 
-            mainRow.innerHTML = `
-                    <td>${item.MsgStructure}</td>
-                    <td>${item.TotalRecords}</td>
-                    <td>
-                        <a href="#" onclick="handleSuccessPlus(${index})">+</a>
-                        <a href="#" onclick="handleSuccessRecords(${index})">${item.SuccessRecords}</a>
-                    </td>
-                    <td>
-                        <a href="#" onclick="handleConstraintPlus(${index})">+</a>
-                        <a href="#" onclick="handleConstraintRejection(${index})">${item.ConstraintRejection}</a>
-                    </td>
-                    <td>
-                        <a href="#" onclick="handleBusinessPlus(${index})">+</a>
-                        <a href="#" onclick="handleBusinessRejection(${index})">${item.BusinessRejection}</a>
-                    </td>
-                `;
-            tableBody.appendChild(mainRow);
-        });
-    }
+        async function fetchData() {
+            const loader = document.getElementById('loader');
+            const tableBody = document.getElementById('tableBody');
+            const referenceDate = document.getElementById('referenceDate').value;
 
-    async function fetchData() {
-        const referenceDate = document.getElementById('referenceDate').value;
-        console.log('Fetching data for date:', referenceDate);
-        
-        const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
-        
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
+            // Show loader
+            loader.style.display = 'block';
+            tableBody.innerHTML = '';
+
+            try {
+                // API call to fetch data for the selected date
+                const url = `https://localhost:7275/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' } // Adjust headers if needed (e.g., Authorization)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
+                const result = await response.json();
+
+                // Clear existing data and add new data from API response
+                data.length = 0;
+                data.push(...result);
+
+                // Populate table with new data
+                populateTable();
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                alert("Failed to fetch data. Please try again later.");
+            } finally {
+                // Hide loader after the API call is finished
+                loader.style.display = 'none';
+            }
+        }
+
+        function populateTable() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = `
+            <tr>
+                <td>${item.MsgStructure}</td>
+                <td>${item.TotalRecords}</td>
+                <td>
+                    <a href="#" onclick="openEditModal(${index}, 'Success')">+</a> 
+                    <a href="#" onclick="openViewAllModal(${index}, 'Success')">${item.SuccessRecords}</span>
+                </td>
+                <td>
+                    <a href="#" onclick="openEditModal(${index}, 'Constraint')">+</a>
+                    <a href="#" onclick="openViewAllModal(${index}, 'Constraint')">${item.ConstraintRejection}</span>
+                </td>
+                <td>
+                    <a href="#" onclick="openEditModal(${index}, 'Business')">+</a>
+                    <a href="#" onclick="openViewAllModal(${index}, 'Business')">${item.BusinessRejection}</span>
+                </td>
+            </tr>
+        `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function openEditModal(index, type) {
+            editRecordIndex = index;
+            const record = data[index];
+
+            // Pre-fill modal inputs with current values
+            document.getElementById('editSuccess').value = record.SuccessRecords;
+            document.getElementById('editConstraint').value = record.ConstraintRejection;
+            document.getElementById('editBusiness').value = record.BusinessRejection;
+
+            document.getElementById('editRecordModal').style.display = 'flex';
+        }
+
+        function saveRecord() {
+            const success = parseInt(document.getElementById('editSuccess').value);
+            const constraint = parseInt(document.getElementById('editConstraint').value);
+            const business = parseInt(document.getElementById('editBusiness').value);
+
+            if (editRecordIndex !== -1) {
+                const record = data[editRecordIndex];
+                record.SuccessRecords = success;
+                record.ConstraintRejection = constraint;
+                record.BusinessRejection = business;
+
+                populateTable();
+                closeEditModal();
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editRecordModal').style.display = 'none';
+        }
+
+        async function openViewAllModal() {
+            const modal = document.getElementById('viewAllRecordsModal');
+            const tableBody = document.getElementById('allRecordsTableBody');
+            tableBody.innerHTML = '';
+
+            const referenceDate = document.getElementById('referenceDate').value;
+
+            try {
+                const response = await fetch(`https://localhost:7275/BorrowerDetail/GetBorrowerDetail?date=${encodeURIComponent(referenceDate)}`);
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.status}`);
+                }
+
+                const records = await response.json();
+
+                records.forEach((record, index) => {
+                    const row = `
+                <tr>
+                    <td>${record.MsgStructure}</td>
+                    <td><input type="number" value="${record.SuccessRecords}" onchange="updateRecord(${index}, 'Success', this.value)"></td>
+                    <td><input type="number" value="${record.ConstraintRejection}" onchange="updateRecord(${index}, 'Constraint', this.value)"></td>
+                    <td><input type="number" value="${record.BusinessRejection}" onchange="updateRecord(${index}, 'Business', this.value)"></td>
+                </tr>
+            `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                modal.style.display = 'flex';
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                alert("Failed to fetch records.");
             }
 
-            const result = await response.json();
-            data.length = 0; // Clear current data
-            data.push(...result); // Populate the data array with the response
-            populateTable(); // Populate the table with new data
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
+            // Initialize the table
+            renderTable();
         }
-    }
 
-    function showModal(item) {
-        const modal = document.getElementById('dataModal');
-        modal.style.display = 'flex'; // Show the modal
+        // Function to update a record field
+        function updateRecord(index, field, value) {
+            records[index][field] = field === 'IsValidated' ? value : value;
+        }
 
-        // Populate the modal content dynamically (if needed)
-        const modalBody = modal.querySelector('.modal-body');
-        modalBody.querySelector('input[placeholder="Rejection Reason"]').value = '';
-        modalBody.querySelector('input[placeholder="Search..."]').value = '';
-    }
+        // Function to save all records
+        function saveAllRecords() {
+            fetch('https://your-service-url/api/BorrowerDetails/UpdateBorrowerDetail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(records)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('All records updated successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to update records.');
+                });
+        }
 
-    function closeModal() {
-        const modal = document.getElementById('dataModal');
-        modal.style.display = 'none'; // Hide the modal
-    }
+        // Function to save a single record
+        function saveRecord(index) {
+            const record = records[index];
+            fetch('https://your-service-url/api/BorrowerDetails/UpdateBorrowerDetail', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Record updated successfully!');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to update record.');
+                });
+        }
 
-    function handleSuccessPlus(index) {
-    const record = data[index];
-    console.log(`Success '+' clicked for:`, record);
-    // Perform your task for Success '+' here
-    showModal(record);
-    // alert(`You clicked '+' for Success Records of ${record.MsgStructure}`);
-}
+        function closeViewAllModal() {
+            document.getElementById('viewAllRecordsModal').style.display = 'none';
+        }
 
-function handleConstraintPlus(index) {
-    const record = data[index];
-    console.log(`Constraint '+' clicked for:`, record);
-    // Perform your task for Constraint '+' here
-    alert(`You clicked '+' for Constraint Rejection of ${record.MsgStructure}`);
-}
+        // Function to render the table
+        function renderTable() {
+            const tableBody = document.getElementById('borrowerTableBody');
+            tableBody.innerHTML = ''; // Clear the table body
 
-function handleBusinessPlus(index) {
-    const record = data[index];
-    console.log(`Business '+' clicked for:`, record);
-    // Perform your task for Business '+' here
-    alert(`You clicked '+' for Business Rejection of ${record.MsgStructure}`);
-}
-function handleSuccessRecords(index) {
-    const record = data[index];
-    console.log(`Success Records clicked for:`, record);
-    alert(`Success Records for ${record.MsgStructure}: ${record.SuccessRecords}`);
-}
-
-function handleConstraintRejection(index) {
-    const record = data[index];
-    console.log(`Constraint Rejection clicked for:`, record);
-    alert(`Constraint Rejection for ${record.MsgStructure}: ${record.ConstraintRejection}`);
-}
-
-function handleBusinessRejection(index) {
-    const record = data[index];
-    console.log(`Business Rejection clicked for:`, record);
-    alert(`Business Rejection for ${record.MsgStructure}: ${record.BusinessRejection}`);
-}
-
-</script>
-
+            records.forEach((record, index) => {
+                const row = `
+            <tr>
+                <td>${record.RowNo}</td>
+                <td><input type="date" value="${record.Date.split('T')[0]}" onchange="updateRecord(${index}, 'Date', this.value)"></td>
+                <td>${record.BankId}</td>
+                <td>${record.Cin}</td>
+                <td><input type="text" value="${record.BName}" onchange="updateRecord(${index}, 'BName', this.value)"></td>
+                <td><input type="date" value="${record.BDob.split('T')[0]}" onchange="updateRecord(${index}, 'BDob', this.value)"></td>
+                <td><input type="text" value="${record.SBCitizenship}" onchange="updateRecord(${index}, 'SBCitizenship', this.value)"></td>
+                <td><input type="text" value="${record.BPanNo}" onchange="updateRecord(${index}, 'BPanNo', this.value)"></td>
+                <td><input type="text" value="${record.Aadhaar}" onchange="updateRecord(${index}, 'Aadhaar', this.value)"></td>
+                <td><input type="number" value="${record.BMonthlyIncome}" onchange="updateRecord(${index}, 'BMonthlyIncome', this.value)"></td>
+                <td><input type="text" value="${record.BReligion}" onchange="updateRecord(${index}, 'BReligion', this.value)"></td>
+                <td><input type="text" value="${record.BGender}" onchange="updateRecord(${index}, 'BGender', this.value)"></td>
+                <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${index}, 'BOccupation', this.value)"></td>
+                <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${index}, 'IsValidated', this.checked)"></td>
+                <td><button onclick="saveRecord(${index})">Save</button></td>
+            </tr>
+        `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+    </script>
 </body>
+
 </html>

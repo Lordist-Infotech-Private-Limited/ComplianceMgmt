@@ -5,10 +5,13 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
     
-    // Replace with your API endpoint
-    const apiUrl = 'https://localhost:7275/Auth/Login';
+     // Check if the app is running locally (development) or on a live server (production)
+     const isLocal = window.location.hostname === "localhost" || window.location.hostname === "https://adfapi.lordist.in";
+        
+     // Set the base URL for the API based on the environment
+     const apiBaseUrl = isLocal ? "https://localhost:7275/Auth/Login" : "https://adfapi.lordist.in/Auth/Login";
 
-    fetch(apiUrl, {
+    fetch(apiBaseUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
