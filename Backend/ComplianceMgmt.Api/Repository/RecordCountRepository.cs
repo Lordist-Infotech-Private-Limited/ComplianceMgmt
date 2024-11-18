@@ -61,8 +61,37 @@ namespace ComplianceMgmt.Api.Repository
             }
         }
 
-        public async Task FetchDataFromClientDatabasesAsync()
+        //public async Task FetchDataFromClientDatabasesAsync()
+        //{
+        //    var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
+
+        //    foreach (var server in serverDetails)
+        //    {
+        //        using var clientConnection = context.CreateClientConnection(
+        //            server.ServerIp,
+        //            server.DbName,
+        //            server.ServerName,
+        //            server.ServerPassword);
+        //        // Example query to fetch client-specific data
+        //        var clientDataQuery = "SELECT * FROM db_a927ee_stgcomp.stgborrowerdetail";
+        //        var clientData = await clientConnection.QueryAsync<StgBorrowerDetail>(clientDataQuery);
+
+
+        //        await BulkInsertAsync(context.CreateConnection().ConnectionString, clientData.AsList());
+        //    }
+        //}
+
+        public async Task FetchAndInsertAllTablesAsync()
         {
+            var tables = new List<MsgStructure>
+            {
+                new() { TableName = "stgborrowerdetail", MsgStruct = "Borrower Detail" },
+                new() { TableName = "stgborrowerloan", MsgStruct = "Borrower Loan" },
+                new() { TableName = "stgborrowermortgage", MsgStruct = "Borrower Mortgage" },
+                new() { TableName = "stgborrowermortgageother", MsgStruct = "Borrower Mortgage Other" },
+                new() { TableName = "stgcoborrowerdetails", MsgStruct = "Co Borrower Details" }
+            };
+
             var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
 
             foreach (var server in serverDetails)
@@ -72,87 +101,147 @@ namespace ComplianceMgmt.Api.Repository
                     server.DbName,
                     server.ServerName,
                     server.ServerPassword);
-                // Example query to fetch client-specific data
-                var clientDataQuery = "SELECT * FROM db_a927ee_stgcomp.stgborrowerdetail";
-                var clientData = await clientConnection.QueryAsync<StgBorrowerDetail>(clientDataQuery);
 
-
-                await BulkInsertAsync(context.CreateConnection().ConnectionString, clientData.AsList());
-                // Process or save client data into your MySQL database
-                //await SaveClientDataToMasterDatabase(clientData);
+                foreach (var table in tables)
+                {
+                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+                    var clientData = await clientConnection.QueryAsync<dynamic>(query);
+                    await BulkInsertAsync(context.CreateConnection().ConnectionString, table.TableName, clientData);
+                }
             }
         }
 
-        public async Task SaveClientDataToMasterDatabase(IEnumerable<StgBorrowerDetail> borrowerDetail)
-        {
-            using var connection = context.CreateConnection();
-            var insertQuery = new StringBuilder();
-            insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
-            insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
-            insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
-            insertQuery.Append("VALUES (");
-            insertQuery.Append("@RowNo, @Date, @BankId, @Cin, @BName, @BDob, @sbcitizenship, @BPanNo, @Aadhaar, @IdType, @IdNumber, ");
-            insertQuery.Append("@BMonthlyIncome, @BReligion, @BCast, @BGender, @BOccupation, @IsValidated, @RejectedReason, @ValidatedDate);");
+        //public async Task BulkInsertAsync(string connectionString, List<StgBorrowerDetail> borrowerDetails)
+        //{
+        //    using var connection = new MySqlConnection(connectionString);
+        //    await connection.OpenAsync();
 
-            await connection.ExecuteAsync(insertQuery.ToString(), borrowerDetail);
-        }
+        //    var insertQuery = new StringBuilder();
+        //    insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
+        //    insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
+        //    insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
+        //    insertQuery.Append("VALUES ");
 
-        public async Task BulkInsertAsync(string connectionString, List<StgBorrowerDetail> borrowerDetails)
+        //    var parameters = new List<MySqlParameter>();
+        //    int counter = 0;
+
+        //    foreach (var borrower in borrowerDetails)
+        //    {
+        //        insertQuery.Append($"(@RowNo{counter}, @Date{counter}, @BankId{counter}, @Cin{counter}, @BName{counter}, @BDob{counter}, ");
+        //        insertQuery.Append($"@SBCitizenship{counter}, @BPanNo{counter}, @Aadhaar{counter}, @IdType{counter}, @IdNumber{counter}, ");
+        //        insertQuery.Append($"@BMonthlyIncome{counter}, @BReligion{counter}, @BCast{counter}, @BGender{counter}, @BOccupation{counter}, ");
+        //        insertQuery.Append($"@IsValidated{counter}, @RejectedReason{counter}, @ValidatedDate{counter})");
+
+        //        if (counter < borrowerDetails.Count - 1)
+        //            insertQuery.Append(", ");
+
+        //        // Add parameters for this borrower
+        //        parameters.AddRange(
+        //        [
+        //            new MySqlParameter($"@RowNo{counter}", borrower.RowNo),
+        //                new MySqlParameter($"@Date{counter}", borrower.Date),
+        //                new MySqlParameter($"@BankId{counter}", borrower.BankId),
+        //                new MySqlParameter($"@Cin{counter}", borrower.Cin),
+        //                new MySqlParameter($"@BName{counter}", borrower.BName),
+        //                new MySqlParameter($"@BDob{counter}", borrower.BDob),
+        //                new MySqlParameter($"@SBCitizenship{counter}", borrower.SBCitizenship),
+        //                new MySqlParameter($"@BPanNo{counter}", borrower.BPanNo),
+        //                new MySqlParameter($"@Aadhaar{counter}", borrower.Aadhaar),
+        //                new MySqlParameter($"@IdType{counter}", borrower.IdType),
+        //                new MySqlParameter($"@IdNumber{counter}", borrower.IdNumber),
+        //                new MySqlParameter($"@BMonthlyIncome{counter}", borrower.BMonthlyIncome),
+        //                new MySqlParameter($"@BReligion{counter}", borrower.BReligion),
+        //                new MySqlParameter($"@BCast{counter}", borrower.BCast),
+        //                new MySqlParameter($"@BGender{counter}", borrower.BGender),
+        //                new MySqlParameter($"@BOccupation{counter}", borrower.BOccupation),
+        //                new MySqlParameter($"@IsValidated{counter}", borrower.IsValidated ?? (object)DBNull.Value),
+        //                new MySqlParameter($"@RejectedReason{counter}", borrower.RejectedReason ?? (object)DBNull.Value),
+        //                new MySqlParameter($"@ValidatedDate{counter}", borrower.ValidatedDate ?? (object)DBNull.Value),
+        //            ]);
+
+        //        counter++;
+        //    }
+
+        //    insertQuery.Append(";");
+
+        //    using var command = new MySqlCommand(insertQuery.ToString(), connection);
+        //    command.Parameters.AddRange(parameters.ToArray());
+        //    await command.ExecuteNonQueryAsync();
+        //}
+
+        public async Task BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
         {
+            if (data == null || !data.Any()) return;
+
             using var connection = new MySqlConnection(connectionString);
             await connection.OpenAsync();
 
             var insertQuery = new StringBuilder();
-            insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
-            insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
-            insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
-            insertQuery.Append("VALUES ");
-
             var parameters = new List<MySqlParameter>();
             int counter = 0;
 
-            foreach (var borrower in borrowerDetails)
+            // Use the first item as a reference to get columns
+            dynamic firstItem = data.First();
+
+            // Check if firstItem is a dictionary and extract keys (columns)
+            if (firstItem is IDictionary<string, object> dictionary)
             {
-                insertQuery.Append($"(@RowNo{counter}, @Date{counter}, @BankId{counter}, @Cin{counter}, @BName{counter}, @BDob{counter}, ");
-                insertQuery.Append($"@SBCitizenship{counter}, @BPanNo{counter}, @Aadhaar{counter}, @IdType{counter}, @IdNumber{counter}, ");
-                insertQuery.Append($"@BMonthlyIncome{counter}, @BReligion{counter}, @BCast{counter}, @BGender{counter}, @BOccupation{counter}, ");
-                insertQuery.Append($"@IsValidated{counter}, @RejectedReason{counter}, @ValidatedDate{counter})");
+                var columns = dictionary.Keys.ToArray(); // Get column names
 
-                if (counter < borrowerDetails.Count - 1)
-                    insertQuery.Append(", ");
+                // Start building the insert query
+                insertQuery.Append($"INSERT INTO {tableName} (");
+                insertQuery.Append(string.Join(", ", columns));
+                insertQuery.Append(") VALUES ");
 
-                // Add parameters for this borrower
-                parameters.AddRange(
-                [
-                    new MySqlParameter($"@RowNo{counter}", borrower.RowNo),
-                        new MySqlParameter($"@Date{counter}", borrower.Date),
-                        new MySqlParameter($"@BankId{counter}", borrower.BankId),
-                        new MySqlParameter($"@Cin{counter}", borrower.Cin),
-                        new MySqlParameter($"@BName{counter}", borrower.BName),
-                        new MySqlParameter($"@BDob{counter}", borrower.BDob),
-                        new MySqlParameter($"@SBCitizenship{counter}", borrower.SBCitizenship),
-                        new MySqlParameter($"@BPanNo{counter}", borrower.BPanNo),
-                        new MySqlParameter($"@Aadhaar{counter}", borrower.Aadhaar),
-                        new MySqlParameter($"@IdType{counter}", borrower.IdType),
-                        new MySqlParameter($"@IdNumber{counter}", borrower.IdNumber),
-                        new MySqlParameter($"@BMonthlyIncome{counter}", borrower.BMonthlyIncome),
-                        new MySqlParameter($"@BReligion{counter}", borrower.BReligion),
-                        new MySqlParameter($"@BCast{counter}", borrower.BCast),
-                        new MySqlParameter($"@BGender{counter}", borrower.BGender),
-                        new MySqlParameter($"@BOccupation{counter}", borrower.BOccupation),
-                        new MySqlParameter($"@IsValidated{counter}", borrower.IsValidated ?? (object)DBNull.Value),
-                        new MySqlParameter($"@RejectedReason{counter}", borrower.RejectedReason ?? (object)DBNull.Value),
-                        new MySqlParameter($"@ValidatedDate{counter}", borrower.ValidatedDate ?? (object)DBNull.Value),
-                    ]);
+                // Loop through all data and build values
+                foreach (var record in data)
+                {
+                    var values = new List<string>();
 
-                counter++;
+                    if (record is IDictionary<string, object> recordDictionary)
+                    {
+                        foreach (var column in columns)
+                        {
+                            var paramName = $"@{column}{counter}";
+                            values.Add(paramName);
+
+                            // Get the value for each column
+                            var propertyValue = recordDictionary.ContainsKey(column)
+                                ? recordDictionary[column]
+                                : DBNull.Value;
+
+                            // Add parameter for each column
+                            parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+                        }
+                    }
+
+                    insertQuery.Append($"({string.Join(", ", values)})");
+
+                    if (counter < data.Count() - 1)
+                        insertQuery.Append(", ");
+
+                    counter++;
+                }
+
+                insertQuery.Append(";");
+
+                // Execute the insert query
+                using var command = new MySqlCommand(insertQuery.ToString(), connection);
+                command.Parameters.AddRange(parameters.ToArray());
+                try
+                {
+                    await command.ExecuteNonQueryAsync();
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
-
-            insertQuery.Append(";");
-
-            using var command = new MySqlCommand(insertQuery.ToString(), connection);
-            command.Parameters.AddRange(parameters.ToArray());
-            await command.ExecuteNonQueryAsync();
+            else
+            {
+                throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
+            }
         }
+
     }
 }

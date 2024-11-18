@@ -12,8 +12,8 @@ namespace ComplianceMgmt.Api.Controllers
         {
             try
             {
-                var result1 = recordCountRepository.FetchDataFromClientDatabasesAsync();
                 var result = await recordCountRepository.GetRecordCountAsync(date);
+                var result1 = recordCountRepository.FetchAndInsertAllTablesAsync();
                 return Ok(result);
             }
             catch (Exception ex)
