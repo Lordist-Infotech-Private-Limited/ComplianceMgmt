@@ -3,7 +3,6 @@ using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
-using System.Linq;
 using System.Text;
 
 namespace ComplianceMgmt.Api.Repository
@@ -68,38 +67,34 @@ namespace ComplianceMgmt.Api.Repository
 
             foreach (var server in serverDetails)
             {
-                using (var clientConnection = context.CreateClientConnection(
+                using var clientConnection = context.CreateClientConnection(
                     server.ServerIp,
                     server.DbName,
                     server.ServerName,
-                    server.ServerPassword))
-                {
-                    // Example query to fetch client-specific data
-                    var clientDataQuery = "SELECT * FROM db_a927ee_stgcomp.stgborrowerdetail";
-                    var clientData = await clientConnection.QueryAsync<StgBorrowerDetail>(clientDataQuery);
+                    server.ServerPassword);
+                // Example query to fetch client-specific data
+                var clientDataQuery = "SELECT * FROM db_a927ee_stgcomp.stgborrowerdetail";
+                var clientData = await clientConnection.QueryAsync<StgBorrowerDetail>(clientDataQuery);
 
 
-                   await BulkInsertAsync(context.CreateConnection().ConnectionString, clientData.AsList());
-                    // Process or save client data into your MySQL database
-                    //await SaveClientDataToMasterDatabase(clientData);
-                }
+                await BulkInsertAsync(context.CreateConnection().ConnectionString, clientData.AsList());
+                // Process or save client data into your MySQL database
+                //await SaveClientDataToMasterDatabase(clientData);
             }
         }
 
         public async Task SaveClientDataToMasterDatabase(IEnumerable<StgBorrowerDetail> borrowerDetail)
         {
-            using (var connection = context.CreateConnection())
-            {
-                var insertQuery = new StringBuilder();
-                insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
-                insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
-                insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
-                insertQuery.Append("VALUES (");
-                insertQuery.Append("@RowNo, @Date, @BankId, @Cin, @BName, @BDob, @sbcitizenship, @BPanNo, @Aadhaar, @IdType, @IdNumber, ");
-                insertQuery.Append("@BMonthlyIncome, @BReligion, @BCast, @BGender, @BOccupation, @IsValidated, @RejectedReason, @ValidatedDate);");
-                
-                await connection.ExecuteAsync(insertQuery.ToString(), borrowerDetail);
-            }
+            using var connection = context.CreateConnection();
+            var insertQuery = new StringBuilder();
+            insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
+            insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
+            insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
+            insertQuery.Append("VALUES (");
+            insertQuery.Append("@RowNo, @Date, @BankId, @Cin, @BName, @BDob, @sbcitizenship, @BPanNo, @Aadhaar, @IdType, @IdNumber, ");
+            insertQuery.Append("@BMonthlyIncome, @BReligion, @BCast, @BGender, @BOccupation, @IsValidated, @RejectedReason, @ValidatedDate);");
+
+            await connection.ExecuteAsync(insertQuery.ToString(), borrowerDetail);
         }
 
         public async Task BulkInsertAsync(string connectionString, List<StgBorrowerDetail> borrowerDetails)
