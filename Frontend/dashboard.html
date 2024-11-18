@@ -121,15 +121,24 @@
 
         data.forEach((item, index) => {
             const mainRow = document.createElement('tr');
-            mainRow.onclick = () => showModal(item);
+            // mainRow.onclick = () => showModal(item);
 
             mainRow.innerHTML = `
-                <td>${item.MsgStructure}</td>
-                <td>${item.TotalRecords}</td>
-                <td>${item.SuccessRecords}</td>
-                <td>${item.ConstraintRejection}</td>
-                <td>${item.BusinessRejection}</td>
-            `;
+                    <td>${item.MsgStructure}</td>
+                    <td>${item.TotalRecords}</td>
+                    <td>
+                        <a href="#" onclick="handleSuccessPlus(${index})">+</a>
+                        <a href="#" onclick="handleSuccessRecords(${index})">${item.SuccessRecords}</a>
+                    </td>
+                    <td>
+                        <a href="#" onclick="handleConstraintPlus(${index})">+</a>
+                        <a href="#" onclick="handleConstraintRejection(${index})">${item.ConstraintRejection}</a>
+                    </td>
+                    <td>
+                        <a href="#" onclick="handleBusinessPlus(${index})">+</a>
+                        <a href="#" onclick="handleBusinessRejection(${index})">${item.BusinessRejection}</a>
+                    </td>
+                `;
             tableBody.appendChild(mainRow);
         });
     }
@@ -176,6 +185,46 @@
         const modal = document.getElementById('dataModal');
         modal.style.display = 'none'; // Hide the modal
     }
+
+    function handleSuccessPlus(index) {
+    const record = data[index];
+    console.log(`Success '+' clicked for:`, record);
+    // Perform your task for Success '+' here
+    showModal(record);
+    // alert(`You clicked '+' for Success Records of ${record.MsgStructure}`);
+}
+
+function handleConstraintPlus(index) {
+    const record = data[index];
+    console.log(`Constraint '+' clicked for:`, record);
+    // Perform your task for Constraint '+' here
+    alert(`You clicked '+' for Constraint Rejection of ${record.MsgStructure}`);
+}
+
+function handleBusinessPlus(index) {
+    const record = data[index];
+    console.log(`Business '+' clicked for:`, record);
+    // Perform your task for Business '+' here
+    alert(`You clicked '+' for Business Rejection of ${record.MsgStructure}`);
+}
+function handleSuccessRecords(index) {
+    const record = data[index];
+    console.log(`Success Records clicked for:`, record);
+    alert(`Success Records for ${record.MsgStructure}: ${record.SuccessRecords}`);
+}
+
+function handleConstraintRejection(index) {
+    const record = data[index];
+    console.log(`Constraint Rejection clicked for:`, record);
+    alert(`Constraint Rejection for ${record.MsgStructure}: ${record.ConstraintRejection}`);
+}
+
+function handleBusinessRejection(index) {
+    const record = data[index];
+    console.log(`Business Rejection clicked for:`, record);
+    alert(`Business Rejection for ${record.MsgStructure}: ${record.BusinessRejection}`);
+}
+
 </script>
 
 </body>
