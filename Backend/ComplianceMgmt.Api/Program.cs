@@ -1,7 +1,9 @@
 
 using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
+using ComplianceMgmt.Api.Models;
 using ComplianceMgmt.Api.Repository;
+using ComplianceMgmt.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
@@ -18,10 +20,10 @@ namespace ComplianceMgmt.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //.SetBasePath(Directory.GetCurrentDirectory())
+            //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //.Build();
 
             builder.Services.AddCors(options =>
             {
@@ -57,6 +59,9 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<IBorrowerMortgageOtherRepository, BorrowerMortgageOtherRepository>();
             builder.Services.AddScoped<ICoBorrowerDetailsRepository, CoBorrowerDetailsRepository>();
 
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+            builder.Services.AddSingleton<TokenService>();
+
             // Add config for JWT bearer token
             builder.Services.AddAuthentication(opt =>
             {
@@ -70,11 +75,11 @@ namespace ComplianceMgmt.Api
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWT:SecretKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:Secret"])),
                     ValidateIssuer = true,
-                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
                     ValidateAudience = true,
-                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
                     ValidateLifetime = true, // Ensure token expiration is validated
                     ClockSkew = TimeSpan.Zero // Optional: Set to zero to avoid time skew (default is 5 minutes)
                 };

@@ -1,197 +1,120 @@
 ﻿using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
+using ComplianceMgmt.Api.Services;
 using Dapper;
-using Microsoft.IdentityModel.Tokens;
 using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ComplianceMgmt.Api.Repository
 {
-    public class AuthRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IAuthRepository
+    public class AuthRepository(IConfiguration configuration, ComplianceMgmtDbContext context, TokenService tokenService) : IAuthRepository
     {
         public async Task<User> Login(LoginUser loginUser)
         {
             User user = null;
-            string sql = "SELECT UserID, LoginId, UserName, MailId, MobileNo, Designation, CreatedBy, CreateDate, UpdatedBy,UpdatedDate, Password, IsActive, LastLogin FROM usermaster WHERE MailId = @MailId AND IsActive = 1";
+            string sql = "SELECT UserID, LoginId, UserName, MailId, MobileNo, Designation, CreatedBy, CreateDate, UpdatedBy, UpdatedDate, Password, IsActive, LastLogin FROM usermaster WHERE MailId = @MailId AND IsActive = 1";
+
             using (var connection = context.CreateConnection())
             {
                 try
                 {
                     user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { loginUser.MailId });
+                    if (user == null) return null;
+
+                    // Verify password
+                    if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password))
+                    {
+                        return null; // Password mismatch
+                    }
+
+                    // Generate JWT token
+                    var token = tokenService.GenerateToken(user.UserID);
+
+                    // Store token in sessioninfo table
+                    string insertSessionSql = @"
+                        INSERT INTO sessioninfo (UserID, Token, ResetTime) 
+                        VALUES (@UserID, @Token, @ResetTime)";
+
+                    await connection.ExecuteAsync(insertSessionSql, new
+                    {
+                        UserID = user.UserID,
+                        Token = token,
+                        ResetTime = DateTime.Now
+                    });
+
+                    // Return user with token
+                    user.Token = token;
+                    return user;
                 }
                 catch (Exception ex)
                 {
+                    // Handle or log exception
+                    return null;
                 }
-                return user;
-            }
-        }
-
-
-        public async Task<User> LoginOld(User loginUser)
-        {
-            User user = null;
-            string sql = "SELECT Email, PasswordHash, Name, UserID, RoleID, ClientID, BranchID, IsActive, EmployeeID FROM Users WHERE Email = @Email AND IsActive = 1";
-
-            using (var connection = context.CreateConnection())
-            {
-                user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { loginUser.MailId });
-
-                if (user == null)
-                {
-                    return null; // User does not exist
-                }
-
-                // Fetch the user's Role
-                //user.Role = await GetUserRole(connection, user.RoleId);
-
-                // Verify password
-                if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password))
-                {
-                    return null; // Password mismatch
-                }
-
-                // Generate tokens and update user
-                //user.AccessToken = GenerateAccessToken(user);
-                //user.RefreshToken = GenerateRefreshToken();
-                //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // Set refresh token expiration
-
-                // Update the user in the database with new tokens
-                await UpdateUserTokens(connection, user);
-
-                return user;
-            }
-        }
-
-        public async Task<User> RefreshToken(string token, string refreshToken)
-        {
-            var principal = GetPrincipalFromExpiredToken(token);
-            var email = principal.Identity?.Name;
-
-            string sql = "SELECT * FROM Users WHERE Email = @Email";
-            User user = null;
-
-            using (var connection = context.CreateConnection())
-            {
-                user = await connection.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
-
-                //if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
-                //{
-                //    return null; // Invalid refresh token
-                //}
-
-                //// Refresh tokens
-                //user.AccessToken = GenerateAccessToken(user);
-                //user.RefreshToken = GenerateRefreshToken();
-
-                // Update the tokens in the database
-                await UpdateUserTokens(connection, user);
-
-                return user;
             }
         }
 
         public async Task<User> Register(User registerUser)
         {
+            // Hash the password using BCrypt
             registerUser.Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
 
-            string sql = @"INSERT INTO Users ( Password, RoleID, IsActive, Email) 
-                       VALUES ( @Password, @RoleID, @IsActive, @Email);
-                       SELECT CAST(SCOPE_IDENTITY() as int);";
+            // SQL query for inserting a new user
+            string sql = @"
+                INSERT INTO usermaster 
+                (LoginId, UserName, MailId, MobileNo, Designation, CreatedBy, Password, IsActive) 
+                VALUES 
+                (@LoginId, @UserName, @MailId, @MobileNo, @Designation, @CreatedBy, @Password, @IsActive);
+                SELECT LAST_INSERT_ID();"; // MySQL function to get the last auto-incremented ID
 
             using (var connection = context.CreateConnection())
             {
-                var userId = await connection.QuerySingleAsync<int>(sql, new
+                try
                 {
-                    registerUser.MailId,
-                    registerUser.Password,
-                    //registerUser.RoleId,
-                    IsActive = true
-                });
+                    // Insert the user and get the generated UserID
+                    var userId = await connection.QuerySingleAsync<int>(sql, new
+                    {
+                        registerUser.LoginId,
+                        registerUser.UserName,
+                        registerUser.MailId,
+                        registerUser.MobileNo,
+                        registerUser.Designation,
+                        registerUser.CreatedBy,
+                        registerUser.Password,
+                        IsActive = true // Set the user as active by default
+                    });
 
-                registerUser.UserID = userId;
-                return registerUser;
+                    // Assign the generated UserID to the registered user
+                    registerUser.UserID = userId;
+
+                    return registerUser; // Return the newly registered user
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle the exception as needed
+                    throw new Exception("An error occurred while registering the user.", ex);
+                }
             }
         }
 
-        private string GenerateAccessToken(User user)
+        public async Task<bool> ValidateToken(string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(configuration["JWT:SecretKey"]);
-
-            var claims = new List<Claim>
+            using (var connection = context.CreateConnection())
             {
-                new (ClaimTypes.Name, user.MailId),                      // Username claim
-                new (ClaimTypes.GivenName, user.UserName),                    // User's given name
-                //new (ClaimTypes.Role, user.Role?.RoleName ?? string.Empty), // User's role name
-                new (ClaimTypes.NameIdentifier, user.UserID.ToString()),   // User ID
-                //new ("RoleID", user.Role?.RoleId.ToString() ?? string.Empty) // Role ID as a claim
-            };
+                var query = "SELECT COUNT(*) FROM sessioninfo WHERE Token = @Token AND ResetTime > @Now";
+                var count = await connection.ExecuteScalarAsync<int>(query, new { Token = token, Now = DateTime.Now });
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                IssuedAt = DateTime.UtcNow,
-                Issuer = configuration["JWT:Issuer"],
-                Audience = configuration["JWT:Audience"],
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
-        private string GenerateRefreshToken()
-        {
-            var randomBytes = new byte[32];
-            RandomNumberGenerator.Fill(randomBytes);
-            return Convert.ToBase64String(randomBytes);
-        }
-
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JWT:SecretKey"])),
-                ValidateLifetime = false // We check for expired tokens
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
+                return count > 0; // Valid token if found
             }
-
-            return principal;
         }
 
-        private async Task UpdateUserTokens(IDbConnection connection, User user)
+        public async Task Logout(int userId)
         {
-            string updateSql = @"UPDATE Users 
-                             SET AccessToken = @AccessToken, 
-                                 RefreshToken = @RefreshToken, 
-                                 RefreshTokenExpiry = @RefreshTokenExpiry,
-                                 IsActive = @IsActive 
-                             WHERE UserID = @UserId";
-
-            await connection.ExecuteAsync(updateSql, new
+            using (var connection = context.CreateConnection())
             {
-                //user.AccessToken,
-                //user.RefreshToken,
-                //user.RefreshTokenExpiry,
-                user.IsActive,
-                user.UserID
-            });
+                var query = "DELETE FROM sessioninfo WHERE UserID = @UserID";
+                await connection.ExecuteAsync(query, new { UserID = userId });
+            }
         }
 
         private async Task<Role> GetUserRole(IDbConnection connection, int roleId)
