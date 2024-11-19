@@ -60,27 +60,6 @@ namespace ComplianceMgmt.Api.Repository
                 throw new Exception("An error occurred while calling the stored procedure.", ex);
             }
         }
-
-        //public async Task FetchDataFromClientDatabasesAsync()
-        //{
-        //    var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
-
-        //    foreach (var server in serverDetails)
-        //    {
-        //        using var clientConnection = context.CreateClientConnection(
-        //            server.ServerIp,
-        //            server.DbName,
-        //            server.ServerName,
-        //            server.ServerPassword);
-        //        // Example query to fetch client-specific data
-        //        var clientDataQuery = "SELECT * FROM db_a927ee_stgcomp.stgborrowerdetail";
-        //        var clientData = await clientConnection.QueryAsync<StgBorrowerDetail>(clientDataQuery);
-
-
-        //        await BulkInsertAsync(context.CreateConnection().ConnectionString, clientData.AsList());
-        //    }
-        //}
-
         public async Task FetchAndInsertAllTablesAsync()
         {
             var tables = new List<MsgStructure>
@@ -110,64 +89,6 @@ namespace ComplianceMgmt.Api.Repository
                 }
             }
         }
-
-        //public async Task BulkInsertAsync(string connectionString, List<StgBorrowerDetail> borrowerDetails)
-        //{
-        //    using var connection = new MySqlConnection(connectionString);
-        //    await connection.OpenAsync();
-
-        //    var insertQuery = new StringBuilder();
-        //    insertQuery.Append("INSERT INTO db_a927ee_comlian.stgborrowerdetail (");
-        //    insertQuery.Append("RowNo, Date, BankId, Cin, BName, BDob, sbcitizenship, BPanNo, Aadhaar, IdType, IdNumber, ");
-        //    insertQuery.Append("BMonthlyIncome, BReligion, BCast, BGender, BOccupation, IsValidated, RejectedReason, ValidatedDate) ");
-        //    insertQuery.Append("VALUES ");
-
-        //    var parameters = new List<MySqlParameter>();
-        //    int counter = 0;
-
-        //    foreach (var borrower in borrowerDetails)
-        //    {
-        //        insertQuery.Append($"(@RowNo{counter}, @Date{counter}, @BankId{counter}, @Cin{counter}, @BName{counter}, @BDob{counter}, ");
-        //        insertQuery.Append($"@SBCitizenship{counter}, @BPanNo{counter}, @Aadhaar{counter}, @IdType{counter}, @IdNumber{counter}, ");
-        //        insertQuery.Append($"@BMonthlyIncome{counter}, @BReligion{counter}, @BCast{counter}, @BGender{counter}, @BOccupation{counter}, ");
-        //        insertQuery.Append($"@IsValidated{counter}, @RejectedReason{counter}, @ValidatedDate{counter})");
-
-        //        if (counter < borrowerDetails.Count - 1)
-        //            insertQuery.Append(", ");
-
-        //        // Add parameters for this borrower
-        //        parameters.AddRange(
-        //        [
-        //            new MySqlParameter($"@RowNo{counter}", borrower.RowNo),
-        //                new MySqlParameter($"@Date{counter}", borrower.Date),
-        //                new MySqlParameter($"@BankId{counter}", borrower.BankId),
-        //                new MySqlParameter($"@Cin{counter}", borrower.Cin),
-        //                new MySqlParameter($"@BName{counter}", borrower.BName),
-        //                new MySqlParameter($"@BDob{counter}", borrower.BDob),
-        //                new MySqlParameter($"@SBCitizenship{counter}", borrower.SBCitizenship),
-        //                new MySqlParameter($"@BPanNo{counter}", borrower.BPanNo),
-        //                new MySqlParameter($"@Aadhaar{counter}", borrower.Aadhaar),
-        //                new MySqlParameter($"@IdType{counter}", borrower.IdType),
-        //                new MySqlParameter($"@IdNumber{counter}", borrower.IdNumber),
-        //                new MySqlParameter($"@BMonthlyIncome{counter}", borrower.BMonthlyIncome),
-        //                new MySqlParameter($"@BReligion{counter}", borrower.BReligion),
-        //                new MySqlParameter($"@BCast{counter}", borrower.BCast),
-        //                new MySqlParameter($"@BGender{counter}", borrower.BGender),
-        //                new MySqlParameter($"@BOccupation{counter}", borrower.BOccupation),
-        //                new MySqlParameter($"@IsValidated{counter}", borrower.IsValidated ?? (object)DBNull.Value),
-        //                new MySqlParameter($"@RejectedReason{counter}", borrower.RejectedReason ?? (object)DBNull.Value),
-        //                new MySqlParameter($"@ValidatedDate{counter}", borrower.ValidatedDate ?? (object)DBNull.Value),
-        //            ]);
-
-        //        counter++;
-        //    }
-
-        //    insertQuery.Append(";");
-
-        //    using var command = new MySqlCommand(insertQuery.ToString(), connection);
-        //    command.Parameters.AddRange(parameters.ToArray());
-        //    await command.ExecuteNonQueryAsync();
-        //}
 
         public async Task BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
         {
@@ -242,6 +163,5 @@ namespace ComplianceMgmt.Api.Repository
                 throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
             }
         }
-
     }
 }
