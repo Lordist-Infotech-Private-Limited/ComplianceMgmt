@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComplianceMgmt.Api.Controllers
 {
+
     [Route("[controller]")]
     [ApiController]
-    public class BorrowerDetailController(IBorrowerDetailRepository repository) : ControllerBase
+    public class BorrowerMortgageController(IBorrowerMortgageRepository repository) : ControllerBase
     {
         [HttpGet("{date}")]
         public async Task<IActionResult> GetByPrimaryKey(DateTime date)
@@ -23,10 +24,11 @@ namespace ComplianceMgmt.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] BorrowerDetail borrowerDetail)
+        public async Task<IActionResult> Update([FromBody] BorrowerMortgage borrowerMortgage)
         {
-            await repository.UpdateAsync(borrowerDetail);
+            await repository.UpdateAsync(borrowerMortgage);
             return NoContent();
         }
     }
+
 }

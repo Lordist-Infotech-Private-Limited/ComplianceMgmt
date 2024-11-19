@@ -21,5 +21,6 @@
         public string Password { get; set; }
         public bool IsActive { get; set; }
         public DateTime LastLogin { get; set; }
+        public string Token { get; set; }
     }
 }

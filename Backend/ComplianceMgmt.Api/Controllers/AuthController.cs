@@ -36,55 +36,60 @@ namespace ComplianceMgmt.Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser user)
         {
-            // Error checks
-
-            if (String.IsNullOrEmpty(user.Name))
+            // Input validation
+            if (string.IsNullOrWhiteSpace(user.Name))
             {
-                return BadRequest(new { message = "Name needs to entered" });
+                return BadRequest(new { message = "Name is required." });
             }
-            else if (String.IsNullOrEmpty(user.UserName))
+            if (string.IsNullOrWhiteSpace(user.UserName))
             {
-                return BadRequest(new { message = "User name needs to entered" });
+                return BadRequest(new { message = "Username is required." });
             }
-            else if (String.IsNullOrEmpty(user.Password))
+            if (string.IsNullOrWhiteSpace(user.Password))
             {
-                return BadRequest(new { message = "Password needs to entered" });
+                return BadRequest(new { message = "Password is required." });
             }
-
-            // Try registration
-
-            var registeredUser = await _authService.Register(new User
+            if (string.IsNullOrWhiteSpace(user.MailId) || !user.MailId.Contains("@"))
             {
-                UserName = user.Name,
-                Password = user.Password,
-                MailId = user.MailId,
-                LastLogin = DateTime.Now,
-                MobileNo = user.PhoneNumber,
-            });
-
-            // Return responses
-
-            if (registeredUser != null)
-            {
-                return Ok(registeredUser);
+                return BadRequest(new { message = "A valid email is required." });
             }
 
-            return BadRequest(new { message = "User registration unsuccessful" });
-        }
-
-        // POST: auth/refresh-token
-        [AllowAnonymous]
-        [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
-        {
-            var user = await _authService.RefreshToken(tokenRequest.AccessToken, tokenRequest.RefreshToken);
-
-            if (user != null)
+            try
             {
-                return Ok(user);
-            }
+                // Call the repository or service to register the user
+                var registeredUser = await _authService.Register(new User
+                {
+                    UserName = user.UserName,
+                    Password = user.Password,
+                    MailId = user.MailId,
+                    MobileNo = user.PhoneNumber,
+                    LoginId = user.LoginId,
+                    CreateDate = DateTime.UtcNow, // Ensure consistent timestamps
+                    IsActive = true // Default active status for new users
+                });
 
-            return Unauthorized(new { message = "Invalid token or refresh token" });
+                // If registration is successful, return the registered user's details (excluding sensitive data)
+                if (registeredUser != null)
+                {
+                    return Ok(new
+                    {
+                        registeredUser.UserID,
+                        registeredUser.UserName,
+                        registeredUser.MailId,
+                        registeredUser.MobileNo,
+                        registeredUser.IsActive
+                    });
+                }
+
+                return BadRequest(new { message = "User registration failed. Please try again." });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                //_logger.LogError(ex, "Error occurred during user registration.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred during registration. Please contact support." });
+            }
         }
 
         // GET: auth/test

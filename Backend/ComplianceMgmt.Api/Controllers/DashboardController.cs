@@ -5,7 +5,7 @@ namespace ComplianceMgmt.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class DashboardController(IRecordCountRepository recordCountRepository, IServerDetailRepository serverDetailRepository) : ControllerBase
+    public class DashboardController(IRecordCountRepository recordCountRepository) : ControllerBase
     {
         [HttpGet("GetRecordCount")]
         public async Task<IActionResult> GetRecordCount([FromQuery] DateOnly date)
