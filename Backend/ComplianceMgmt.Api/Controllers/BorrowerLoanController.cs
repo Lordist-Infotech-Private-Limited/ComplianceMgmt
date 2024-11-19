@@ -6,7 +6,7 @@ namespace ComplianceMgmt.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class BorrowerDetailController(IBorrowerDetailRepository repository) : ControllerBase
+    public class BorrowerLoanController(IBorrowerLoanRepository repository) : ControllerBase
     {
         [HttpGet("{date}")]
         public async Task<IActionResult> GetByPrimaryKey(DateTime date)
@@ -23,9 +23,9 @@ namespace ComplianceMgmt.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] BorrowerDetail borrowerDetail)
+        public async Task<IActionResult> Update([FromBody] BorrowerLoan borrowerLoan)
         {
-            await repository.UpdateAsync(borrowerDetail);
+            await repository.UpdateAsync(borrowerLoan);
             return NoContent();
         }
     }

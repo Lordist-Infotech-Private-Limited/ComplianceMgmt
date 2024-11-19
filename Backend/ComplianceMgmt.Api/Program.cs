@@ -52,6 +52,10 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<IRecordCountRepository, RecordCountRepository>();
             builder.Services.AddScoped<IServerDetailRepository, ServerDetailRepository>();
             builder.Services.AddScoped<IBorrowerDetailRepository, BorrowerDetailRepository>();
+            builder.Services.AddScoped<IBorrowerLoanRepository, BorrowerLoanRepository>();
+            builder.Services.AddScoped<IBorrowerMortgageRepository, BorrowerMortgageRepository>();
+            builder.Services.AddScoped<IBorrowerMortgageOtherRepository, BorrowerMortgageOtherRepository>();
+            builder.Services.AddScoped<ICoBorrowerDetailsRepository, CoBorrowerDetailsRepository>();
 
             // Add config for JWT bearer token
             builder.Services.AddAuthentication(opt =>

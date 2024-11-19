@@ -4,7 +4,8 @@ namespace ComplianceMgmt.Api.IRepository
 {
     public interface IBorrowerDetailRepository
     {
-        Task<IEnumerable<StgBorrowerDetail>> GetBorrowerDetailAsync(DateTime date);
-        Task<bool> UpdateBorrowerDetailAsync(StgBorrowerDetail updatedDetail);
+        Task<BorrowerDetail> GetByPrimaryKeyAsync(DateTime date);
+        Task<IEnumerable<BorrowerDetail>> GetAllByDateAsync(DateTime date);
+        Task UpdateAsync(BorrowerDetail borrowerDetail);
     }
 }
