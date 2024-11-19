@@ -37,7 +37,7 @@ namespace ComplianceMgmt.Api.Controllers
         }
 
         [HttpPost("import")]
-        public async Task<IActionResult> ImportExcel([FromForm] IFormFile file)
+        public async Task<IActionResult> ImportExcel(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
