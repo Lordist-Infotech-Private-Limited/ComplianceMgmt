@@ -28,5 +28,12 @@ namespace ComplianceMgmt.Api.Controllers
             await repository.UpdateAsync(borrowerDetail);
             return NoContent();
         }
+
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportToExcel(DateTime date)
+        {
+            var excelData = await repository.ExportBorrowerDetailsToExcelAsync(date);
+            return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "BorrowerDetails.xlsx");
+        }
     }
 }
