@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Dashboard with Loader</title>
     <style>
-
         :root {
             --primary-color: #4F46E5;
             --secondary-color: #818CF8;
             --background-color: #F3F4F6;
             --card-background: #FFFFFF;
         }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -80,27 +80,6 @@
             transform: translateY(-1px);
         }
 
-
-        /* .actions input,
-        .actions button {
-            padding: 10px;
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .actions button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .actions button:hover {
-            background-color: #0056b3;
-        } */
-
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -131,7 +110,6 @@
             background-color: #F9FAFB;
         }
 
-        /* Loader Container Styles */
         .loader-container {
             display: none;
             position: absolute;
@@ -139,13 +117,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(128, 128, 128, 0.8); /* Gray background with opacity */
-            /* display: flex; */
+            background-color: rgba(128, 128, 128, 0.8);
             justify-content: center;
             align-items: center;
         }
 
-        /* Loader Styles */
         .loader {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #007BFF;
@@ -165,7 +141,6 @@
             }
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -176,7 +151,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
             backdrop-filter: blur(4px);
         }
 
@@ -188,7 +163,7 @@
             width: 90%;
             max-width: 800px;
             text-align: left;
-            margin: 20px auto; /* Center the modal content */
+            margin: 20px auto;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -199,7 +174,6 @@
             align-items: center;
             border-bottom: 1px solid #E5E7EB;
             padding: 1.5rem;
-
         }
 
         .modal-body {
@@ -216,7 +190,6 @@
             cursor: pointer;
         }
 
-        /* Input styles for modals */
         .modal-body input {
             width: 50%;
             padding: 8px;
@@ -224,7 +197,6 @@
             font-size: 16px;
         }
 
-        /* General table styling */
         .responsive-table {
             width: 100%;
             border-collapse: collapse;
@@ -243,18 +215,15 @@
             font-weight: bold;
         }
 
-        /* Wrapping table in a scrollable container */
         .table-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            /* Smooth scrolling for iOS */
             background-color: var(--card-background);
             border-radius: 0.75rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             margin-top: 1.5rem;
         }
 
-        /* Responsive design for smaller screens */
         @media (max-width: 768px) {
             .responsive-table {
                 font-size: 12px;
@@ -272,7 +241,6 @@
             }
         }
 
-        /* Button styling */
         button {
             padding: 8px 16px;
             background-color: var(--primary-color);
@@ -291,7 +259,6 @@
             background-color: #004085;
         }
 
-        /* Pagination styles */
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -310,7 +277,6 @@
             background-color: var(--secondary-color);
         }
 
-        /* Checkbox for edit */
         .edit-checkbox {
             width: 1.25rem;
             height: 1.25rem;
@@ -324,7 +290,6 @@
             border-color: var(--primary-color);
         }
 
-        /* Disable input fields when not checked */
         .responsive-table input[type="text"],
         .responsive-table input[type="date"],
         .responsive-table input[type="number"],
@@ -332,10 +297,10 @@
             background-color: #f4f4f4;
         }
 
-        .responsive-table input[type="checkbox"]:checked ~ input[type="text"],
-        .responsive-table input[type="checkbox"]:checked ~ input[type="date"],
-        .responsive-table input[type="checkbox"]:checked ~ input[type="number"],
-        .responsive-table input[type="checkbox"]:checked ~ input[type="checkbox"] {
+        .responsive-table input[type="checkbox"]:checked~input[type="text"],
+        .responsive-table input[type="checkbox"]:checked~input[type="date"],
+        .responsive-table input[type="checkbox"]:checked~input[type="number"],
+        .responsive-table input[type="checkbox"]:checked~input[type="checkbox"] {
             background-color: white;
         }
     </style>
@@ -344,18 +309,15 @@
 <body>
     <h2>Interactive Dashboard</h2>
     <div class="container">
-        <!-- Input Section -->
         <div class="actions">
             <input type="date" id="referenceDate">
             <button onclick="fetchData()">Fetch Data</button>
         </div>
 
-        <!-- Loader -->
         <div id="loader" class="loader-container">
             <div class="loader"></div>
         </div>
 
-        <!-- Data Table -->
         <div class="table-container">
             <table class="table" id="dataTable">
                 <thead>
@@ -372,7 +334,6 @@
         </div>
     </div>
 
-    <!-- Modal 1 (Edit Individual Record) -->
     <div id="editRecordModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -381,23 +342,86 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <label for="editSuccess">Success Records:</label>
-                    <input type="number" id="editSuccess">
+                    <label for="editRowNo">Row No:</label>
+                    <input type="number" id="editRowNo">
                 </div>
                 <div>
-                    <label for="editConstraint">Constraint Rejection:</label>
-                    <input type="number" id="editConstraint">
+                    <label for="editDate">Date:</label>
+                    <input type="date" id="editDate">
                 </div>
                 <div>
-                    <label for="editBusiness">Business Rejection:</label>
-                    <input type="number" id="editBusiness">
+                    <label for="editBankId">Bank ID:</label>
+                    <input type="number" id="editBankId">
+                </div>
+                <div>
+                    <label for="editCin">CIN:</label>
+                    <input type="text" id="editCin">
+                </div>
+                <div>
+                    <label for="editBName">Name:</label>
+                    <input type="text" id="editBName">
+                </div>
+                <div>
+                    <label for="editBDob">DOB:</label>
+                    <input type="date" id="editBDob">
+                </div>
+                <div>
+                    <label for="editSBCitizenship">Citizenship:</label>
+                    <input type="text" id="editSBCitizenship">
+                </div>
+                <div>
+                    <label for="editBPanNo">PAN No:</label>
+                    <input type="text" id="editBPanNo">
+                </div>
+                <div>
+                    <label for="editAadhaar">Aadhaar:</label>
+                    <input type="text" id="editAadhaar">
+                </div>
+                <div>
+                    <label for="editIdType">ID Type:</label>
+                    <input type="text" id="editIdType">
+                </div>
+                <div>
+                    <label for="editIdNumber">ID Number:</label>
+                    <input type="text" id="editIdNumber">
+                </div>
+                <div>
+                    <label for="editBMonthlyIncome">Monthly Income:</label>
+                    <input type="number" id="editBMonthlyIncome">
+                </div>
+                <div>
+                    <label for="editBReligion">Religion:</label>
+                    <input type="text" id="editBReligion">
+                </div>
+                <div>
+                    <label for="editBCast">Cast:</label>
+                    <input type="text" id="editBCast">
+                </div>
+                <div>
+                    <label for="editBGender">Gender:</label>
+                    <input type="text" id="editBGender">
+                </div>
+                <div>
+                    <label for="editBOccupation">Occupation:</label>
+                    <input type="text" id="editBOccupation">
+                </div>
+                <div>
+                    <label for="editIsValidated">Is Validated:</label>
+                    <input type="checkbox" id="editIsValidated">
+                </div>
+                <div>
+                    <label for="editRejectedReason">Rejected Reason:</label>
+                    <input type="text" id="editRejectedReason">
+                </div>
+                <div>
+                    <label for="editValidatedDate">Validated Date:</label>
+                    <input type="datetime-local" id="editValidatedDate">
                 </div>
                 <button onclick="saveRecord()">Save</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal 2 (View and Edit All Records) -->
     <div id="viewAllRecordsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -426,7 +450,35 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="borrowerTableBody"></tbody>
+                    <tbody id="borrowerDetailTableBody"></tbody>
+                </table>
+
+                <table id="coBorrowerTable" class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Edit</th>
+                            <th>Row No</th>
+                            <th>Date</th>
+                            <th>Bank ID</th>
+                            <th>CIN</th>
+                            <th>Cb CIN</th>
+                            <th>Cb Name</th>
+                            <th>Cb DOB</th>
+                            <th>Cb Citizenship</th>
+                            <th>Cb PAN No</th>
+                            <th>Cb Aadhaar</th>
+                            <th>ID Type</th>
+                            <th>ID Number</th>
+                            <th>Cb Monthly Income</th>
+                            <th>Cb Religion</th>
+                            <th>Cb Cast</th>
+                            <th>Cb Gender</th>
+                            <th>Cb Occupation</th>
+                            <th>Is Validated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coBorrowerTableBody"></tbody>
                 </table>
             </div>
             <br>
@@ -435,40 +487,35 @@
                 <button onclick="nextAllRecordsPage()">Next</button>
             </div>
             <div class="actions">
-                <button onclick="saveAllRecords()">Save Changes</button>
+                <button onclick="">Push to NHB Stagging</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Check if the app is running locally (development) or on a live server (production)
         const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-
-        // Set the base URL for the API based on the environment
         const apiBaseUrl = isLocal ? "https://localhost:5001/BorrowerDetail/GetBorrowerDetail" : "https://adfapi.lordist.in/BorrowerDetail/GetBorrowerDetail";
-        const data = []; // Mock data to simulate API response
-        let editRecordIndex = -1; // To keep track of which record is being edited
-        let currentPage = 0; // Current page for pagination
-        const recordsPerPage = 10; // Number of records to display per page
-        let allRecords = []; // Store all records fetched from the API
-        let currentAllRecordsPage = 0; // Current page for all records pagination
+        const data = [];
+        let editRecordIndex = -1;
+        let currentPage = 0;
+        const recordsPerPage = 10;
+        let allRecords = [];
+        let currentAllRecordsPage = 0;
 
         async function fetchData() {
             const loader = document.getElementById('loader');
             const tableBody = document.getElementById('tableBody');
             const referenceDate = document.getElementById('referenceDate').value;
 
-            // Show loader
             loader.style.display = 'flex';
             tableBody.innerHTML = '';
 
             try {
-                // API call to fetch data for the selected date
                 const url = `https://adfapi.lordist.in/Dashboard/GetRecordCount?date=${encodeURIComponent(referenceDate)}`;
 
                 const response = await fetch(url, {
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' } // Adjust headers if needed (e.g., Authorization)
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
                 if (!response.ok) {
@@ -477,18 +524,15 @@
 
                 const result = await response.json();
 
-                // Clear existing data and add new data from API response
                 data.length = 0;
                 data.push(...result);
 
-                // Populate table with new data
                 populateTable();
 
             } catch (error) {
                 console.error("Error fetching data:", error);
                 alert("Failed to fetch data. Please try again later.");
             } finally {
-                // Hide loader after the API call is finished
                 loader.style.display = 'none';
             }
         }
@@ -524,75 +568,183 @@
             });
         }
 
-        function openEditModal(index, type) {
-            editRecordIndex = index;
-            const record = data[index];
+        async function openEditModal(index, type) {
+            const referenceDate = document.getElementById('referenceDate').value;
+            const loader = document.getElementById('loader');
+            loader.style.display = 'flex';
 
-            // Pre-fill modal inputs with current values
-            document.getElementById('editSuccess').value = record.SuccessRecords;
-            document.getElementById('editConstraint').value = record.ConstraintRejection;
-            document.getElementById('editBusiness').value = record.BusinessRejection;
+            try {
+                let apiUrl, record;
+                if (index === 0) {
+                    apiUrl = `https://adfapi.lordist.in/BorrowerDetail/byDate/${encodeURIComponent(referenceDate)}`;
+                } else if (index === 4) {
+                    apiUrl = `https://adfapi.lordist.in/CoBorrowerDetails/byDate/${encodeURIComponent(referenceDate)}`;
+                }
 
-            document.getElementById('editRecordModal').style.display = 'flex';
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.status}`);
+                }
+
+                const result = await response.json();
+                record = result[0]; // Assuming you want to edit the first record
+
+                // Populate the modal with the fetched record
+                document.getElementById('editRowNo').value = record.RowNo !== undefined ? record.RowNo : '';
+                document.getElementById('editDate').value = record.Date !== undefined ? record.Date.split('T')[0] : '';
+                document.getElementById('editBankId').value = record.BankId !== undefined ? record.BankId : '';
+                document.getElementById('editCin').value = record.Cin !== undefined ? record.Cin : '';
+                document.getElementById('editBName').value = record.BName !== undefined ? record.BName : '';
+                document.getElementById('editBDob').value = record.BDob !== undefined ? record.BDob.split('T')[0] : '';
+                document.getElementById('editSBCitizenship').value = record.SBCitizenship !== undefined ? record.SBCitizenship : '';
+                document.getElementById('editBPanNo').value = record.BPanNo !== undefined ? record.BPanNo : '';
+                document.getElementById('editAadhaar').value = record.Aadhaar !== undefined ? record.Aadhaar : '';
+                document.getElementById('editIdType').value = record.IdType !== undefined ? record.IdType : '';
+                document.getElementById('editIdNumber').value = record.IdNumber !== undefined ? record.IdNumber : '';
+                document.getElementById('editBMonthlyIncome').value = record.BMonthlyIncome !== undefined ? record.BMonthlyIncome : '';
+                document.getElementById('editBReligion').value = record.BReligion !== undefined ? record.BReligion : '';
+                document.getElementById('editBCast').value = record.BCast !== undefined ? record.BCast : '';
+                document.getElementById('editBGender').value = record.BGender !== undefined ? record.BGender : '';
+                document.getElementById('editBOccupation').value = record.BOccupation !== undefined ? record.BOccupation : '';
+                document.getElementById('editIsValidated').checked = record.IsValidated !== undefined ? record.IsValidated : false;
+                document.getElementById('editRejectedReason').value = record.RejectedReason !== undefined ? record.RejectedReason : '';
+                document.getElementById('editValidatedDate').value = record.ValidatedDate !== undefined ? record.ValidatedDate.split('T')[0] : '';
+
+                document.getElementById('editRecordModal').style.display = 'flex';
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                alert("Failed to fetch records.");
+            } finally {
+                loader.style.display = 'none';
+            }
         }
 
         function saveRecord() {
-            const success = parseInt(document.getElementById('editSuccess').value);
-            const constraint = parseInt(document.getElementById('editConstraint').value);
-            const business = parseInt(document.getElementById('editBusiness').value);
+            const record = {
+                RowNo: parseInt(document.getElementById('editRowNo').value),
+                Date: document.getElementById('editDate').value,
+                BankId: parseInt(document.getElementById('editBankId').value),
+                Cin: document.getElementById('editCin').value,
+                BName: document.getElementById('editBName').value,
+                BDob: document.getElementById('editBDob').value,
+                SBCitizenship: document.getElementById('editSBCitizenship').value,
+                BPanNo: document.getElementById('editBPanNo').value,
+                Aadhaar: document.getElementById('editAadhaar').value,
+                IdType: document.getElementById('editIdType').value,
+                IdNumber: document.getElementById('editIdNumber').value,
+                BMonthlyIncome: parseInt(document.getElementById('editBMonthlyIncome').value),
+                BReligion: document.getElementById('editBReligion').value,
+                BCast: document.getElementById('editBCast').value,
+                BGender: document.getElementById('editBGender').value,
+                BOccupation: document.getElementById('editBOccupation').value,
+                IsValidated: document.getElementById('editIsValidated').checked,
+                RejectedReason: document.getElementById('editRejectedReason').value,
+                ValidatedDate: document.getElementById('editValidatedDate').value
+            };
 
-            if (editRecordIndex !== -1) {
-                const record = data[editRecordIndex];
-                record.SuccessRecords = success;
-                record.ConstraintRejection = constraint;
-                record.BusinessRejection = business;
+            const apiUrl = 'https://adfapi.lordist.in/BorrowerDetail';
 
-                populateTable();
-                closeEditModal();
-            }
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: { 
+                    'accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(record)
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    // Handle the 204 No Content status
+                    alert('Record updated successfully!');
+                } else if (response.ok) {
+                    // Handle other successful status codes (e.g., 200, 201)
+                    return response.json();
+                } else {
+                    // Handle other status codes (e.g., 400, 500)
+                    throw new Error(`Failed to update record. Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                if (data) {
+                    // This block will only execute if there is JSON data to parse
+                    alert('Record updated successfully!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update record.');
+            });
         }
 
         function closeEditModal() {
             document.getElementById('editRecordModal').style.display = 'none';
         }
 
-        async function openViewAllModal() {
+        async function openViewAllModal(index, status) {
             const modal = document.getElementById('viewAllRecordsModal');
-            const tableBody = document.getElementById('borrowerTableBody');
-            const loader = document.getElementById('loader');
             const referenceDate = document.getElementById('referenceDate').value;
+            const loader = document.getElementById('loader');
+            document.getElementById("borrowerTable").style.display = "none";
+            document.getElementById("coBorrowerTable").style.display = "none";
 
-            // Show loader
-            loader.style.display = 'flex';
-            tableBody.innerHTML = '';
+            if (index === 0) {
+                const tableBody = document.getElementById('borrowerDetailTableBody');
+                loader.style.display = 'flex';
+                tableBody.innerHTML = '';
+                try {
+                    const response = await fetch(`https://adfapi.lordist.in/BorrowerDetail/byDate/${encodeURIComponent(referenceDate)}`);
 
-            try {
-                const response = await fetch(`https://adfapi.lordist.in/BorrowerDetail/GetBorrowerDetail?date=${encodeURIComponent(referenceDate)}`);
+                    if (!response.ok) {
+                        throw new Error(`Error fetching data: ${response.status}`);
+                    }
 
-                if (!response.ok) {
-                    throw new Error(`Error fetching data: ${response.status}`);
+                    allRecords = await response.json();
+
+                    loader.style.display = 'none';
+
+                    populateBorrowerTable();
+
+                    modal.style.display = 'flex';
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    alert("Failed to fetch records.");
+                } finally {
+                    loader.style.display = 'none';
                 }
+            } else if (index === 4) {
+                const tableBody = document.getElementById('coBorrowerTableBody');
+                loader.style.display = 'flex';
+                tableBody.innerHTML = '';
+                try {
+                    const response = await fetch(`https://adfapi.lordist.in/CoBorrowerDetails/byDate/${encodeURIComponent(referenceDate)}`);
 
-                allRecords = await response.json();
+                    if (!response.ok) {
+                        throw new Error(`Error fetching data: ${response.status}`);
+                    }
 
-                // Hide loader after the API call is finished
-                loader.style.display = 'none';
+                    allRecords = await response.json();
 
-                // Populate table with paginated data
-                populateAllRecordsTable();
+                    loader.style.display = 'none';
 
-                modal.style.display = 'flex';
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                alert("Failed to fetch records.");
-            } finally {
-                // Hide loader after the API call is finished
-                loader.style.display = 'none';
+                    populateCoBorrowerTable();
+
+                    modal.style.display = 'flex';
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    alert("Failed to fetch records.");
+                } finally {
+                    loader.style.display = 'none';
+                }
             }
         }
 
-        function populateAllRecordsTable() {
-            const tableBody = document.getElementById('borrowerTableBody');
+        function populateBorrowerTable() {
+            const tableBody = document.getElementById('borrowerDetailTableBody');
+            document.getElementById("borrowerTable").style.display = "block";
             tableBody.innerHTML = '';
 
             const start = currentAllRecordsPage * recordsPerPage;
@@ -616,20 +768,56 @@
                     <td><input type="text" value="${record.BReligion}" onchange="updateRecord(${start + index}, 'BReligion', this.value)" disabled></td>
                     <td><input type="text" value="${record.BGender}" onchange="updateRecord(${start + index}, 'BGender', this.value)" disabled></td>
                     <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${start + index}, 'BOccupation', this.value)" disabled></td>
-                    <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked) disabled"></td>
-                    <td><button onclick="saveRecord(${start + index})">Save</button></td>
+                    <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
+                    <td><button onclick="saveRecord(${start + index},'borrowerTable')">Save</button></td>
                 </tr>
             `;
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
         }
 
-        // Function to update a record field
+        function populateCoBorrowerTable() {
+            const tableBody = document.getElementById('coBorrowerTableBody');
+            document.getElementById("coBorrowerTable").style.display = "block";
+            tableBody.innerHTML = '';
+
+            const start = currentAllRecordsPage * recordsPerPage;
+            const end = start + recordsPerPage;
+            const paginatedData = allRecords.slice(start, end);
+
+            paginatedData.forEach((record, index) => {
+                const row = `
+                <tr>
+                    <td><input type="checkbox" class="edit-checkbox" onchange="toggleEdit(this)"></td>
+                    <td>${record.RowNo}</td>
+                    <td><input type="date" value="${record.Date.split('T')[0]}" onchange="updateRecord(${start + index}, 'Date', this.value)" disabled></td>
+                    <td>${record.BankId}</td>
+                    <td>${record.Cin}</td>
+                    <td>${record.CbCin}</td>
+                    <td><input type="text" value="${record.CbName}" onchange="updateRecord(${start + index}, 'CbName', this.value)" disabled></td>
+                    <td><input type="date" value="${record.CbDob.split('T')[0]}" onchange="updateRecord(${start + index}, 'CbDob', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbCitizenship}" onchange="updateRecord(${start + index}, 'CbCitizenship', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbPanNo}" onchange="updateRecord(${start + index}, 'CbPanNo', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbAadhaar}" onchange="updateRecord(${start + index}, 'CbAadhaar', this.value)" disabled></td>
+                    <td><input type="text" value="${record.IdType}" onchange="updateRecord(${start + index}, 'IdType', this.value)" disabled></td>
+                    <td><input type="text" value="${record.IdNumber}" onchange="updateRecord(${start + index}, 'IdNumber', this.value)" disabled></td>
+                    <td><input type="number" value="${record.CbMonthlyIncome}" onchange="updateRecord(${start + index}, 'CbMonthlyIncome', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbReligion}" onchange="updateRecord(${start + index}, 'CbReligion', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbCast}" onchange="updateRecord(${start + index}, 'CbCast', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbGender}" onchange="updateRecord(${start + index}, 'CbGender', this.value)" disabled></td>
+                    <td><input type="text" value="${record.CbOccupation}" onchange="updateRecord(${start + index}, 'CbOccupation', this.value)" disabled></td>
+                    <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
+                    <td><button onclick="saveRecord(${start + index},'coBorrowerTable')">Save</button></td>
+                </tr>
+            `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
         function updateRecord(index, field, value) {
             allRecords[index][field] = field === 'IsValidated' ? value : value;
         }
 
-        // Function to save all records
         function saveAllRecords() {
             fetch('https://adfapi.lordist.in/api/BorrowerDetails/UpdateBorrowerDetail', {
                 method: 'POST',
@@ -646,44 +834,60 @@
                 });
         }
 
-        // Function to save a single record
-        function saveRecord(index) {
+        function saveRecord(index, tableName) {
             const record = allRecords[index];
-            fetch('https://adfapi.lordist.in/api/BorrowerDetails/UpdateBorrowerDetail', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const apiUrl = tableName === 'borrowerTable' ? 'https://adfapi.lordist.in/BorrowerDetail' : 'https://adfapi.lordist.in/CoBorrowerDetails';
+
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: { 
+                    'accept': '*/*',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(record)
             })
-                .then(response => response.json())
-                .then(data => {
+            .then(response => {
+                if (response.status === 204) {
+                    // Handle the 204 No Content status
                     alert('Record updated successfully!');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to update record.');
-                });
+                } else if (response.ok) {
+                    // Handle other successful status codes (e.g., 200, 201)
+                    return response.json();
+                } else {
+                    // Handle other status codes (e.g., 400, 500)
+                    throw new Error(`Failed to update record. Status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                if (data) {
+                    // This block will only execute if there is JSON data to parse
+                    alert('Record updated successfully!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update record.');
+            });
         }
 
         function closeViewAllModal() {
             document.getElementById('viewAllRecordsModal').style.display = 'none';
         }
 
-        // Pagination functions
         function prevAllRecordsPage() {
             if (currentAllRecordsPage > 0) {
                 currentAllRecordsPage--;
-                populateAllRecordsTable();
+                populateBorrowerTable();
             }
         }
 
         function nextAllRecordsPage() {
             if ((currentAllRecordsPage + 1) * recordsPerPage < allRecords.length) {
                 currentAllRecordsPage++;
-                populateAllRecordsTable();
+                populateBorrowerTable();
             }
         }
 
-        // Function to toggle edit mode
         function toggleEdit(checkbox) {
             const row = checkbox.closest('tr');
             const inputs = row.querySelectorAll('input[type="text"], input[type="date"], input[type="number"], input[type="checkbox"]:not(.edit-checkbox)');
