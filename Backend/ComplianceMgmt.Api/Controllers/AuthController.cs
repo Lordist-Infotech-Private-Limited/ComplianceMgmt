@@ -92,21 +92,6 @@ namespace ComplianceMgmt.Api.Controllers
             }
         }
 
-        // POST: auth/refresh-token
-        [AllowAnonymous]
-        [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
-        {
-            var user = await _authService.RefreshToken(tokenRequest.AccessToken, tokenRequest.RefreshToken);
-
-            if (user != null)
-            {
-                return Ok(user);
-            }
-
-            return Unauthorized(new { message = "Invalid token or refresh token" });
-        }
-
         // GET: auth/test
         [Authorize()]
         [HttpGet]
