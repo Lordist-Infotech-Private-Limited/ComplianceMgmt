@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Dashboard with Loader</title>
     <style>
         :root {
-            --primary-color: #4F46E5;
+            --primary-color: #0056b3;
             --secondary-color: #818CF8;
             --background-color: #F3F4F6;
             --card-background: #FFFFFF;
@@ -45,7 +42,7 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            padding: 1rem;
+            padding: 0.5rem;
             background-color: var(--card-background);
             border-radius: 0.75rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -80,10 +77,26 @@
             transform: translateY(-1px);
         }
 
+        #clearBtn{
+            background-color: #dc3545; /* Red color for clear button */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem; /* Space between Save and Clear buttons */
+        }
+
+        #clearBtn:hover{
+            background-color: #c82333; /* Darker red on hover */
+            transform: translateY(-1px);
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
         }
 
         .table,
@@ -102,7 +115,7 @@
         }
 
         .table td {
-            padding: 1rem;
+            padding: 0.5rem;
             border-bottom: 1px solid #E5E7EB;
         }
 
@@ -180,6 +193,11 @@
             padding: 1.5rem;
         }
 
+        .modal-body div{
+            display: flex;
+            align-items: center;
+        }
+
         .modal-header h2 {
             margin: 0;
         }
@@ -190,11 +208,21 @@
             cursor: pointer;
         }
 
+        .modal-action{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
         .modal-body input {
             width: 50%;
             padding: 8px;
             margin: 5px 0;
             font-size: 16px;
+        }
+
+        .modal-body label {
+            width: 50%;
         }
 
         .responsive-table {
@@ -259,6 +287,10 @@
             background-color: #004085;
         }
 
+        #saveSingleRecordBtn{
+            margin-top: 1rem;
+        }
+
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -303,6 +335,59 @@
         .responsive-table input[type="checkbox"]:checked~input[type="checkbox"] {
             background-color: white;
         }
+
+        /* Search Input Field */
+        #searchInput {
+            padding: 0.75rem 1rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px; /* Adjust as needed */
+            box-sizing: border-box;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Placeholder Text */
+        #searchInput::placeholder {
+            color: #9CA3AF;
+            opacity: 1; /* Firefox */
+        }
+
+        #searchInput:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #9CA3AF;
+        }
+
+        #searchInput::-ms-input-placeholder { /* Microsoft Edge */
+            color: #9CA3AF;
+        }
+
+        /* Button Alignment */
+        .modal-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .modal-action {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #searchInput {
+                max-width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -327,6 +412,7 @@
                         <th>Success</th>
                         <th>Constraint Rejection</th>
                         <th>Business Rejection</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -343,11 +429,11 @@
             <div class="modal-body">
                 <div>
                     <label for="editRowNo">Row No:</label>
-                    <input type="number" id="editRowNo">
+                    <input type="number" id="editRowNo" disabled>
                 </div>
                 <div>
                     <label for="editDate">Date:</label>
-                    <input type="date" id="editDate">
+                    <input type="date" id="editDate" disabled>
                 </div>
                 <div>
                     <label for="editBankId">Bank ID:</label>
@@ -355,7 +441,7 @@
                 </div>
                 <div>
                     <label for="editCin">CIN:</label>
-                    <input type="text" id="editCin">
+                    <input type="text" id="editCin" disabled>
                 </div>
                 <div>
                     <label for="editBName">Name:</label>
@@ -410,14 +496,8 @@
                     <input type="checkbox" id="editIsValidated">
                 </div>
                 <div>
-                    <label for="editRejectedReason">Rejected Reason:</label>
-                    <input type="text" id="editRejectedReason">
+                    <button id="saveSingleRecordBtn" onclick="saveSingleRecord()">Save</button>
                 </div>
-                <div>
-                    <label for="editValidatedDate">Validated Date:</label>
-                    <input type="datetime-local" id="editValidatedDate">
-                </div>
-                <button onclick="saveRecord()">Save</button>
             </div>
         </div>
     </div>
@@ -427,6 +507,10 @@
             <div class="modal-header">
                 <h2>All Records</h2>
                 <button onclick="closeViewAllModal()">X</button>
+            </div>
+            <div class="modal-action">
+                <input type="text" id="searchInput" placeholder="Search..." oninput="filterRecords()">
+                <button onclick="downloadExcel()">Download</button>
             </div>
             <div class="table-container">
                 <table id="borrowerTable" class="responsive-table">
@@ -491,7 +575,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
         const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
         const apiBaseUrl = isLocal ? "https://localhost:5001/BorrowerDetail/GetBorrowerDetail" : "https://adfapi.lordist.in/BorrowerDetail/GetBorrowerDetail";
@@ -501,6 +585,8 @@
         const recordsPerPage = 10;
         let allRecords = [];
         let currentAllRecordsPage = 0;
+        let currentTableName = ''; // Global variable to store the current table name
+        let originalRecords = [];
 
         async function fetchData() {
             const loader = document.getElementById('loader');
@@ -551,16 +637,19 @@
                 <td>${item.MsgStructure}</td>
                 <td>${item.TotalRecords}</td>
                 <td>
-                    <a href="#" onclick="openEditModal(${start + index}, 'Success')">+</a> 
+                    <a href="#" onclick="openEditModal(${start + index}, 'Success', 'borrowerTable')">+</a> 
                     <a href="#" onclick="openViewAllModal(${start + index}, 'Success')">${item.SuccessRecords}</span>
                 </td>
                 <td>
-                    <a href="#" onclick="openEditModal(${start + index}, 'Constraint')">+</a>
+                    <a href="#" onclick="openEditModal(${start + index}, 'Constraint', 'borrowerTable')">+</a>
                     <a href="#" onclick="openViewAllModal(${start + index}, 'Constraint')">${item.ConstraintRejection}</span>
                 </td>
                 <td>
-                    <a href="#" onclick="openEditModal(${start + index}, 'Business')">+</a>
+                    <a href="#" onclick="openEditModal(${start + index}, 'Business', 'borrowerTable')">+</a>
                     <a href="#" onclick="openViewAllModal(${start + index}, 'Business')">${item.BusinessRejection}</span>
+                </td>
+                <td>
+                    <button>Validate</button>
                 </td>
             </tr>
         `;
@@ -568,7 +657,7 @@
             });
         }
 
-        async function openEditModal(index, type) {
+        async function openEditModal(index, type, tableName) {
             const referenceDate = document.getElementById('referenceDate').value;
             const loader = document.getElementById('loader');
             loader.style.display = 'flex';
@@ -576,9 +665,11 @@
             try {
                 let apiUrl, record;
                 if (index === 0) {
+                    currentTableName = "borrowerDetail"
                     apiUrl = `https://adfapi.lordist.in/BorrowerDetail/byDate/${encodeURIComponent(referenceDate)}`;
                 } else if (index === 4) {
                     apiUrl = `https://adfapi.lordist.in/CoBorrowerDetails/byDate/${encodeURIComponent(referenceDate)}`;
+                    currentTableName = "coBorrowerDetail"
                 }
 
                 const response = await fetch(apiUrl, {
@@ -600,7 +691,7 @@
                 document.getElementById('editCin').value = record.Cin !== undefined ? record.Cin : '';
                 document.getElementById('editBName').value = record.BName !== undefined ? record.BName : '';
                 document.getElementById('editBDob').value = record.BDob !== undefined ? record.BDob.split('T')[0] : '';
-                document.getElementById('editSBCitizenship').value = record.SBCitizenship !== undefined ? record.SBCitizenship : '';
+                document.getElementById('editSBCitizenship').value = record.sbCitizenship !== undefined ? record.sbCitizenship : '';
                 document.getElementById('editBPanNo').value = record.BPanNo !== undefined ? record.BPanNo : '';
                 document.getElementById('editAadhaar').value = record.Aadhaar !== undefined ? record.Aadhaar : '';
                 document.getElementById('editIdType').value = record.IdType !== undefined ? record.IdType : '';
@@ -611,8 +702,41 @@
                 document.getElementById('editBGender').value = record.BGender !== undefined ? record.BGender : '';
                 document.getElementById('editBOccupation').value = record.BOccupation !== undefined ? record.BOccupation : '';
                 document.getElementById('editIsValidated').checked = record.IsValidated !== undefined ? record.IsValidated : false;
-                document.getElementById('editRejectedReason').value = record.RejectedReason !== undefined ? record.RejectedReason : '';
-                document.getElementById('editValidatedDate').value = record.ValidatedDate !== undefined ? record.ValidatedDate.split('T')[0] : '';
+
+                // Additional fields for Co-Borrower
+                if (record.CbCin !== undefined) {
+                    document.getElementById('editCin').value = record.CbCin;
+                }
+                if (record.CbName !== undefined) {
+                    document.getElementById('editBName').value = record.CbName;
+                }
+                if (record.CbDob !== undefined) {
+                    document.getElementById('editBDob').value = record.CbDob.split('T')[0];
+                }
+                if (record.CbCitizenship !== undefined) {
+                    document.getElementById('editSBCitizenship').value = record.CbCitizenship;
+                }
+                if (record.CbPanNo !== undefined) {
+                    document.getElementById('editBPanNo').value = record.CbPanNo;
+                }
+                if (record.CbAadhaar !== undefined) {
+                    document.getElementById('editAadhaar').value = record.CbAadhaar;
+                }
+                if (record.CbMonthlyIncome !== undefined) {
+                    document.getElementById('editBMonthlyIncome').value = record.CbMonthlyIncome;
+                }
+                if (record.CbReligion !== undefined) {
+                    document.getElementById('editBReligion').value = record.CbReligion;
+                }
+                if (record.CbCast !== undefined) {
+                    document.getElementById('editBCast').value = record.CbCast;
+                }
+                if (record.CbGender !== undefined) {
+                    document.getElementById('editBGender').value = record.CbGender;
+                }
+                if (record.CbOccupation !== undefined) {
+                    document.getElementById('editBOccupation').value = record.CbOccupation;
+                }
 
                 document.getElementById('editRecordModal').style.display = 'flex';
             } catch (error) {
@@ -623,15 +747,15 @@
             }
         }
 
-        function saveRecord() {
+        function saveSingleRecord() {
             const record = {
                 RowNo: parseInt(document.getElementById('editRowNo').value),
-                Date: document.getElementById('editDate').value,
+                Date: new Date(document.getElementById('editDate').value).toISOString(),
                 BankId: parseInt(document.getElementById('editBankId').value),
                 Cin: document.getElementById('editCin').value,
                 BName: document.getElementById('editBName').value,
-                BDob: document.getElementById('editBDob').value,
-                SBCitizenship: document.getElementById('editSBCitizenship').value,
+                BDob: new Date(document.getElementById('editBDob').value).toISOString(),
+                sbCitizenship: document.getElementById('editSBCitizenship').value,
                 BPanNo: document.getElementById('editBPanNo').value,
                 Aadhaar: document.getElementById('editAadhaar').value,
                 IdType: document.getElementById('editIdType').value,
@@ -642,12 +766,26 @@
                 BGender: document.getElementById('editBGender').value,
                 BOccupation: document.getElementById('editBOccupation').value,
                 IsValidated: document.getElementById('editIsValidated').checked,
-                RejectedReason: document.getElementById('editRejectedReason').value,
-                ValidatedDate: document.getElementById('editValidatedDate').value
             };
 
-            const apiUrl = 'https://adfapi.lordist.in/BorrowerDetail';
+            // Additional fields for Co-Borrower
+            if (currentTableName === 'coBorrowerTable') {
+                record.CbCin = document.getElementById('editCin').value;
+                record.CbName = document.getElementById('editBName').value;
+                record.CbDob = new Date(document.getElementById('editBDob').value).toISOString();
+                record.CbCitizenship = document.getElementById('editSBCitizenship').value;
+                record.CbPanNo = document.getElementById('editBPanNo').value;
+                record.CbAadhaar = document.getElementById('editAadhaar').value;
+                record.CbMonthlyIncome = parseInt(document.getElementById('editBMonthlyIncome').value);
+                record.CbReligion = document.getElementById('editBReligion').value;
+                record.CbCast = document.getElementById('editBCast').value;
+                record.CbGender = document.getElementById('editBGender').value;
+                record.CbOccupation = document.getElementById('editBOccupation').value;
+            }
 
+            const apiUrl = currentTableName === 'borrowerTable' ? 'https://adfapi.lordist.in/BorrowerDetail' : 'https://adfapi.lordist.in/CoBorrowerDetails';
+            console.log(record);
+            
             fetch(apiUrl, {
                 method: 'PUT',
                 headers: { 
@@ -680,6 +818,7 @@
             });
         }
 
+
         function closeEditModal() {
             document.getElementById('editRecordModal').style.display = 'none';
         }
@@ -692,6 +831,7 @@
             document.getElementById("coBorrowerTable").style.display = "none";
 
             if (index === 0) {
+                currentTableName = "borrowerDetail";
                 const tableBody = document.getElementById('borrowerDetailTableBody');
                 loader.style.display = 'flex';
                 tableBody.innerHTML = '';
@@ -703,6 +843,7 @@
                     }
 
                     allRecords = await response.json();
+                    originalRecords = [...allRecords]; // Store original records
 
                     loader.style.display = 'none';
 
@@ -716,6 +857,7 @@
                     loader.style.display = 'none';
                 }
             } else if (index === 4) {
+                currentTableName = "coBorrowerDetail";
                 const tableBody = document.getElementById('coBorrowerTableBody');
                 loader.style.display = 'flex';
                 tableBody.innerHTML = '';
@@ -727,6 +869,7 @@
                     }
 
                     allRecords = await response.json();
+                    originalRecords = [...allRecords]; // Store original records
 
                     loader.style.display = 'none';
 
@@ -756,12 +899,12 @@
                 <tr>
                     <td><input type="checkbox" class="edit-checkbox" onchange="toggleEdit(this)"></td>
                     <td>${record.RowNo}</td>
-                    <td><input type="date" value="${record.Date.split('T')[0]}" onchange="updateRecord(${start + index}, 'Date', this.value)" disabled></td>
+                    <td>${record.Date.split('T')[0]}</td>
                     <td>${record.BankId}</td>
                     <td>${record.Cin}</td>
                     <td><input type="text" value="${record.BName}" onchange="updateRecord(${start + index}, 'BName', this.value)" disabled></td>
                     <td><input type="date" value="${record.BDob.split('T')[0]}" onchange="updateRecord(${start + index}, 'BDob', this.value)" disabled></td>
-                    <td><input type="text" value="${record.SBCitizenship}" onchange="updateRecord(${start + index}, 'SBCitizenship', this.value)" disabled></td>
+                    <td><input type="text" value="${record.sbCitizenship}" onchange="updateRecord(${start + index}, 'SBCitizenship', this.value)" disabled></td>
                     <td><input type="text" value="${record.BPanNo}" onchange="updateRecord(${start + index}, 'BPanNo', this.value)" disabled></td>
                     <td><input type="text" value="${record.Aadhaar}" onchange="updateRecord(${start + index}, 'Aadhaar', this.value)" disabled></td>
                     <td><input type="number" value="${record.BMonthlyIncome}" onchange="updateRecord(${start + index}, 'BMonthlyIncome', this.value)" disabled></td>
@@ -769,7 +912,10 @@
                     <td><input type="text" value="${record.BGender}" onchange="updateRecord(${start + index}, 'BGender', this.value)" disabled></td>
                     <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${start + index}, 'BOccupation', this.value)" disabled></td>
                     <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
-                    <td><button onclick="saveRecord(${start + index},'borrowerTable')">Save</button></td>
+                    <td>
+                        <button onclick="saveRecord(${start + index},'borrowerTable')">Save</button>
+                        <button id="clearBtn" onclick="clearRow(${start + index})">Clear</button>
+                    </td>
                 </tr>
             `;
                 tableBody.insertAdjacentHTML('beforeend', row);
@@ -790,7 +936,7 @@
                 <tr>
                     <td><input type="checkbox" class="edit-checkbox" onchange="toggleEdit(this)"></td>
                     <td>${record.RowNo}</td>
-                    <td><input type="date" value="${record.Date.split('T')[0]}" onchange="updateRecord(${start + index}, 'Date', this.value)" disabled></td>
+                    <td>${record.Date.split('T')[0]}</td>
                     <td>${record.BankId}</td>
                     <td>${record.Cin}</td>
                     <td>${record.CbCin}</td>
@@ -807,11 +953,38 @@
                     <td><input type="text" value="${record.CbGender}" onchange="updateRecord(${start + index}, 'CbGender', this.value)" disabled></td>
                     <td><input type="text" value="${record.CbOccupation}" onchange="updateRecord(${start + index}, 'CbOccupation', this.value)" disabled></td>
                     <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
-                    <td><button onclick="saveRecord(${start + index},'coBorrowerTable')">Save</button></td>
+                    <td>
+                        <button onclick="saveRecord(${start + index},'coBorrowerTable')">Save</button>
+                        <button id="clearBtn" onclick="clearRow(${start + index})">Clear</button>
+                    </td>
                 </tr>
             `;
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
+        }
+
+        function clearRow(index) {
+            const record = allRecords[index];
+            for (let key in record) {
+                if(key === "Cin"|| key === "RowNo" || key === "Date" ||key ===  "BankId" || key ===  "CbCin"){
+                    continue;
+                }
+                if (record.hasOwnProperty(key)) {
+                    if (typeof record[key] === 'string') {
+                        record[key] = '';
+                    } else if (typeof record[key] === 'number') {
+                        record[key] = 0;
+                    } else if (typeof record[key] === 'boolean') {
+                        record[key] = false;
+                    }
+                }
+            }
+            // Repopulate the table to reflect the changes
+            if(currentTableName ==="borrowerDetail"){
+                populateBorrowerTable();
+            }else if(currentTableName ==="coBorrowerDetail"){
+                populateCoBorrowerTable();
+            }
         }
 
         function updateRecord(index, field, value) {
@@ -895,7 +1068,129 @@
                 input.disabled = !checkbox.checked;
             });
         }
+
+        function downloadExcel() {
+            const ws = XLSX.utils.json_to_sheet(allRecords);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Records");
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            saveAsExcelFile(wbout, "records.xlsx");
+        }
+
+        function saveAsExcelFile(buffer, fileName) {
+            const data = new Blob([buffer], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+
+        function filterRecords() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tableBody = document.getElementById('borrowerDetailTableBody');
+            const coBorrowerTableBody = document.getElementById('coBorrowerTableBody');
+
+            if (searchTerm === '') {
+                // If search term is empty, restore original records
+                if (currentTableName === "borrowerDetail") {
+                    populateBorrowerTable();
+                } else if (currentTableName === "coBorrowerDetail") {
+                    populateCoBorrowerTable();
+                }
+                return;
+            }
+
+            // Filter records based on search term
+            const filteredRecords = originalRecords.filter(record => {
+                for (let key in record) {
+                    if (record.hasOwnProperty(key) && record[key] !== null && record[key] !== undefined) {
+                        if (record[key].toString().toLowerCase().includes(searchTerm)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+
+            // Display top 10 matches
+            const top10Records = filteredRecords.slice(0, 10);
+
+            console.log("top10reords",top10Records);
+            
+
+            // Clear current table bodies
+            tableBody.innerHTML = '';
+            coBorrowerTableBody.innerHTML = '';
+
+
+            if(currentTableName === "borrowerDetail"){
+
+                
+                // Populate borrower table with filtered records
+            top10Records.forEach((record, index) => {
+                const row = `
+                    <tr>
+                        <td><input type="checkbox" class="edit-checkbox" onchange="toggleEdit(this)"></td>
+                        <td>${record.RowNo}</td>
+                        <td>${record.Date.split('T')[0]}</td>
+                        <td>${record.BankId}</td>
+                        <td>${record.Cin}</td>
+                        <td><input type="text" value="${record.BName}" onchange="updateRecord(${index}, 'BName', this.value)" disabled></td>
+                        <td><input type="date" value="${record.BDob.split('T')[0]}" onchange="updateRecord(${index}, 'BDob', this.value)" disabled></td>
+                        <td><input type="text" value="${record.sbCitizenship}" onchange="updateRecord(${index}, 'SBCitizenship', this.value)" disabled></td>
+                        <td><input type="text" value="${record.BPanNo}" onchange="updateRecord(${index}, 'BPanNo', this.value)" disabled></td>
+                        <td><input type="text" value="${record.Aadhaar}" onchange="updateRecord(${index}, 'Aadhaar', this.value)" disabled></td>
+                        <td><input type="number" value="${record.BMonthlyIncome}" onchange="updateRecord(${index}, 'BMonthlyIncome', this.value)" disabled></td>
+                        <td><input type="text" value="${record.BReligion}" onchange="updateRecord(${index}, 'BReligion', this.value)" disabled></td>
+                        <td><input type="text" value="${record.BGender}" onchange="updateRecord(${index}, 'BGender', this.value)" disabled></td>
+                        <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${index}, 'BOccupation', this.value)" disabled></td>
+                        <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${index}, 'IsValidated', this.checked)" disabled></td>
+                        <td>
+                            <button onclick="saveRecord(${index},'borrowerTable')">Save</button>
+                            <button id="clearBtn" onclick="clearRow(${index})">Clear</button>
+                            </td>
+                            </tr>
+                            `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }else if (currentTableName === "coBorrowerDetail"){ 
+                // Populate co-borrower table with filtered records
+                top10Records.forEach((record, index) => {
+                    const row = `
+                    <tr>
+                        <td><input type="checkbox" class="edit-checkbox" onchange="toggleEdit(this)"></td>
+                        <td>${record.RowNo}</td>
+                        <td>${record.Date.split('T')[0]}</td>
+                        <td>${record.BankId}</td>
+                        <td>${record.Cin}</td>
+                        <td>${record.CbCin}</td>
+                        <td><input type="text" value="${record.CbName}" onchange="updateRecord(${index}, 'CbName', this.value)" disabled></td>
+                        <td><input type="date" value="${record.CbDob.split('T')[0]}" onchange="updateRecord(${index}, 'CbDob', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbCitizenship}" onchange="updateRecord(${index}, 'CbCitizenship', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbPanNo}" onchange="updateRecord(${index}, 'CbPanNo', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbAadhaar}" onchange="updateRecord(${index}, 'CbAadhaar', this.value)" disabled></td>
+                        <td><input type="text" value="${record.IdType}" onchange="updateRecord(${index}, 'IdType', this.value)" disabled></td>
+                        <td><input type="text" value="${record.IdNumber}" onchange="updateRecord(${index}, 'IdNumber', this.value)" disabled></td>
+                        <td><input type="number" value="${record.CbMonthlyIncome}" onchange="updateRecord(${index}, 'CbMonthlyIncome', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbReligion}" onchange="updateRecord(${index}, 'CbReligion', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbCast}" onchange="updateRecord(${index}, 'CbCast', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbGender}" onchange="updateRecord(${index}, 'CbGender', this.value)" disabled></td>
+                        <td><input type="text" value="${record.CbOccupation}" onchange="updateRecord(${index}, 'CbOccupation', this.value)" disabled></td>
+                        <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${index}, 'IsValidated', this.checked)" disabled></td>
+                        <td>
+                            <button onclick="saveRecord(${index},'coBorrowerTable')">Save</button>
+                            <button id="clearBtn" onclick="clearRow(${index})">Clear</button>
+                            </td>
+                            </tr>
+                            `;
+                    coBorrowerTableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+        }
+
+
     </script>
 </body>
-
-</html>

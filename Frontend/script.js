@@ -4,12 +4,16 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const mailId = document.getElementById('mailId').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
-    
-     // Check if the app is running locally (development) or on a live server (production)
-     const isLocal = window.location.hostname === "localhost" || window.location.hostname === "https://adfapi.lordist.in";
+    const loaderContainer = document.getElementById('loaderContainer');
+
+    // Show loader
+    loaderContainer.style.display = 'flex';
+
+    // Check if the app is running locally (development) or on a live server (production)
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "https://adfapi.lordist.in";
         
-     // Set the base URL for the API based on the environment
-     const apiBaseUrl = isLocal ? "https://localhost:7275/Auth/Login" : "https://adfapi.lordist.in/Auth/Login";
+    // Set the base URL for the API based on the environment
+    const apiBaseUrl = isLocal ? "https://localhost:7275/Auth/Login" : "https://adfapi.lordist.in/Auth/Login";
 
     fetch(apiBaseUrl, {
         method: 'POST',
@@ -23,16 +27,22 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     })
     .then(response => response.json())
     .then(data => {
+        // Hide loader
+        loaderContainer.style.display = 'none';
+
         if (data.UserID) {
             // Redirect to a dashboard or home page
             window.location.href = 'dashboard.html';
         } else {
-            document.getElementById('error-message').textContent = data.message || 'Login failed';
+            errorMessage.textContent = data.message || 'Login failed';
         }
     })
     .catch(error => {
+        // Hide loader
+        loaderContainer.style.display = 'none';
+
         console.error('Error:', error);
-        document.getElementById('error-message').textContent = 'An error occurred during login';
+        errorMessage.textContent = 'An error occurred during login';
     });
 });
 
