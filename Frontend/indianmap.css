@@ -1,0 +1,28 @@
+/* Container styling */
+#india-map-container {
+    width: 100%;
+    height: calc(100vh - 80px); /* Full height minus dropdown */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent scrollbars */
+}
+
+/* SVG styling */
+svg {
+    width: 100%; /* Scale to full width */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 100%; /* Prevent vertical overflow */
+    display: block;
+}
+
+/* Hover effects for states */
+.state {
+    cursor: pointer;
+    fill: #B0BEC5; /* Default color */
+    transition: fill 0.3s ease;
+}
+
+.state:hover {
+    fill: #FF9900; /* Highlight on hover */
+}
