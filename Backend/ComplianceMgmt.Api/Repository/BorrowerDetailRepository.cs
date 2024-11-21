@@ -4,7 +4,7 @@ using ComplianceMgmt.Api.Models;
 using Dapper;
 using MiniExcelLibs;
 using MySql.Data.MySqlClient;
-using System.Globalization;
+using System.Dynamic;
 using System.Text;
 
 namespace ComplianceMgmt.Api.Repository
@@ -83,29 +83,20 @@ namespace ComplianceMgmt.Api.Repository
             // Use MiniExcel to read rows from the uploaded file
             var rows = excelStream.Query(useHeaderRow: true);
 
-            var borrowers = rows.Select(row => new BorrowerDetail
+            var borrowers = rows.Select(row =>
             {
-                Date = DateTime.Parse(row.Date.ToString(), CultureInfo.InvariantCulture),
-                BankId = Convert.ToInt32(row.BankId),
-                Cin = row.Cin.ToString(),
-                BName = row.BName.ToString(),
-                BDob = DateTime.Parse(row.BDob.ToString(), CultureInfo.InvariantCulture),
-                sbcitizenship = row.sbcitizenship.ToString(),
-                BPanNo = row.BPanNo?.ToString(),
-                Aadhaar = row.Aadhaar.ToString(),
-                IdType = row.IdType?.ToString(),
-                IdNumber = row.IdNumber?.ToString(),
-                BMonthlyIncome = Convert.ToInt64(row.BMonthlyIncome),
-                BReligion = row.BReligion?.ToString(),
-                BCast = row.BCast?.ToString(),
-                BGender = row.BGender.ToString(),
-                BOccupation = row.BOccupation.ToString(),
-                IsValidated = string.IsNullOrWhiteSpace(row.IsValidated?.ToString()) ? null : (bool?)bool.Parse(row.IsValidated.ToString()),
-                RejectedReason = row.RejectedReason?.ToString(),
-                ValidatedDate = string.IsNullOrWhiteSpace(row.ValidatedDate?.ToString()) ? null : (DateTime?)DateTime.Parse(row.ValidatedDate.ToString(), CultureInfo.InvariantCulture)
-            }).ToList();
+                dynamic dynamicRow = new ExpandoObject();
+                var dictionary = (IDictionary<string, object>)dynamicRow;
 
-            return await BulkInsertAsync(context.CreateConnection().ConnectionString, "stgborrowerdetail", borrowers);
+                foreach (var column in row)
+                {
+                    dictionary[column.Key] = column.Value;
+                }
+
+                return dynamicRow;
+            });
+
+            return await BulkUpdateAsync(context.CreateConnection().ConnectionString, "stgborrowerdetail", borrowers);
         }
 
         public async Task<bool> BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
@@ -182,5 +173,86 @@ namespace ComplianceMgmt.Api.Repository
             }
             return true;
         }
+
+        public async Task<bool> BulkUpdateAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
+        {
+            if (data == null || !data.Any()) return false;
+
+            using var connection = new MySqlConnection(connectionString);
+            await connection.OpenAsync();
+
+            var updateQuery = new StringBuilder();
+            var parameters = new List<MySqlParameter>();
+            int counter = 0;
+
+            // Define the composite key columns
+            var keyColumns = new[] { "Date", "BankId", "Cin" };
+
+            // Use the first item as a reference to get columns
+            dynamic firstItem = data.First();
+
+            // Check if firstItem is a dictionary and extract keys (columns)
+            if (firstItem is IDictionary<string, object> dictionary)
+            {
+                var columns = dictionary.Keys
+                    .Where(k => !keyColumns.Contains(k, StringComparer.OrdinalIgnoreCase)) // Exclude key columns from the update set
+                    .ToArray();
+
+                foreach (var record in data)
+                {
+                    if (record is IDictionary<string, object> recordDictionary)
+                    {
+                        var setClauses = new List<string>();
+                        var whereClauses = new List<string>();
+
+                        // Build SET clauses for non-key columns
+                        foreach (var column in columns)
+                        {
+                            var paramName = $"@{column}{counter}";
+                            var propertyValue = recordDictionary.ContainsKey(column) ? recordDictionary[column] : DBNull.Value;
+
+                            setClauses.Add($"{column} = {paramName}");
+                            parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+                        }
+
+                        // Build WHERE clauses for key columns
+                        foreach (var keyColumn in keyColumns)
+                        {
+                            var keyParamName = $"@{keyColumn}{counter}";
+                            var keyValue = recordDictionary.ContainsKey(keyColumn) ? recordDictionary[keyColumn] : DBNull.Value;
+
+                            whereClauses.Add($"{keyColumn} = {keyParamName}");
+                            parameters.Add(new MySqlParameter(keyParamName, keyValue ?? DBNull.Value));
+                        }
+
+                        // Append the UPDATE statement
+                        updateQuery.Append($"UPDATE {tableName} SET {string.Join(", ", setClauses)} WHERE {string.Join(" AND ", whereClauses)}; ");
+                        counter++;
+                    }
+                }
+
+                // Execute the update query
+                using var command = new MySqlCommand(updateQuery.ToString(), connection);
+                command.Parameters.AddRange(parameters.ToArray());
+
+                try
+                {
+                    await command.ExecuteNonQueryAsync();
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
+            }
+
+            return true;
+        }
+
     }
 }

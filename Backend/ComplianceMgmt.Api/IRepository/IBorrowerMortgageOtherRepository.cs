@@ -7,5 +7,7 @@ namespace ComplianceMgmt.Api.IRepository
         Task<BorrowerMortgageOther> GetByPrimaryKeyAsync(DateTime date);
         Task<IEnumerable<BorrowerMortgageOther>> GetAllByDateAsync(DateTime date);
         Task UpdateAsync(BorrowerMortgageOther borrowerMortgageOther);
+        Task<bool> ImportBorrowerDetailsFromExcelAsync(Stream excelStream);
+
     }
 }

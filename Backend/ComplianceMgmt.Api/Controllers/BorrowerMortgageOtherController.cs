@@ -29,5 +29,36 @@ namespace ComplianceMgmt.Api.Controllers
             await repository.UpdateAsync(borrowerMortgageOther);
             return NoContent();
         }
+
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportExcel(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please upload a valid Excel file.");
+            }
+
+            try
+            {
+                // Read the file stream
+                using var stream = file.OpenReadStream();
+                // Pass the stream to the service for processing
+                var result = await repository.ImportBorrowerDetailsFromExcelAsync(stream);
+
+                if (result)
+                {
+                    return Ok("Excel file imported successfully.");
+                }
+                else
+                {
+                    return StatusCode(500, "Error importing data from Excel.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
     }
 }
