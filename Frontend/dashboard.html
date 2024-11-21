@@ -2,12 +2,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Dashboard with Loader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary-color: #0056b3;
             --secondary-color: #818CF8;
             --background-color: #F3F4F6;
             --card-background: #FFFFFF;
+            --table-header-color: #6D9886; /* New color for table headers */
+            --table-row-alt-color: #F2F2F2; /* Alternative color for table rows */
         }
 
         body {
@@ -77,7 +80,30 @@
             transform: translateY(-1px);
         }
 
-        #clearBtn{
+        /* Download Button Specific Styles */
+        #downloadBtn {
+            background-color: #28a745; /* Green color for download button */
+        }
+
+        #downloadBtn:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        /* Upload Button Specific Styles */
+        #uploadBtn {
+            background-color: #dc3545; /* Red color for upload button */
+        }
+
+        #uploadBtn:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+
+        #uploadBtn:active {
+            background-color: #bd2130; /* Even darker red on active */
+            transform: translateY(0);
+        }
+
+        #clearBtn {
             background-color: #dc3545; /* Red color for clear button */
             color: white;
             padding: 0.5rem 1rem;
@@ -86,10 +112,9 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 0.5rem; /* Space between Save and Clear buttons */
         }
 
-        #clearBtn:hover{
+        #clearBtn:hover {
             background-color: #c82333; /* Darker red on hover */
             transform: translateY(-1px);
         }
@@ -105,12 +130,18 @@
             border: 1px solid #ddd;
         }
 
+        .td-action {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
         .table th {
-            background-color: #F9FAFB;
+            background-color: var(--table-header-color); /* New color for table headers */
             padding: 1rem;
             text-align: left;
             font-weight: 600;
-            color: #374151;
+            color: white; /* Text color for table headers */
             border-bottom: 1px solid #E5E7EB;
         }
 
@@ -119,8 +150,8 @@
             border-bottom: 1px solid #E5E7EB;
         }
 
-        .table tr:hover {
-            background-color: #F9FAFB;
+        table tr:nth-child(even) {
+            background-color: var(--table-row-alt-color); /* Alternative color for table rows */
         }
 
         .loader-container {
@@ -185,15 +216,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #E5E7EB;
-            padding: 1.5rem;
         }
 
         .modal-body {
-            padding: 1.5rem;
+            padding: 0.5rem;
         }
 
-        .modal-body div{
+        .modal-body div {
             display: flex;
             align-items: center;
         }
@@ -204,25 +233,48 @@
 
         .modal-header button {
             border: none;
-            font-size: 20px;
+            font-size: 14px;
             cursor: pointer;
         }
 
-        .modal-action{
+        .modal-action {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 1rem;
         }
+
         .modal-body input {
-            width: 50%;
-            padding: 8px;
+            flex: 1;
             margin: 5px 0;
             font-size: 16px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #b7b9bd;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: #ffffff; /* Default background color */
+            color: #333333; /* Default text color */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-body input:disabled {
+            background-color: #f2f2f2;
+            color: #999999;
+            border-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .modal-body label {
-            width: 50%;
+            max-width: 20%;
+            width: 500px;
+        }
+
+        .single-modal-action {
+            display: flex;
+            align-items: end !important;
+            flex-direction: column !important;
         }
 
         .responsive-table {
@@ -236,11 +288,13 @@
             text-align: left;
             padding: 8px;
             border: 1px solid #ddd;
+            white-space: nowrap;
         }
 
         .responsive-table th {
-            background-color: #f4f4f4;
+            background-color: var(--table-header-color); /* New color for table headers */
             font-weight: bold;
+            color: white; /* Text color for table headers */
         }
 
         .table-container {
@@ -249,7 +303,7 @@
             background-color: var(--card-background);
             border-radius: 0.75rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-top: 1.5rem;
+            margin-top: 0.5rem;
         }
 
         @media (max-width: 768px) {
@@ -287,15 +341,14 @@
             background-color: #004085;
         }
 
-        #saveSingleRecordBtn{
+        #saveSingleRecordBtn {
             margin-top: 1rem;
         }
 
         .pagination {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-            padding: 1rem;
+            padding: 0.5rem;
         }
 
         .pagination button {
@@ -326,7 +379,25 @@
         .responsive-table input[type="date"],
         .responsive-table input[type="number"],
         .responsive-table input[type="checkbox"] {
-            background-color: #f4f4f4;
+            background-color: #ffffff; /* Default background color */
+            color: #333333; /* Default text color */
+            width: fit-content;
+            padding: 0.5rem 1rem;
+            border: 1px solid #b7b9bd;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+            max-width: 160px;
+        }
+
+        .responsive-table input[type="text"]:disabled,
+        .responsive-table input[type="date"]:disabled,
+        .responsive-table input[type="number"]:disabled,
+        .responsive-table input[type="checkbox"]:disabled {
+            background-color: #f2f2f2;
+            color: #999999;
+            border-color: #cccccc;
+            cursor: not-allowed;
         }
 
         .responsive-table input[type="checkbox"]:checked~input[type="text"],
@@ -338,7 +409,7 @@
 
         /* Search Input Field */
         #searchInput {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 1rem;
             border: 1px solid #E5E7EB;
             border-radius: 0.5rem;
             outline: none;
@@ -495,7 +566,7 @@
                     <label for="editIsValidated">Is Validated:</label>
                     <input type="checkbox" id="editIsValidated">
                 </div>
-                <div>
+                <div class="single-modal-action">
                     <button id="saveSingleRecordBtn" onclick="saveSingleRecord()">Save</button>
                 </div>
             </div>
@@ -510,7 +581,11 @@
             </div>
             <div class="modal-action">
                 <input type="text" id="searchInput" placeholder="Search..." oninput="filterRecords()">
-                <button onclick="downloadExcel()">Download</button>
+                <div>
+                    <button id="downloadBtn" onclick="downloadExcel()"><i class="fas fa-download"></i></button>
+                    <button id="uploadBtn" onclick="triggerFileInput()"><i class="fas fa-upload"></i></button>
+                    <input type="file" id="uploadInput" style="display: none;" onchange="handleFileUpload(event)">
+                </div>
             </div>
             <div class="table-container">
                 <table id="borrowerTable" class="responsive-table">
@@ -565,7 +640,6 @@
                     <tbody id="coBorrowerTableBody"></tbody>
                 </table>
             </div>
-            <br>
             <div class="pagination">
                 <button onclick="prevAllRecordsPage()">Previous</button>
                 <button onclick="nextAllRecordsPage()">Next</button>
@@ -649,7 +723,7 @@
                     <a href="#" onclick="openViewAllModal(${start + index}, 'Business')">${item.BusinessRejection}</span>
                 </td>
                 <td>
-                    <button>Validate</button>
+                    <button onclick="handleValidate(${start+index})">Validate</button>
                 </td>
             </tr>
         `;
@@ -784,7 +858,6 @@
             }
 
             const apiUrl = currentTableName === 'borrowerTable' ? 'https://adfapi.lordist.in/BorrowerDetail' : 'https://adfapi.lordist.in/CoBorrowerDetails';
-            console.log(record);
             
             fetch(apiUrl, {
                 method: 'PUT',
@@ -912,9 +985,9 @@
                     <td><input type="text" value="${record.BGender}" onchange="updateRecord(${start + index}, 'BGender', this.value)" disabled></td>
                     <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${start + index}, 'BOccupation', this.value)" disabled></td>
                     <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
-                    <td>
-                        <button onclick="saveRecord(${start + index},'borrowerTable')">Save</button>
-                        <button id="clearBtn" onclick="clearRow(${start + index})">Clear</button>
+                    <td class="td-action">
+                        <button onclick="saveRecord(${start + index},'borrowerTable')"><i class="fas fa-save"></i></button>
+                        <button id="clearBtn" onclick="clearRow(${start + index})"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
             `;
@@ -953,9 +1026,9 @@
                     <td><input type="text" value="${record.CbGender}" onchange="updateRecord(${start + index}, 'CbGender', this.value)" disabled></td>
                     <td><input type="text" value="${record.CbOccupation}" onchange="updateRecord(${start + index}, 'CbOccupation', this.value)" disabled></td>
                     <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${start + index}, 'IsValidated', this.checked)" disabled></td>
-                    <td>
-                        <button onclick="saveRecord(${start + index},'coBorrowerTable')">Save</button>
-                        <button id="clearBtn" onclick="clearRow(${start + index})">Clear</button>
+                    <td class="td-action">
+                        <button onclick="saveRecord(${start + index},'borrowerTable')"><i class="fas fa-save"></i></button>
+                        <button id="clearBtn" onclick="clearRow(${start + index})"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
             `;
@@ -1148,11 +1221,11 @@
                         <td><input type="text" value="${record.BGender}" onchange="updateRecord(${index}, 'BGender', this.value)" disabled></td>
                         <td><input type="text" value="${record.BOccupation}" onchange="updateRecord(${index}, 'BOccupation', this.value)" disabled></td>
                         <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${index}, 'IsValidated', this.checked)" disabled></td>
-                        <td>
-                            <button onclick="saveRecord(${index},'borrowerTable')">Save</button>
-                            <button id="clearBtn" onclick="clearRow(${index})">Clear</button>
-                            </td>
-                            </tr>
+                        <td class="td-action">
+                            <button onclick="saveRecord(${start + index},'borrowerTable')"><i class="fas fa-save"></i></button>
+                            <button id="clearBtn" onclick="clearRow(${start + index})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
                             `;
                     tableBody.insertAdjacentHTML('beforeend', row);
                 });
@@ -1180,17 +1253,31 @@
                         <td><input type="text" value="${record.CbGender}" onchange="updateRecord(${index}, 'CbGender', this.value)" disabled></td>
                         <td><input type="text" value="${record.CbOccupation}" onchange="updateRecord(${index}, 'CbOccupation', this.value)" disabled></td>
                         <td><input type="checkbox" ${record.IsValidated ? 'checked' : ''} onchange="updateRecord(${index}, 'IsValidated', this.checked)" disabled></td>
-                        <td>
-                            <button onclick="saveRecord(${index},'coBorrowerTable')">Save</button>
-                            <button id="clearBtn" onclick="clearRow(${index})">Clear</button>
-                            </td>
-                            </tr>
+                        <td class="td-action">
+                            <button onclick="saveRecord(${start + index},'borrowerTable')"><i class="fas fa-save"></i></button>
+                            <button id="clearBtn" onclick="clearRow(${start + index})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
                             `;
                     coBorrowerTableBody.insertAdjacentHTML('beforeend', row);
                 });
             }
         }
 
+        function triggerFileInput() {
+            document.getElementById('uploadInput').click();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                //TODO: api call to upload the file
+            }
+        }
+
+        function handleValidate(index){
+            //TODO: logic for validation
+        }
 
     </script>
 </body>
