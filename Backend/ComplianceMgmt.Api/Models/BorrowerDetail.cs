@@ -11,7 +11,7 @@ namespace ComplianceMgmt.Api.Models
         public string Cin { get; set; }
         public string BName { get; set; }
         public DateTime BDob { get; set; }
-        public string sbCitizenship { get; set; }
+        public string sbcitizenship { get; set; }
         public string? BPanNo { get; set; }
         public string Aadhaar { get; set; }
         public string? IdType { get; set; }

@@ -90,7 +90,7 @@ namespace ComplianceMgmt.Api.Repository
                 Cin = row.Cin.ToString(),
                 BName = row.BName.ToString(),
                 BDob = DateTime.Parse(row.BDob.ToString(), CultureInfo.InvariantCulture),
-                sbCitizenship = row.sbcitizenship.ToString(),
+                sbcitizenship = row.sbcitizenship.ToString(),
                 BPanNo = row.BPanNo?.ToString(),
                 Aadhaar = row.Aadhaar.ToString(),
                 IdType = row.IdType?.ToString(),
