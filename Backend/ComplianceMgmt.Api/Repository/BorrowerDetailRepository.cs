@@ -53,7 +53,7 @@ namespace ComplianceMgmt.Api.Repository
                 b.Cin,
                 b.BName,
                 b.BDob,
-                b.sbCitizenship,
+                b.sbcitizenship,
                 b.BPanNo,
                 b.Aadhaar,
                 b.IdType,
