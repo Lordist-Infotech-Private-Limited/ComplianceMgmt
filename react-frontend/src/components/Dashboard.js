@@ -116,9 +116,6 @@ function Dashboard() {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        Interactive Dashboard
-      </h2>
       <Actions
         onFetchData={handleFetchData}
         selectedDate={selectedDate}

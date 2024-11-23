@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import { saveSingleRecord } from "../api/service";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import ReactPaginate from "react-paginate";
 
 const ViewAllRecordsModal = ({
   records,
@@ -49,7 +50,14 @@ const ViewAllRecordsModal = ({
   const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
 
   const handleDownloadExcel = () => {
-    const ws = utils.json_to_sheet(allRecords);
+    // Assuming allRecords is your array of objects
+    const updatedRecords = allRecords.map((record) => ({
+      ...record,
+      ValidatedDate: record.Date,
+      RejectedReason: "",
+    }));
+
+    const ws = utils.json_to_sheet(updatedRecords);
     const wb = utils.book_new();
     utils.book_append_sheet(wb, ws, "Records");
     writeFileXLSX(wb, "records.xlsx");
@@ -87,20 +95,8 @@ const ViewAllRecordsModal = ({
     hideLoader();
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
   const clearRow = (index) => {
@@ -225,7 +221,13 @@ const ViewAllRecordsModal = ({
                     className="text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap"
                   >
                     {field.disabled ? (
-                      <span>{record[field.name]}</span>
+                      <span>
+                        {field.name === "Date"
+                          ? new Date(record[field.name])
+                              .toISOString()
+                              .split("T")[0]
+                          : record[field.name]}
+                      </span>
                     ) : (
                       <input
                         type={field.type}
@@ -270,51 +272,6 @@ const ViewAllRecordsModal = ({
             ))}
           </tbody>
         </table>
-      </div>
-    );
-  };
-
-  const renderPagination = () => {
-    const pageNumbers = [];
-    const maxPagesToShow = 5; // Maximum number of page numbers to show
-    const startPage = Math.max(0, currentPage - Math.floor(maxPagesToShow / 2));
-    const endPage = Math.min(totalPages - 1, startPage + maxPagesToShow - 1);
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`bg-blue-500 text-white p-2 rounded-md ${
-            currentPage === i ? "bg-blue-700" : ""
-          }`}
-        >
-          {i + 1}
-        </button>
-      );
-    }
-
-    return (
-      <div className="flex justify-between items-center mt-4">
-        <button
-          data-tooltip-id="my-tooltip"
-          data-tooltip-content="Previous"
-          onClick={handlePrevPage}
-          disabled={currentPage === 0}
-          className="bg-blue-500 text-white p-2 rounded-md"
-        >
-          <i className="fas fa-chevron-left"></i>
-        </button>
-        <div className="flex space-x-2">{pageNumbers}</div>
-        <button
-          data-tooltip-id="my-tooltip"
-          data-tooltip-content="Next"
-          onClick={handleNextPage}
-          disabled={currentPage >= totalPages - 1}
-          className="bg-blue-500 text-white p-2 rounded-md"
-        >
-          <i className="fas fa-chevron-right"></i>
-        </button>
       </div>
     );
   };
@@ -391,7 +348,28 @@ const ViewAllRecordsModal = ({
           </button>
         </div>
         <div className="overflow-x-auto">{renderTable(currentRecords)}</div>
-        {renderPagination()}
+        <div className="flex justify-between items-center mt-4">
+          <ReactPaginate
+            previousLabel={<i className="fas fa-chevron-left"></i>}
+            nextLabel={<i className="fas fa-chevron-right"></i>}
+            breakLabel={"..."}
+            breakClassName={"break-me px-2 py-1"}
+            pageCount={totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageChange}
+            containerClassName={"flex gap-1"}
+            activeClassName={"bg-blue-500 text-white rounded-md px-2 py-1"}
+            previousClassName={"pagination-previous  px-2 py-1"}
+            nextClassName={"pagination-next px-2 py-1"}
+            pageClassName={"pagination-page px-2 py-1"}
+            disabledClassName={"pagination-disabled"}
+            forcePage={currentPage}
+          />
+          <button className="bg-blue-500 text-white p-2 rounded-md" onclick="">
+            Push to NHB Stagging
+          </button>
+        </div>
       </div>
       <ReactTooltip id="my-tooltip" />
     </div>

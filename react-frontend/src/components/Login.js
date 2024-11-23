@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/service";
 import fulllogo from "../assets/fulllogo.png";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [mailId, setMailId] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -17,9 +17,10 @@ const Login = () => {
 
     try {
       const response = await loginUser({ mailId, password });
+      console.log("user ", response);
 
       if (response.UserID) {
-        // Redirect to a dashboard or home page
+        onLogin(response); // Call the onLogin prop with user data
         navigate("/dashboard");
       } else {
         setErrorMessage(response.message || "Login failed");
