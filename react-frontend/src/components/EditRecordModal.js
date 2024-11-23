@@ -131,7 +131,7 @@ const EditRecordModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="bg-white p-5 rounded-xl shadow-lg w-11/12 max-w-4xl text-left mx-auto max-h-[90vh] overflow-y-auto"
+          className="bg-white p-3 rounded-xl shadow-lg w-11/12 max-w-4xl text-left mx-auto max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center">
@@ -145,7 +145,7 @@ const EditRecordModal = ({
           </div>
           <div className="p-2">
             {fields.map((field) => (
-              <div key={field.name} className="flex items-center mb-2">
+              <div key={field.name} className="flex items-center mb-1">
                 <label
                   htmlFor={field.name}
                   className="max-w-[20%] w-[500px] pr-2 font-medium"
