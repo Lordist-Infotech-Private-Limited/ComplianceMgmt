@@ -164,35 +164,5 @@ namespace ComplianceMgmt.Api.Repository
                 throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
             }
         }
-
-        public void ValidateStagingTable(DateTime date, int bankId)
-        {
-            using (var connection = context.CreateConnection())
-            {
-                // Parameters to pass to the stored procedure
-                var parameters = new DynamicParameters();
-                parameters.Add("@V_DATE", date, DbType.Date);
-                parameters.Add("@V_BANKID", bankId, DbType.Int32);
-                parameters.Add("@V_ERRNO", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                parameters.Add("@V_ERRMSG", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
-
-                // Call the stored procedure
-                connection.Execute("spValidateStagingTable", parameters, commandType: CommandType.StoredProcedure);
-
-                // Retrieve the output values
-                int errorNo = parameters.Get<int>("@V_ERRNO");
-                string errorMessage = parameters.Get<string>("@V_ERRMSG");
-
-                // Display the results
-                Console.WriteLine($"Error Number: {errorNo}");
-                Console.WriteLine($"Error Message: {errorMessage}");
-
-                // Handle errors if any
-                if (errorNo != 0)
-                {
-                    throw new Exception($"Error occurred during validation: {errorMessage}");
-                }
-            }
-        }
     }
 }
