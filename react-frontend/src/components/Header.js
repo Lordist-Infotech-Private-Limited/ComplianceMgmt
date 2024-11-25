@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,7 @@ import logo from "../assets/logo.png";
 const Header = ({ componentName, user, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -17,10 +18,23 @@ const Header = ({ componentName, user, onLogout }) => {
     navigate("/");
   };
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center md:flex-row">
       <h1 className="text-xl font-semibold">{componentName}</h1>
-      <div className="flex gap-4 relative">
+      <div className="flex gap-4 relative" ref={dropdownRef}>
         <img src={logo} alt="Small Logo" className="w-8" />
         <button
           onClick={toggleDropdown}

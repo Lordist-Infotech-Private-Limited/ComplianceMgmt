@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { saveSingleRecord } from "../api/service";
+import { saveSingleRecord } from "../utils/service";
 
 const EditRecordModal = ({
   record,

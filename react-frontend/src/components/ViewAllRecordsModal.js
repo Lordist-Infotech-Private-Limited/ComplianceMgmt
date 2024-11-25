@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { utils, writeFileXLSX } from "xlsx";
 import "@fortawesome/fontawesome-free/css/all.css";
-import { saveSingleRecord } from "../api/service";
+import { saveSingleRecord } from "../utils/service";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import ReactPaginate from "react-paginate";
@@ -21,8 +21,12 @@ const ViewAllRecordsModal = ({
 
   useEffect(() => {
     console.log("records", records);
-    setAllRecords(records);
-    setOriginalRecords([...records]);
+    const recordsWithEditingState = records.map((record) => ({
+      ...record,
+      isEditing: false, // Initialize isEditing state for each record
+    }));
+    setAllRecords(recordsWithEditingState);
+    setOriginalRecords([...recordsWithEditingState]);
   }, [records]);
 
   const handleSearch = (e) => {
@@ -69,13 +73,16 @@ const ViewAllRecordsModal = ({
 
   const handleToggleEdit = (index) => {
     const updatedRecords = [...allRecords];
-    updatedRecords[index].isEditing = !updatedRecords[index].isEditing;
+    const globalIndex = indexOfFirstRecord + index; // Calculate the global index
+    updatedRecords[globalIndex].isEditing =
+      !updatedRecords[globalIndex].isEditing;
     setAllRecords(updatedRecords);
   };
 
   const handleSaveRecord = async (index) => {
     showLoader();
-    const recordToSave = allRecords[index];
+    const globalIndex = indexOfFirstRecord + index; // Calculate the global index
+    const recordToSave = allRecords[globalIndex];
 
     try {
       const response = await saveSingleRecord(recordToSave, tableName);
@@ -83,7 +90,7 @@ const ViewAllRecordsModal = ({
         alert("Record updated successfully!");
         // Optionally, update the local state to reflect the saved changes
         const updatedRecords = [...allRecords];
-        updatedRecords[index].isEditing = false; // Disable editing mode
+        updatedRecords[globalIndex].isEditing = false; // Disable editing mode
         setAllRecords(updatedRecords);
       } else {
         throw new Error(`Failed to update record. Status: ${response.status}`);
@@ -101,7 +108,8 @@ const ViewAllRecordsModal = ({
 
   const clearRow = (index) => {
     const updatedRecords = [...allRecords];
-    const record = updatedRecords[index];
+    const globalIndex = indexOfFirstRecord + index; // Calculate the global index
+    const record = updatedRecords[globalIndex];
     for (let key in record) {
       if (
         key === "Cin" ||
@@ -127,9 +135,10 @@ const ViewAllRecordsModal = ({
 
   const handleInputChange = (index, field, e) => {
     const updatedRecords = [...allRecords];
+    const globalIndex = indexOfFirstRecord + index; // Calculate the global index
     const fieldValue =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    updatedRecords[index][field.name] = fieldValue;
+    updatedRecords[globalIndex][field.name] = fieldValue;
     setAllRecords(updatedRecords);
   };
 
@@ -282,7 +291,7 @@ const ViewAllRecordsModal = ({
       onClick={(e) => e.stopPropagation()}
     >
       <div
-        className="bg-white p-3 rounded-xl shadow-lg w-11/12 max-w-4xl text-left mx-auto max-h-[90vh] overflow-y-auto"
+        className="bg-white p-3 rounded-xl shadow-lg w-11/12 text-left mx-auto max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal content */}

@@ -8,7 +8,7 @@ import {
   fetchData,
   fetchBorrowerDetails,
   fetchCoBorrowerDetails,
-} from "../api/service";
+} from "../utils/service";
 
 function Dashboard() {
   const [data, setData] = useState([]);

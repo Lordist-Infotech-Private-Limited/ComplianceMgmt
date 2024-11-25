@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../api/service";
+import { loginUser } from "../utils/service";
 import fulllogo from "../assets/fulllogo.png";
 
 const Login = ({ onLogin }) => {
