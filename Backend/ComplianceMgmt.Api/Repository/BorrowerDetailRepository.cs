@@ -4,6 +4,7 @@ using ComplianceMgmt.Api.Models;
 using Dapper;
 using MiniExcelLibs;
 using MySql.Data.MySqlClient;
+using System.Data;
 using System.Dynamic;
 using System.Text;
 
@@ -252,6 +253,94 @@ namespace ComplianceMgmt.Api.Repository
             }
 
             return true;
+        }
+
+        //public async Task ValidateAsync(BorrowerDetailValidationRequest request)
+        //{
+        //    using (var connection = context.CreateConnection())
+        //    {
+        //        // Parameters to pass to the stored procedure
+        //        var parameters = new DynamicParameters();
+        //        parameters.Add("@V_DATE", request.Date, DbType.Date);
+        //        parameters.Add("@V_BANKID", request.BankId, DbType.Int32);
+        //        parameters.Add("@V_ERRNO", dbType: DbType.Int32, direction: ParameterDirection.Output);
+        //        parameters.Add("@V_ERRMSG", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
+
+        //        try
+        //        {
+        //            // Call the stored procedure
+        //            await connection.ExecuteAsync("spValidateStagingTable", parameters, commandType: CommandType.StoredProcedure);
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //        }
+        //        // Retrieve the output values
+        //        int errorNo = parameters.Get<int>("@V_ERRNO");
+        //        string errorMessage = parameters.Get<string>("@V_ERRMSG");
+
+        //        // Display the results
+        //        Console.WriteLine($"Error Number: {errorNo}");
+        //        Console.WriteLine($"Error Message: {errorMessage}");
+
+        //        // Handle errors if any
+        //        if (errorNo != 0)
+        //        {
+        //            throw new Exception($"Error occurred during validation: {errorMessage}");
+        //        }
+        //    }
+        //}
+
+        public async Task ValidateAsync(BorrowerDetailValidationRequest request)
+        {
+            using (var connection = context.CreateConnection())
+            {
+                // Parameters to pass to the stored procedure
+                var parameters = new DynamicParameters();
+                parameters.Add("@V_DATE", request.Date, DbType.Date);
+                parameters.Add("@V_BANKID", request.BankId, DbType.Int32);
+                parameters.Add("@V_ERRNO", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@V_ERRMSG", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
+
+                try
+                {
+                    // Call the stored procedure
+                    await connection.ExecuteAsync("spValidateStagingTable", parameters, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions here, maybe log or rethrow the exception
+                    Console.WriteLine($"Exception occurred: {ex.Message}");
+                    throw; // Optional: rethrow or handle accordingly
+                }
+
+                // Retrieve the output values, handling potential nulls
+                int? errorNo = parameters.Get<int?>("@V_ERRNO");  // Nullable int in case it's null
+                string errorMessage = parameters.Get<string>("@V_ERRMSG"); // String, could be null
+
+                // Check if errorNo is null and handle the case where it might be
+                if (errorNo.HasValue)
+                {
+                    // Display the results
+                    Console.WriteLine($"Error Number: {errorNo.Value}");
+                }
+                else
+                {
+                    Console.WriteLine("Error Number: null");
+                }
+
+                // Handle errors if any
+                if (errorNo.HasValue && errorNo.Value != 0)
+                {
+                    string message = errorMessage ?? "An unknown error occurred."; // If errorMessage is null, provide a default message
+                    throw new Exception($"Error occurred during validation: {message}");
+                }
+                else
+                {
+                    Console.WriteLine("Validation passed successfully.");
+                }
+            }
         }
 
     }

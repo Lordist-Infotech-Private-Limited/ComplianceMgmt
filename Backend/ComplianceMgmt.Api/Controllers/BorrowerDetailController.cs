@@ -65,5 +65,12 @@ namespace ComplianceMgmt.Api.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpPost("Validate")]
+        public async Task<IActionResult> ValidateAsync([FromBody] BorrowerDetailValidationRequest request)
+        {
+           await repository.ValidateAsync(request);
+            return NoContent();
+        }
     }
 }
