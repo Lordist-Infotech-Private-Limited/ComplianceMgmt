@@ -4,6 +4,6 @@ namespace ComplianceMgmt.Api.IRepository
 {
     public interface IStatewiseLoanRepository
     {
-        Task<IEnumerable<StatewiseLoanSummary>> GetStatewiseLoanDataAsync();
+        Task<IEnumerable<StatewiseLoanSummary>> GetStatewiseLoanDataAsync(string state);
     }
 }

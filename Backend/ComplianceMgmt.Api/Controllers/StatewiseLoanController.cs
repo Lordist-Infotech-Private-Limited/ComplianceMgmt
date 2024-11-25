@@ -7,11 +7,13 @@ namespace ComplianceMgmt.Api.Controllers
     [ApiController]
     public class StatewiseLoanController(IStatewiseLoanRepository repository) : ControllerBase
     {
-        [HttpGet]
-        [Route("GetStatewiseLoanData")]
-        public async Task<IActionResult> GetStatewiseLoanData()
+        [HttpGet("statewise-loan-data")]
+        public async Task<IActionResult> GetStatewiseData([FromQuery] string state)
         {
-            var data = await repository.GetStatewiseLoanDataAsync();
+            if (string.IsNullOrWhiteSpace(state))
+                return BadRequest("State parameter is required.");
+
+            var data = await repository.GetStatewiseLoanDataAsync(state);
             return Ok(data);
         }
     }
