@@ -7,13 +7,18 @@ namespace ComplianceMgmt.Api.Controllers
     [ApiController]
     public class StatewiseLoanController(IStatewiseLoanRepository repository) : ControllerBase
     {
-        [HttpGet("statewise-loan-data")]
-        public async Task<IActionResult> GetStatewiseData([FromQuery] string state)
+        [HttpGet("filtered-loan-data")]
+        public async Task<IActionResult> GetFilteredLoanData([FromQuery] string filterType)
         {
-            if (string.IsNullOrWhiteSpace(state))
-                return BadRequest("State parameter is required.");
+            if (string.IsNullOrWhiteSpace(filterType))
+                return BadRequest("FilterType parameter is required.");
 
-            var data = await repository.GetStatewiseLoanDataAsync(state);
+            // Validate filterType
+            var validFilters = new[] { "Disbursement", "Sanction", "Outstanding", "NPA" };
+            if (!validFilters.Contains(filterType, StringComparer.OrdinalIgnoreCase))
+                return BadRequest("Invalid FilterType. Valid values are: Disbursement, Sanction, Outstanding, NPA.");
+
+            var data = await repository.GetFilteredLoanDataAsync(filterType);
             return Ok(data);
         }
     }
