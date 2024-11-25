@@ -53,6 +53,7 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<IBorrowerMortgageRepository, BorrowerMortgageRepository>();
             builder.Services.AddScoped<IBorrowerMortgageOtherRepository, BorrowerMortgageOtherRepository>();
             builder.Services.AddScoped<ICoBorrowerDetailsRepository, CoBorrowerDetailsRepository>();
+            builder.Services.AddScoped<IStatewiseLoanRepository, StatewiseLoanRepository>();
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             builder.Services.AddSingleton<TokenService>();
