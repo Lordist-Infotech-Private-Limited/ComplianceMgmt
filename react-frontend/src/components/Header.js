@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import logo from "../assets/logo.png";
+import logo from "../assets/placeholder.png";
 
 const Header = ({ componentName, user, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

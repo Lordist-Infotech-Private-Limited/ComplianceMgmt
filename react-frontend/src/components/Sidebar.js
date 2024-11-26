@@ -5,15 +5,22 @@ import {
   faChartBar,
   faFileAlt,
   faCogs,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.png";
 import fullLogo from "../assets/fulllogo.png";
 
 const Sidebar = ({ onComponentChange, activeComponent }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isReportSubMenuOpen, setIsReportSubMenuOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
+  };
+
+  const toggleReportSubMenu = () => {
+    setIsReportSubMenuOpen(!isReportSubMenuOpen);
   };
 
   return (
@@ -50,13 +57,57 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
             className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
             } ${activeComponent === "Report" ? "bg-gray-200" : ""}`}
-            onClick={() => onComponentChange("Report")}
+            onClick={toggleReportSubMenu}
           >
-            <a href="#" className="flex items-center">
-              <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
-              {isCollapsed ? "" : "Report"}
+            <a href="#" className="flex items-center justify-between">
+              <span className="flex items-center">
+                <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
+                {isCollapsed ? "" : "Report"}
+              </span>
+              {!isCollapsed && (
+                <FontAwesomeIcon
+                  icon={isReportSubMenuOpen ? faChevronUp : faChevronDown}
+                  className="ml-2"
+                />
+              )}
             </a>
           </li>
+          {isReportSubMenuOpen && !isCollapsed && (
+            <ul className="ml-8">
+              <li
+                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                  activeComponent === "Compliance Reports" ? "bg-gray-200" : ""
+                }`}
+                onClick={() => onComponentChange("Compliance Reports")}
+              >
+                <a href="#" className="flex items-center">
+                  Compliance Reports
+                </a>
+              </li>
+              <li
+                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                  activeComponent === "MIS Reports" ? "bg-gray-200" : ""
+                }`}
+                onClick={() => onComponentChange("MIS Reports")}
+              >
+                <a href="#" className="flex items-center">
+                  MIS Reports
+                </a>
+              </li>
+              <li
+                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                  activeComponent === "Management Dashboard"
+                    ? "bg-gray-200"
+                    : ""
+                }`}
+                onClick={() => onComponentChange("Management Dashboard")}
+              >
+                <a href="#" className="flex items-center">
+                  Management Dashboard
+                </a>
+              </li>
+            </ul>
+          )}
           <li
             className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
