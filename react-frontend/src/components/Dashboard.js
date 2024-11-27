@@ -8,6 +8,7 @@ import {
   fetchData,
   fetchBorrowerDetails,
   fetchCoBorrowerDetails,
+  validateBorrowerDetail,
 } from "../utils/service";
 
 function Dashboard() {
@@ -57,16 +58,19 @@ function Dashboard() {
     setCurrentModal("edit");
     // Pass selectedDate as a prop
     // Determine the current table name based on the index
+    let tableName = "";
     if (index === 0) {
       setCurrentTableName("borrowerDetail");
+      tableName = "borrowerDetail";
     } else if (index === 4) {
       setCurrentTableName("coBorrowerDetail");
+      tableName = "coBorrowerDetail";
     } else {
       setCurrentTableName("");
     }
 
     // Fetch the record before opening the modal
-    await fetchRecord(index, currentTableName, selectedDate);
+    await fetchRecord(index, tableName, selectedDate);
   };
 
   const handleOpenViewAllModal = async (index, status) => {
@@ -97,8 +101,23 @@ function Dashboard() {
     setEditRecord(null); // Clear the edit record when closing the modal
   };
 
-  const handleValidate = (index) => {
-    // Implement validation logic
+  const handleValidate = async (index) => {
+    showLoader();
+    try {
+      const referenceDate = selectedDate;
+      const bankId = 103;
+      const response = await validateBorrowerDetail(referenceDate, bankId);
+      if (response.status === 204 || response.ok) {
+        alert("Validation successful!");
+      } else {
+        throw new Error(`Failed to update record. Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error validating borrower details:", error);
+      alert("Validation failed.");
+    } finally {
+      hideLoader();
+    }
   };
 
   const showLoader = () => {

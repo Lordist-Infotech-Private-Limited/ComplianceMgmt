@@ -86,3 +86,20 @@ export async function loginUser(credentials) {
 
   return await response.json();
 }
+
+export async function validateBorrowerDetail(date, bankId) {
+  const url = `${apiBaseUrl}/BorrowerDetail/Validate`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ Date: date, BankId: bankId }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Validation failed with status: ${response.status}`);
+  }
+
+  return await response;
+}

@@ -1,56 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { saveSingleRecord } from "../utils/service";
+import { borrowerFields, coBorrowerFields } from "../utils/tables";
 
-const EditRecordModal = ({
-  record,
-  tableName,
-  referenceDate,
-  onClose,
-  showLoader,
-  hideLoader,
-}) => {
+const EditRecordModal = ({ record, tableName, onClose }) => {
   const [editedRecord, setEditedRecord] = useState(record);
-
-  const borrowerFields = [
-    { name: "RowNo", type: "number", disabled: true },
-    { name: "Date", type: "date", disabled: true },
-    { name: "BankId", type: "number", disabled: true },
-    { name: "Cin", type: "text" },
-    { name: "BName", type: "text" },
-    { name: "BDob", type: "date" },
-    { name: "sbcitizenship", type: "text" },
-    { name: "BPanNo", type: "text" },
-    { name: "Aadhaar", type: "text" },
-    { name: "IdType", type: "text" },
-    { name: "IdNumber", type: "text" },
-    { name: "BMonthlyIncome", type: "number" },
-    { name: "BReligion", type: "text" },
-    { name: "BCast", type: "text" },
-    { name: "BGender", type: "text" },
-    { name: "BOccupation", type: "text" },
-    { name: "IsValidated", type: "checkbox" },
-  ];
-
-  const coBorrowerFields = [
-    { name: "RowNo", type: "number", disabled: true },
-    { name: "Date", type: "date", disabled: true },
-    { name: "BankId", type: "number", disabled: true },
-    { name: "Cin", type: "text" },
-    { name: "IdType", type: "text" },
-    { name: "IdNumber", type: "text" },
-    { name: "CbCin", type: "text" },
-    { name: "CbName", type: "text" },
-    { name: "CbDob", type: "date" },
-    { name: "CbCitizenship", type: "text" },
-    { name: "CbPanNo", type: "text" },
-    { name: "CbAadhaar", type: "text" },
-    { name: "CbMonthlyIncome", type: "number" },
-    { name: "CbReligion", type: "text" },
-    { name: "CbCast", type: "text" },
-    { name: "CbGender", type: "text" },
-    { name: "CbOccupation", type: "text" },
-    { name: "IsValidated", type: "checkbox" },
-  ];
 
   useEffect(() => {
     console.log(record);
