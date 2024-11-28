@@ -40,9 +40,64 @@ export async function fetchCoBorrowerDetails(date) {
   return await response.json();
 }
 
+export async function fetchBorrowerLoanDetails(date) {
+  const url = `${apiBaseUrl}/BorrowerLoan/byDate/${encodeURIComponent(date)}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Error fetching borrower loan details: ${response.status}`);
+  }
+  return await response.json();
+}
+
+export async function fetchBorrowerMortgageDetails(date) {
+  const url = `${apiBaseUrl}/BorrowerMortgage/byDate/${encodeURIComponent(
+    date
+  )}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(
+      `Error fetching borrower mortgage details: ${response.status}`
+    );
+  }
+  return await response.json();
+}
+
+export async function fetchBorrowerMortgageOtherDetails(date) {
+  const url = `${apiBaseUrl}/BorrowerMortgageOther/byDate/${encodeURIComponent(
+    date
+  )}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(
+      `Error fetching borrower mortgage other details: ${response.status}`
+    );
+  }
+  return await response.json();
+}
+
 export async function saveSingleRecord(record, tableName) {
-  const endpoint =
-    tableName === "borrowerDetail" ? "/BorrowerDetail" : "/CoBorrowerDetails";
+  let endpoint = "";
+  if (tableName === "borrowerDetail") {
+    endpoint = "/BorrowerDetail";
+  } else if (tableName === "coBorrowerDetail") {
+    endpoint = "/CoBorrowerDetails";
+  } else if (tableName === "borrowerLoan") {
+    endpoint = "/BorrowerLoan";
+  } else if (tableName === "borrowerMortgage") {
+    endpoint = "/BorrowerMortgage";
+  } else if (tableName === "borrowerMortgageOther") {
+    endpoint = "/BorrowerMortgageOther";
+  }
+
   const url = `${apiBaseUrl}${endpoint}`;
   const response = await fetch(url, {
     method: "PUT",

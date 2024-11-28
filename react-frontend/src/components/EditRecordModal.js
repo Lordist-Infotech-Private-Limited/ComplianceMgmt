@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { saveSingleRecord } from "../utils/service";
-import { borrowerFields, coBorrowerFields } from "../utils/tables";
+import {
+  borrowerFields,
+  coBorrowerFields,
+  borrowerLoanFields,
+  borrowerMortgageFields,
+  borrowerMortgageOtherFields,
+} from "../utils/tables";
 
 const EditRecordModal = ({ record, tableName, onClose }) => {
   const [editedRecord, setEditedRecord] = useState(record);
@@ -32,8 +38,18 @@ const EditRecordModal = ({ record, tableName, onClose }) => {
   const handleSave = async () => {
     const recordToSave = {};
 
-    let fields =
-      tableName === "borrowerDetail" ? borrowerFields : coBorrowerFields;
+    let fields = [];
+    if (tableName === "borrowerDetail") {
+      fields = borrowerFields;
+    } else if (tableName === "coBorrowerDetail") {
+      fields = coBorrowerFields;
+    } else if (tableName === "borrowerLoan") {
+      fields = borrowerLoanFields;
+    } else if (tableName === "borrowerMortgage") {
+      fields = borrowerMortgageFields;
+    } else if (tableName === "borrowerMortgageOther") {
+      fields = borrowerMortgageOtherFields;
+    }
 
     fields.forEach((field) => {
       if (field.type === "number") {
@@ -65,8 +81,18 @@ const EditRecordModal = ({ record, tableName, onClose }) => {
     }
   };
 
-  const fields =
-    tableName === "borrowerDetail" ? borrowerFields : coBorrowerFields;
+  let fields = [];
+  if (tableName === "borrowerDetail") {
+    fields = borrowerFields;
+  } else if (tableName === "coBorrowerDetail") {
+    fields = coBorrowerFields;
+  } else if (tableName === "borrowerLoan") {
+    fields = borrowerLoanFields;
+  } else if (tableName === "borrowerMortgage") {
+    fields = borrowerMortgageFields;
+  } else if (tableName === "borrowerMortgageOther") {
+    fields = borrowerMortgageOtherFields;
+  }
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
