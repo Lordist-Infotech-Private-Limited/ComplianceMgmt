@@ -30,7 +30,15 @@ function Dashboard() {
     setLoading(true);
     try {
       const fetchedData = await fetchData(date);
-      setData(fetchedData);
+      // Initialize data with only TotalRecords
+      const initialData = fetchedData.map((item) => ({
+        MsgStructure: item.MsgStructure,
+        TotalRecords: item.TotalRecords,
+        SuccessRecords: 0,
+        ConstraintRejection: 0,
+        BusinessRejection: 0,
+      }));
+      setData(initialData);
     } catch (error) {
       console.error("Error fetching data:", error);
       alert("An error occurred while fetching data.");
@@ -150,6 +158,9 @@ function Dashboard() {
       const response = await validateBorrowerDetail(referenceDate, bankId);
       if (response.status === 204 || response.ok) {
         alert("Validation successful!");
+        // Fetch the full data after successful validation
+        const fetchedData = await fetchData(selectedDate);
+        setData(fetchedData);
       } else {
         throw new Error(`Failed to update record. Status: ${response.status}`);
       }
