@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import stateData from "../utils/stateData";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { read, writeFile } from "xlsx";
+//import { read, writeFile } from "xlsx";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 const InteractiveMap = () => {
@@ -14,22 +16,82 @@ const InteractiveMap = () => {
 
   const downloadReport = async () => {
     try {
-      // Fetch the existing Excel file from the public folder
-      const response = await fetch("loanAndAdvances.xlsx");
-      const arrayBuffer = await response.arrayBuffer();
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("PART-1");
 
-      // Convert the ArrayBuffer to a workbook
-      const workbook = read(new Uint8Array(arrayBuffer), {
-        type: "array",
+      // Set up headers and formatting
+      worksheet.mergeCells("A1:J1"); // Merge cells for title
+      worksheet.getCell("A1").value = "PART-1: LOAN & ADVANCES";
+      worksheet.getCell("A1").alignment = { horizontal: "center", vertical: "middle" };
+      worksheet.getCell("A1").font = { bold: true, size: 14, underline: true, };
+      worksheet.getCell("A1").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFFFE599" }, // Light yellow background
+      };
+
+      // Add subheaders
+      worksheet.getCell("A3").value = "PART-1A: LOAN SANCTIONS";
+      worksheet.getCell("A3").font = { bold: true };
+
+      // Add table headers
+      const headers = [
+          "Sr. No.",
+          "Particulars",
+          "From April to previous month",
+          "",
+          "During the month under report",
+          "",
+          "Cumulative sanctions from April to reporting date",
+          "",
+          "Item Code",
+          "(Rs. In Lakhs)",
+      ];
+      worksheet.addRow(headers);
+
+      // Apply header styles
+      const headerRow = worksheet.getRow(4);
+      headerRow.eachCell((cell) => {
+          cell.font = { bold: true };
+          cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFB6D7A8" }, // Light green background
+          };
+          cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+          };
       });
-      const worksheet = workbook.Sheets["Sheet1"];
 
-      // Update the worksheet with the desired data
-      // Example: Update cell D9 with a new value
-      worksheet["D9"] = { v: 100, t: "n" };
+      // Add sample data
+      const data = [
+          [1, "Housing Loans", 0, 0, 0, 0, 0, 0, "LS101", ">=0, & = LS102+LS106+LS110"],
+          // Add more rows as needed
+      ];
 
-      // Generate a new Excel file
-      writeFile(workbook, "loanAndAdvances_updated.xlsx");
+      data.forEach((row) => worksheet.addRow(row));
+
+      // Adjust column widths
+      worksheet.columns = [
+          { width: 10 }, // Sr. No.
+          { width: 30 }, // Particulars
+          { width: 20 }, // From April to previous month
+          { width: 20 }, // Gross Carrying Amount
+          { width: 20 }, // No. of A/cs
+          { width: 20 }, // Gross Carrying Amount
+          { width: 25 }, // Cumulative sanctions
+          { width: 20 }, // Gross Carrying Amount
+          { width: 10 }, // Item Code
+          { width: 30 }, // Validation
+      ];
+
+      // Save the workbook
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      saveAs(blob, "Schedule-V_PART-1.xlsx");
       console.log("Excel file created successfully!");
     } catch (error) {
       console.error("Error downloading report:", error);
