@@ -5,7 +5,13 @@ import { saveSingleRecord } from "../utils/service";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import ReactPaginate from "react-paginate";
-import { borrowerFields, coBorrowerFields } from "../utils/tables";
+import {
+  borrowerFields,
+  coBorrowerFields,
+  borrowerLoanFields,
+  borrowerMortgageFields,
+  borrowerMortgageOtherFields,
+} from "../utils/tables";
 
 const ViewAllRecordsModal = ({
   records,
@@ -143,8 +149,18 @@ const ViewAllRecordsModal = ({
     setAllRecords(updatedRecords);
   };
 
-  const fields =
-    tableName === "borrowerDetail" ? borrowerFields : coBorrowerFields;
+  let fields = [];
+  if (tableName === "borrowerDetail") {
+    fields = borrowerFields;
+  } else if (tableName === "coBorrowerDetail") {
+    fields = coBorrowerFields;
+  } else if (tableName === "borrowerLoan") {
+    fields = borrowerLoanFields;
+  } else if (tableName === "borrowerMortgage") {
+    fields = borrowerMortgageFields;
+  } else if (tableName === "borrowerMortgageOther") {
+    fields = borrowerMortgageOtherFields;
+  }
 
   const renderTable = (records) => {
     return (

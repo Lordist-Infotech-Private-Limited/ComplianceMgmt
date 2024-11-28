@@ -9,6 +9,9 @@ import {
   fetchBorrowerDetails,
   fetchCoBorrowerDetails,
   validateBorrowerDetail,
+  fetchBorrowerLoanDetails,
+  fetchBorrowerMortgageDetails,
+  fetchBorrowerMortgageOtherDetails,
 } from "../utils/service";
 
 function Dashboard() {
@@ -39,10 +42,20 @@ function Dashboard() {
   const fetchRecord = async (index, tableName, referenceDate) => {
     showLoader();
     try {
-      const data =
-        tableName === "borrowerDetail"
-          ? await fetchBorrowerDetails(referenceDate)
-          : await fetchCoBorrowerDetails(referenceDate);
+      let data;
+      if (tableName === "borrowerDetail") {
+        data = await fetchBorrowerDetails(referenceDate);
+      } else if (tableName === "coBorrowerDetail") {
+        data = await fetchCoBorrowerDetails(referenceDate);
+      } else if (tableName === "borrowerLoan") {
+        data = await fetchBorrowerLoanDetails(referenceDate);
+      } else if (tableName === "borrowerMortgage") {
+        data = await fetchBorrowerMortgageDetails(referenceDate);
+      } else if (tableName === "borrowerMortgageOther") {
+        data = await fetchBorrowerMortgageOtherDetails(referenceDate);
+      } else {
+        throw new Error(`Unsupported table name: ${tableName}`);
+      }
 
       const fetchedRecord = data[index];
       setEditRecord(fetchedRecord);
@@ -62,6 +75,15 @@ function Dashboard() {
     if (index === 0) {
       setCurrentTableName("borrowerDetail");
       tableName = "borrowerDetail";
+    } else if (index === 1) {
+      setCurrentTableName("borrowerLoan");
+      tableName = "borrowerLoan";
+    } else if (index === 2) {
+      setCurrentTableName("borrowerMortgage");
+      tableName = "borrowerMortgage";
+    } else if (index === 3) {
+      setCurrentTableName("borrowerMortgageOther");
+      tableName = "borrowerMortgageOther";
     } else if (index === 4) {
       setCurrentTableName("coBorrowerDetail");
       tableName = "coBorrowerDetail";
@@ -79,6 +101,19 @@ function Dashboard() {
     if (index === 0) {
       const borrowerData = await fetchBorrowerDetails(referenceDate);
       setViewAllRecords(borrowerData);
+    } else if (index === 1) {
+      const borrowerLoanData = await fetchBorrowerLoanDetails(referenceDate);
+      setViewAllRecords(borrowerLoanData);
+    } else if (index === 2) {
+      const borrowerMortgageData = await fetchBorrowerMortgageDetails(
+        referenceDate
+      );
+      setViewAllRecords(borrowerMortgageData);
+    } else if (index === 3) {
+      const borrowerMortgageOtherData = await fetchBorrowerMortgageOtherDetails(
+        referenceDate
+      );
+      setViewAllRecords(borrowerMortgageOtherData);
     } else if (index === 4) {
       const coBorrowerData = await fetchCoBorrowerDetails(referenceDate);
       setViewAllRecords(coBorrowerData);
@@ -87,6 +122,12 @@ function Dashboard() {
     // Determine the current table name based on the index
     if (index === 0) {
       setCurrentTableName("borrowerDetail");
+    } else if (index === 1) {
+      setCurrentTableName("borrowerLoan");
+    } else if (index === 2) {
+      setCurrentTableName("borrowerMortgage");
+    } else if (index === 3) {
+      setCurrentTableName("borrowerMortgageOther");
     } else if (index === 4) {
       setCurrentTableName("coBorrowerDetail");
     } else {
