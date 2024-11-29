@@ -49,6 +49,7 @@ const DataTable = ({
                 <button
                   className="text-blue-500 hover:underline mr-2"
                   onClick={() =>
+                    item.SuccessRecords > 0 &&
                     openEditModal(index, "Success", "borrowerTable")
                   }
                 >
@@ -56,7 +57,10 @@ const DataTable = ({
                 </button>
                 <button
                   className="text-blue-500 hover:underline"
-                  onClick={() => openViewAllModal(index, "Success")}
+                  onClick={() =>
+                    item.SuccessRecords > 0 &&
+                    openViewAllModal(index, "Success")
+                  }
                 >
                   {item.SuccessRecords}
                 </button>
@@ -65,6 +69,7 @@ const DataTable = ({
                 <button
                   className="text-blue-500 hover:underline mr-2"
                   onClick={() =>
+                    item.ConstraintRejection > 0 &&
                     openEditModal(index, "Constraint", "borrowerTable")
                   }
                 >
@@ -72,7 +77,10 @@ const DataTable = ({
                 </button>
                 <button
                   className="text-blue-500 hover:underline"
-                  onClick={() => openViewAllModal(index, "Constraint")}
+                  onClick={() =>
+                    item.ConstraintRejection > 0 &&
+                    openViewAllModal(index, "Constraint")
+                  }
                 >
                   {item.ConstraintRejection}
                 </button>
@@ -81,6 +89,7 @@ const DataTable = ({
                 <button
                   className="text-blue-500 hover:underline mr-2"
                   onClick={() =>
+                    item.BusinessRejection > 0 &&
                     openEditModal(index, "Business", "borrowerTable")
                   }
                 >
@@ -88,7 +97,10 @@ const DataTable = ({
                 </button>
                 <button
                   className="text-blue-500 hover:underline"
-                  onClick={() => openViewAllModal(index, "Business")}
+                  onClick={() =>
+                    item.BusinessRejection > 0 &&
+                    openViewAllModal(index, "Business")
+                  }
                 >
                   {item.BusinessRejection}
                 </button>
