@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/service";
 import fulllogo from "../assets/fulllogo.png";
 
@@ -8,7 +7,6 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +19,6 @@ const Login = ({ onLogin }) => {
 
       if (response.UserID) {
         onLogin(response); // Call the onLogin prop with user data
-        navigate("/dashboard");
       } else {
         setErrorMessage(response.message || "Login failed");
       }
