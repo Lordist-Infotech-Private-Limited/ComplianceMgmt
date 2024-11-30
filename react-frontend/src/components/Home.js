@@ -4,6 +4,8 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Dashboard from "./Dashboard";
 import Report from "./Report";
+import ManagementDashboard from "./ManagementDashboard";
+import ComplianceReports from "./ComplianceReports";
 
 function Home({ user, onLogout }) {
   const [selectedComponent, setSelectedComponent] = useState("Dashboard");
@@ -16,6 +18,7 @@ function Home({ user, onLogout }) {
   }, [user, navigate]);
 
   const handleComponentChange = (component) => {
+    console.log("this is working", component);
     setSelectedComponent(component);
   };
 
@@ -31,7 +34,15 @@ function Home({ user, onLogout }) {
           user={user}
           onLogout={onLogout}
         />
-        {selectedComponent === "Dashboard" ? <Dashboard /> : <Report />}
+        {selectedComponent === "Dashboard" ? (
+          <Dashboard />
+        ) : selectedComponent === "Management Dashboard" ? (
+          <ManagementDashboard />
+        ) : selectedComponent === "MIS Reports" ? (
+          <Report />
+        ) : (
+          <ComplianceReports />
+        )}
       </div>
     </div>
   );
