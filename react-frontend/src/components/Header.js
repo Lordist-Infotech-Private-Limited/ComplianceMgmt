@@ -32,7 +32,7 @@ const Header = ({ componentName, user, onLogout }) => {
   }, []);
 
   return (
-    <header className="bg-white shadow-md p-4 flex justify-between items-center md:flex-row">
+    <header className="hidden bg-white shadow-md p-4 justify-between items-center md:flex-row md:flex">
       <h1 className="text-xl font-semibold">{componentName}</h1>
       <div className="flex gap-4 relative" ref={dropdownRef}>
         <img src={logo} alt="Small Logo" className="w-8" />

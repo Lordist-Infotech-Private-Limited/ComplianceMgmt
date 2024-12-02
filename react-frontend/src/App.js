@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import "./globals";
+import "@boldreports/javascript-reporting-controls/Content/v2.0/tailwind-light/bold.report-viewer.min.css";
+import "@boldreports/javascript-reporting-controls/Scripts/v2.0/common/bold.reports.common.min";
+import "@boldreports/javascript-reporting-controls/Scripts/v2.0/common/bold.reports.widgets.min";
+import "@boldreports/javascript-reporting-controls/Scripts/v2.0/bold.report-viewer.min";
+//Reports react base
+import "@boldreports/react-reporting-components/Scripts/bold.reports.react.min";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,7 +49,16 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={user ? <Home user={user} onLogout={handleLogout} /> : <Login onLogin={handleLogin} />} />
+        <Route
+          path="/"
+          element={
+            user ? (
+              <Home user={user} onLogout={handleLogout} />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
       </Routes>
     </Router>
   );
