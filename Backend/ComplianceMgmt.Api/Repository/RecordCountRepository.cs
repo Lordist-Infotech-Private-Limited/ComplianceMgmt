@@ -1,8 +1,10 @@
-﻿using ComplianceMgmt.Api.Infrastructure;
+﻿using ComplianceMgmt.Api.Extensions;
+using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
+using System.Dynamic;
 using System.Text;
 
 namespace ComplianceMgmt.Api.Repository
@@ -111,109 +113,18 @@ namespace ComplianceMgmt.Api.Repository
                 {
                     string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
                     var clientData = await clientConnection.QueryAsync<dynamic>(query);
-                    //await BulkInsertAsync(context.CreateConnection().ConnectionString, table.TableName, clientData);
-                    await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData,
-                        validateRecord: record =>
-                        {
-                            // Example validation logic
-                            if (record.sbcitizenship == null)
-                                return (isValid: false, errorMessage: "sbcitizenship cannot be null");
-
-                            if (record.Aadhaar == null)
-                                return (isValid: false, errorMessage: "Aadhaar cannot be null");
-
-                            if (record.IdType == null)
-                                return (isValid: false, errorMessage: "IdType cannot be null");
-
-                            if (record.BMonthlyIncome >= 0)
-                                return (isValid: false, errorMessage: "BMonthlyIncome cannot be negative");
-
-                            return (isValid: true, errorMessage: string.Empty);
-                        });
+                    await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData,1);
                 }
             }
         }
 
-        //public async Task BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
-        //{
-        //    if (data == null || !data.Any()) return;
-
-        //    using var connection = new MySqlConnection(connectionString);
-        //    await connection.OpenAsync();
-
-        //    var insertQuery = new StringBuilder();
-        //    var parameters = new List<MySqlParameter>();
-        //    int counter = 0;
-
-        //    // Use the first item as a reference to get columns
-        //    dynamic firstItem = data.First();
-
-        //    // Check if firstItem is a dictionary and extract keys (columns)
-        //    if (firstItem is IDictionary<string, object> dictionary)
-        //    {
-        //        var columns = dictionary.Keys.ToArray(); // Get column names
-
-        //        // Start building the insert query
-        //        insertQuery.Append($"INSERT INTO {tableName} (");
-        //        insertQuery.Append(string.Join(", ", columns));
-        //        insertQuery.Append(") VALUES ");
-
-        //        // Loop through all data and build values
-        //        foreach (var record in data)
-        //        {
-        //            var values = new List<string>();
-
-        //            if (record is IDictionary<string, object> recordDictionary)
-        //            {
-        //                foreach (var column in columns)
-        //                {
-        //                    var paramName = $"@{column}{counter}";
-        //                    values.Add(paramName);
-
-        //                    // Get the value for each column
-        //                    var propertyValue = recordDictionary.ContainsKey(column)
-        //                        ? recordDictionary[column]
-        //                        : DBNull.Value;
-
-        //                    // Add parameter for each column
-        //                    parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
-        //                }
-        //            }
-
-        //            insertQuery.Append($"({string.Join(", ", values)})");
-
-        //            if (counter < data.Count() - 1)
-        //                insertQuery.Append(", ");
-
-        //            counter++;
-        //        }
-
-        //        insertQuery.Append(";");
-
-        //        // Execute the insert query
-        //        using var command = new MySqlCommand(insertQuery.ToString(), connection);
-        //        command.Parameters.AddRange(parameters.ToArray());
-        //        try
-        //        {
-        //            await command.ExecuteNonQueryAsync();
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
-        //    }
-        //}
-
         public async Task BulkInsertWithValidationAsync(
-        string connectionString,
-        string tableName,
-        string rejectionTableName,
-        IEnumerable<dynamic> data,
-        Func<dynamic, (bool isValid, string errorMessage)> validateRecord)
+                string connectionString,
+                string tableName,
+                string rejectionTableName,
+                IEnumerable<dynamic> data,
+                int createdBy, // Pass the user ID creating the records
+                int batchSize = 1000)
         {
             if (data == null || !data.Any()) return;
 
@@ -226,31 +137,106 @@ namespace ComplianceMgmt.Api.Repository
             // Validate each record and segregate
             foreach (var record in data)
             {
-                var validation = validateRecord(record);
-                if (validation.Item1)
+                var businessValidation = ValidateBusinessRules(record);
+                var constraintValidation = ValidateConstraints(record);
+
+                if (businessValidation.Item1 && constraintValidation.Item1)
                 {
                     validRecords.Add(record);
                 }
                 else
                 {
-                    // Add error details to the record for rejection table
-                    var rejectedRecord = new Dictionary<string, object>(record);
-                    rejectedRecord["ErrorMessage"] = validation.Item2;
+                    // Combine rejection reasons
+                    var rejectionReason = new StringBuilder();
+                    if (!businessValidation.Item1)
+                        rejectionReason.AppendLine($"Business Validation Failed: {businessValidation.Item2}");
+                    if (!constraintValidation.Item1)
+                        rejectionReason.AppendLine($"Constraint Validation Failed: {constraintValidation.Item2}");
+
+                    // Prepare rejected record
+                    var rejectedRecord = new ExpandoObject() as IDictionary<string, object>;
+                    foreach (var kvp in (IDictionary<string, object>)record)
+                        rejectedRecord[kvp.Key] = kvp.Value;
+
+                    rejectedRecord["RejectedReason"] = rejectionReason.ToString();
+                    rejectedRecord["ValidationType"] = !businessValidation.Item1 ? "Business" : "Constraint";
+                    rejectedRecord["IsValidated"] = false;
+                    rejectedRecord["CreatedBy"] = createdBy;
+                    rejectedRecord["CreatedDate"] = DateTime.UtcNow;
+
                     rejectedRecords.Add(rejectedRecord);
                 }
             }
 
-            // Insert valid records into the main table
+            // Insert valid records into the main table in batches
             if (validRecords.Any())
             {
-                await InsertRecordsAsync(connection, tableName, validRecords);
+                foreach (var batch in validRecords.Batch(batchSize))
+                {
+                    await InsertRecordsAsync(connection, tableName, batch);
+                }
             }
 
-            // Insert rejected records into the rejection table
+            // Insert rejected records into the rejection table in batches
             if (rejectedRecords.Any())
             {
-                await InsertRecordsAsync(connection, rejectionTableName, rejectedRecords);
+                foreach (var batch in rejectedRecords.Batch(batchSize))
+                {
+                    await InsertRecordsAsync(connection, rejectionTableName, batch);
+                }
             }
+        }
+
+        private (bool isValid, string reason) ValidateBusinessRules(dynamic record)
+        {
+            var reason = new StringBuilder();
+
+            // CIN Validation
+            if (string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
+                reason.AppendLine("CIN and PAN cannot both be blank.");
+
+            // PAN Conditional Validation
+            if (!string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
+                reason.AppendLine("PAN is mandatory if CIN is provided.");
+
+            // Date Validation
+            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
+                reason.AppendLine("Invalid Date or blank Date field.");
+
+            // Monthly Income Validation
+            if (record.nbmonthlyincome == null || record.nbmonthlyincome < 0)
+                reason.AppendLine("Monthly income must be numeric and >= 0.");
+
+            // Other Field Validations
+            if (string.IsNullOrWhiteSpace(record.sbname))
+                reason.AppendLine("Primary Borrower Name cannot be blank.");
+            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
+                reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
+            if (string.IsNullOrWhiteSpace(record.saadhaar))
+                reason.AppendLine("Aadhaar must not be blank.");
+            if (string.IsNullOrWhiteSpace(record.sbgender))
+                reason.AppendLine("Gender must not be blank.");
+
+            return (reason.Length == 0, reason.ToString());
+        }
+
+        private (bool isValid, string reason) ValidateConstraints(dynamic record)
+        {
+            var reason = new StringBuilder();
+
+            // Example: Citizenship Validation (Check against Master Values)
+            if (!IsValidMasterValue("Citizenship", record.sbcitizenship))
+                reason.AppendLine("Invalid Citizenship value.");
+
+            // Gender Validation
+            if (!IsValidMasterValue("Gender", record.sbgender))
+                reason.AppendLine("Invalid Gender value.");
+
+            // Occupation Validation
+            if (!IsValidMasterValue("Occupation", record.sboccupation))
+                reason.AppendLine("Invalid Occupation value.");
+
+            return (reason.Length == 0, reason.ToString());
         }
 
         private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
@@ -308,7 +294,6 @@ namespace ComplianceMgmt.Api.Repository
                 }
                 catch (Exception ex)
                 {
-                    // Log or handle query execution errors
                     throw new Exception($"Error inserting records into {tableName}: {ex.Message}", ex);
                 }
             }
@@ -316,6 +301,19 @@ namespace ComplianceMgmt.Api.Repository
             {
                 throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
             }
+        }
+
+        private bool IsValidMasterValue(string columnName, string value)
+        {
+            // Replace this with actual master value checks (e.g., a database query)
+            var masterValues = new Dictionary<string, List<string>>
+            {
+                { "Citizenship", new List<string> { "Indian", "NRI", "OCI" } },
+                { "Gender", new List<string> { "Male", "Female", "Other" } },
+                { "Occupation", new List<string> { "Salaried", "Self-Employed", "Retired" } }
+            };
+
+            return masterValues.TryGetValue(columnName, out var validValues) && validValues.Contains(value);
         }
     }
 }
