@@ -3,6 +3,7 @@ using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using MySql.Data.MySqlClient;
 using System.Dynamic;
 using System.Text;
@@ -99,144 +100,152 @@ namespace ComplianceMgmt.Api.Repository
                 }
             };
 
-            var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
+           await ExecuteValidationSPAsync();
+            //var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
 
-            foreach (var server in serverDetails)
+            //foreach (var server in serverDetails)
+            //{
+            //    using var clientConnection = context.CreateClientConnection(
+            //        server.ServerIp,
+            //        server.DbName,
+            //        server.ServerName,
+            //        server.ServerPassword);
+
+            //    foreach (var table in tables)
+            //    {
+            //        string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+            //        var clientData = await clientConnection.QueryAsync<dynamic>(query);
+            //        //await BulkInsertWithValidationInBackgroundAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData,1, GetValidationErrors);
+            //    }
+            //}
+        }
+
+
+
+        public async Task ExecuteValidationSPAsync()
+        {
+            using (var connection = new MySqlConnection(context.CreateConnection().ConnectionString))
             {
-                using var clientConnection = context.CreateClientConnection(
-                    server.ServerIp,
-                    server.DbName,
-                    server.ServerName,
-                    server.ServerPassword);
-
-                foreach (var table in tables)
+                try
                 {
-                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
-                    var clientData = await clientConnection.QueryAsync<dynamic>(query);
-                    await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData,1);
+                    await connection.OpenAsync();
+                    var command = new MySqlCommand("CALL ProcessRemoteBorrowerDetails()", connection);
+                    await command.ExecuteNonQueryAsync();
+                }
+                catch (Exception ex)
+                {
+
                 }
             }
         }
 
-        public async Task BulkInsertWithValidationAsync(
-                string connectionString,
-                string tableName,
-                string rejectionTableName,
-                IEnumerable<dynamic> data,
-                int createdBy, // Pass the user ID creating the records
-                int batchSize = 1000)
+        public async Task BulkInsertWithValidationInBackgroundAsync(
+            string connectionString,
+            string tableName,
+            string rejectionTableName,
+            IEnumerable<dynamic> data,
+            int createdBy, // Pass the user ID creating the records
+            Func<dynamic, string> getValidationErrors)
         {
-            if (data == null || !data.Any()) return;
-
-            using var connection = new MySqlConnection(connectionString);
-            await connection.OpenAsync();
-
-            var validRecords = new List<dynamic>();
-            var rejectedRecords = new List<dynamic>();
-
-            // Validate each record and segregate
-            foreach (var record in data)
+            // Run in background
+            _ = Task.Run(async () =>
             {
-                var businessValidation = ValidateBusinessRules(record);
-                var constraintValidation = ValidateConstraints(record);
+                var validRecords = new List<dynamic>();
+                var rejectedRecords = new List<dynamic>();
 
-                if (businessValidation.Item1 && constraintValidation.Item1)
+                foreach (var record in data)
                 {
-                    validRecords.Add(record);
+                    var rejectionReason = getValidationErrors(record);
+                    if (string.IsNullOrEmpty(rejectionReason))
+                    {
+                        validRecords.Add(record);
+                    }
+                    else
+                    {
+                        var rejectedRecord = new Dictionary<string, object>(record);
+                        rejectedRecord["RejectedReason"] = rejectionReason;
+                        rejectedRecords.Add(rejectedRecord);
+                    }
                 }
-                else
+
+                // Process valid and rejected records
+                using var connection = new MySqlConnection(connectionString);
+                await connection.OpenAsync();
+
+                if (validRecords.Any())
                 {
-                    // Combine rejection reasons
-                    var rejectionReason = new StringBuilder();
-                    if (!businessValidation.Item1)
-                        rejectionReason.AppendLine($"Business Validation Failed: {businessValidation.Item2}");
-                    if (!constraintValidation.Item1)
-                        rejectionReason.AppendLine($"Constraint Validation Failed: {constraintValidation.Item2}");
-
-                    // Prepare rejected record
-                    var rejectedRecord = new ExpandoObject() as IDictionary<string, object>;
-                    foreach (var kvp in (IDictionary<string, object>)record)
-                        rejectedRecord[kvp.Key] = kvp.Value;
-
-                    rejectedRecord["RejectedReason"] = rejectionReason.ToString();
-                    rejectedRecord["ValidationType"] = !businessValidation.Item1 ? "Business" : "Constraint";
-                    rejectedRecord["IsValidated"] = false;
-                    rejectedRecord["CreatedBy"] = createdBy;
-                    rejectedRecord["CreatedDate"] = DateTime.UtcNow;
-
-                    rejectedRecords.Add(rejectedRecord);
+                    await InsertRecordsAsync(connection, tableName, validRecords);
                 }
-            }
 
-            // Insert valid records into the main table in batches
-            if (validRecords.Any())
-            {
-                foreach (var batch in validRecords.Batch(batchSize))
+                if (rejectedRecords.Any())
                 {
-                    await InsertRecordsAsync(connection, tableName, batch);
+                    await InsertRecordsAsync(connection, rejectionTableName, rejectedRecords);
                 }
-            }
-
-            // Insert rejected records into the rejection table in batches
-            if (rejectedRecords.Any())
-            {
-                foreach (var batch in rejectedRecords.Batch(batchSize))
-                {
-                    await InsertRecordsAsync(connection, rejectionTableName, batch);
-                }
-            }
+            });
         }
 
-        private (bool isValid, string reason) ValidateBusinessRules(dynamic record)
+        private string GetValidationErrors(dynamic record)
         {
-            var reason = new StringBuilder();
+            var rejectionReasons = new List<string>();
 
-            // CIN Validation
-            if (string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
-                reason.AppendLine("CIN and PAN cannot both be blank.");
+            // Business validations
+            if (string.IsNullOrWhiteSpace((string)record.scin) && string.IsNullOrWhiteSpace((string)record.sbpanno))
+            {
+                rejectionReasons.Add("CIN and PAN cannot both be blank.");
+            }
 
-            // PAN Conditional Validation
-            if (!string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
-                reason.AppendLine("PAN is mandatory if CIN is provided.");
+            if (string.IsNullOrWhiteSpace((string)record.dbdob) || !DateTime.TryParse((string)record.dbdob.ToString(), out _))
+            {
+                rejectionReasons.Add("Invalid Date or blank Date field.");
+            }
 
-            // Date Validation
-            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
-                reason.AppendLine("Invalid Date or blank Date field.");
+            // Initialize 'income' to avoid CS0165
+            long income = 0;
+            if (record.nbmonthlyincome == null ||
+                !long.TryParse((string)record.nbmonthlyincome.ToString(), out income) ||
+                income < 0)
+            {
+                rejectionReasons.Add("Monthly income must be numeric and >= 0.");
+            }
 
-            // Monthly Income Validation
-            if (record.nbmonthlyincome == null || record.nbmonthlyincome < 0)
-                reason.AppendLine("Monthly income must be numeric and >= 0.");
+            if (string.IsNullOrWhiteSpace((string)record.sbname))
+            {
+                rejectionReasons.Add("Primary Borrower Name cannot be blank.");
+            }
 
-            // Other Field Validations
-            if (string.IsNullOrWhiteSpace(record.sbname))
-                reason.AppendLine("Primary Borrower Name cannot be blank.");
-            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
-                reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
-            if (string.IsNullOrWhiteSpace(record.saadhaar))
-                reason.AppendLine("Aadhaar must not be blank.");
-            if (string.IsNullOrWhiteSpace(record.sbgender))
-                reason.AppendLine("Gender must not be blank.");
+            if (string.IsNullOrWhiteSpace((string)record.saadhaar))
+            {
+                rejectionReasons.Add("Aadhaar must not be blank.");
+            }
 
-            return (reason.Length == 0, reason.ToString());
-        }
+            if (string.IsNullOrWhiteSpace((string)record.sbgender))
+            {
+                rejectionReasons.Add("Gender must not be blank.");
+            }
 
-        private (bool isValid, string reason) ValidateConstraints(dynamic record)
-        {
-            var reason = new StringBuilder();
+            // Constraint validations
+            var validCitizenship = new[] { "Indian", "Non-Resident", "Foreign National" };
+            if (!string.IsNullOrWhiteSpace((string)record.sbcitizenship) &&
+                !validCitizenship.Contains((string)record.sbcitizenship))
+            {
+                rejectionReasons.Add("Invalid Citizenship value.");
+            }
 
-            // Example: Citizenship Validation (Check against Master Values)
-            if (!IsValidMasterValue("Citizenship", record.sbcitizenship))
-                reason.AppendLine("Invalid Citizenship value.");
+            var validGenders = new[] { "Male", "Female", "Other" };
+            if (!string.IsNullOrWhiteSpace((string)record.sbgender) &&
+                !validGenders.Contains((string)record.sbgender))
+            {
+                rejectionReasons.Add("Invalid Gender value.");
+            }
 
-            // Gender Validation
-            if (!IsValidMasterValue("Gender", record.sbgender))
-                reason.AppendLine("Invalid Gender value.");
+            var validOccupations = new[] { "Salaried", "Self-Employed", "Student", "Retired" };
+            if (!string.IsNullOrWhiteSpace((string)record.sboccupation) &&
+                !validOccupations.Contains((string)record.sboccupation))
+            {
+                rejectionReasons.Add("Invalid Occupation value.");
+            }
 
-            // Occupation Validation
-            if (!IsValidMasterValue("Occupation", record.sboccupation))
-                reason.AppendLine("Invalid Occupation value.");
-
-            return (reason.Length == 0, reason.ToString());
+            return string.Join("; ", rejectionReasons);
         }
 
         private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
@@ -301,19 +310,6 @@ namespace ComplianceMgmt.Api.Repository
             {
                 throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
             }
-        }
-
-        private bool IsValidMasterValue(string columnName, string value)
-        {
-            // Replace this with actual master value checks (e.g., a database query)
-            var masterValues = new Dictionary<string, List<string>>
-            {
-                { "Citizenship", new List<string> { "Indian", "NRI", "OCI" } },
-                { "Gender", new List<string> { "Male", "Female", "Other" } },
-                { "Occupation", new List<string> { "Salaried", "Self-Employed", "Retired" } }
-            };
-
-            return masterValues.TryGetValue(columnName, out var validValues) && validValues.Contains(value);
         }
     }
 }
