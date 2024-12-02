@@ -19,19 +19,26 @@ namespace ComplianceMgmt.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            Bold.Licensing.BoldLicenseProvider.RegisterLicense("hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=");
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
-                    });
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000") // Allow only your React app
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials(); // Use this only if credentials are required
+                });
             });
 
             builder.Services.AddOpenApi();
+
+            var options = new WebApplicationOptions
+            {
+                WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources") // Set your custom path here
+            };
+
+            builder = WebApplication.CreateBuilder(options);  // Use the options here
 
             // Add services to the container.
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -105,7 +112,8 @@ namespace ComplianceMgmt.Api
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-
+            // Register services
+            builder.Services.AddMemoryCache();
 
             // Define Swagger generation options and add Bearer token authentication
             builder.Services.AddSwaggerGen(c =>
@@ -177,15 +185,29 @@ namespace ComplianceMgmt.Api
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            app.UseCors(cors => cors
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .SetIsOriginAllowed(origin => true)
-               .AllowCredentials()
-           );
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Method == "OPTIONS")
+                {
+                    context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
+                    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                    context.Response.StatusCode = 204; // No Content
+                    return;
+                }
+                await next();
+            });
+
+
+            // app.UseCors(cors => cors
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .SetIsOriginAllowed(origin => true)
+            //    .AllowCredentials()
+            //);
 
             app.UseCors("AllowAll");
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

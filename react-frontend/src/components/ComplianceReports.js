@@ -9,9 +9,9 @@ const ComplianceReports = () => {
       <BoldReportViewerComponent
         id="reportviewer-container"
         reportServiceUrl={
-          "https://demos.boldreports.com/services/api/ReportViewer"
+          "https://localhost:7275/ReportViewer"
         }
-        reportPath={"~/Resources/docs/sales-order-detail.rdl"}
+        reportPath={"~/Resources/sales-order-detail.rdl"}
       ></BoldReportViewerComponent>
     </div>
   );
