@@ -1,4 +1,3 @@
-
 using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
@@ -22,24 +21,23 @@ namespace ComplianceMgmt.Api
             Bold.Licensing.BoldLicenseProvider.RegisterLicense("hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=");
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
                     policy.WithOrigins("http://localhost:3000") // Allow only your React app
                           .AllowAnyMethod()
                           .AllowAnyHeader()
-                          .WithMethods("GET", "POST", "OPTIONS")
-                          .AllowCredentials(); // Use this only if credentials are required
+                          .WithMethods("GET", "POST", "OPTIONS");
                 });
             });
 
             builder.Services.AddOpenApi();
 
-            var options = new WebApplicationOptions
-            {
-                WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources") // Set your custom path here
-            };
+            //var options = new WebApplicationOptions
+            //{
+            //    WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources") // Set your custom path here
+            //};
 
-            builder = WebApplication.CreateBuilder(options);  // Use the options here
+            //builder = WebApplication.CreateBuilder(options);  // Use the options here
 
             // Add services to the container.
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -63,6 +61,7 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<ICoBorrowerDetailsRepository, CoBorrowerDetailsRepository>();
             builder.Services.AddScoped<IStatewiseLoanRepository, StatewiseLoanRepository>();
             builder.Services.AddScoped<IComplianceReportRepository, ComplianceReportRepository>();
+            builder.Services.AddSingleton<IHybridCache, HybridCache>();
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             builder.Services.AddSingleton<TokenService>();
@@ -113,8 +112,6 @@ namespace ComplianceMgmt.Api
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            // Register services
-            builder.Services.AddMemoryCache();
 
             // Define Swagger generation options and add Bearer token authentication
             builder.Services.AddSwaggerGen(c =>
@@ -169,7 +166,16 @@ namespace ComplianceMgmt.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+        
+            // Add in-memory cache
+            builder.Services.AddMemoryCache();
+            // Add distributed cache (e.g., Redis)
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:7275"; // Update with your Redis configuration
+                options.InstanceName = "HybridCache";
+            });
+            //builder.Services.AddHybridCache(); // Not shown: optional configuration API.
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -186,29 +192,19 @@ namespace ComplianceMgmt.Api
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            // Use CORS
+            app.UseCors("AllowSpecificOrigin");
 
-            app.Use(async (context, next) =>
+            // Ensure endpoints support OPTIONS requests
+            app.MapMethods("/ReportViewer/PostReportAction", new[] { "OPTIONS" }, (HttpContext context) =>
             {
-                if (context.Request.Method == "OPTIONS")
-                {
-                    context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
-                    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-                    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
-                    context.Response.StatusCode = 204; // No Content
-                    return;
-                }
-                await next();
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
+                context.Response.Headers.Add("Access-Control-Allow-Methods", "POST, OPTIONS");
+                context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+                context.Response.StatusCode = 204; // No content
+                return Task.CompletedTask;
             });
 
-
-            // app.UseCors(cors => cors
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader()
-            //    .SetIsOriginAllowed(origin => true)
-            //    .AllowCredentials()
-            //);
-            // Use CORS
-            app.UseCors("AllowReactApp");
             //app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
