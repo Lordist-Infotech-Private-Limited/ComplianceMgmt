@@ -9,7 +9,7 @@ const ComplianceReports = () => {
       <BoldReportViewerComponent
         id="reportviewer-container"
         reportServiceUrl={
-          "https://localhost:7275/ReportViewer"
+          "https://adfapi.lordist.in/ReportViewer"
         }
         reportPath={"~/Resources/sales-order-detail.rdl"}
       ></BoldReportViewerComponent>

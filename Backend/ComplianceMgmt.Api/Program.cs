@@ -27,6 +27,7 @@ namespace ComplianceMgmt.Api
                     policy.WithOrigins("http://localhost:3000") // Allow only your React app
                           .AllowAnyMethod()
                           .AllowAnyHeader()
+                          .WithMethods("GET", "POST", "OPTIONS")
                           .AllowCredentials(); // Use this only if credentials are required
                 });
             });
@@ -206,8 +207,9 @@ namespace ComplianceMgmt.Api
             //    .SetIsOriginAllowed(origin => true)
             //    .AllowCredentials()
             //);
-
-            app.UseCors("AllowAll");
+            // Use CORS
+            app.UseCors("AllowReactApp");
+            //app.UseCors("AllowAll");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

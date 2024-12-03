@@ -5,7 +5,7 @@ namespace ComplianceMgmt.Api.Controllers
 {
     [Route("[controller]/[action]")]
     [Microsoft.AspNetCore.Cors.EnableCors("AllowAllOrigins")]
-    public class ReportViewerController : Controller, IReportController
+    public class ReportViewerController : ControllerBase, IReportController
     {
         // Report viewer requires a memory cache to store the information of consecutive client request and
         // have the rendered report viewer information in server.
