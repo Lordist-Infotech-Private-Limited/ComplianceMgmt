@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\Resources\sales-order-detail.rdl" />
-    <None Include="wwwroot\Resources\StateReport.rdlc" />
     <None Include="wwwroot\Resources\stgborrowerdetailrejection.rdl" />
   </ItemGroup>
 

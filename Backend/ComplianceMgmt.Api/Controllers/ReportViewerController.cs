@@ -4,7 +4,6 @@ using ComplianceMgmt.Api.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ComplianceMgmt.Api.Controllers
 {

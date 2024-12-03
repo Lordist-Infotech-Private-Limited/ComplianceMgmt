@@ -348,9 +348,9 @@
   <DataSources>
     <DataSource Name="DataSource">
       <ConnectionProperties>
-		  <DataProvider>MySql</DataProvider>
-		  <ConnectString>Server=mysql5050.site4now.net;Database=db_a927ee_comlian;User Id=a927ee_comlian;Password=P@ssw0rd;</ConnectString>
-	  </ConnectionProperties>
+        <DataProvider>MySql</DataProvider>
+        <ConnectString>Host=mysql5050.site4now.net;Port=3306;Database=db_a927ee_comlian;</ConnectString>
+      </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:ImpersonateUser>false</rd:ImpersonateUser>
     </DataSource>
