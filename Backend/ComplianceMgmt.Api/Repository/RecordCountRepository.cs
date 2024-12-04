@@ -5,6 +5,7 @@ using ComplianceMgmt.Api.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
 using System.Dynamic;
+using System.Globalization;
 using System.Text;
 
 namespace ComplianceMgmt.Api.Repository
@@ -82,7 +83,7 @@ namespace ComplianceMgmt.Api.Repository
                 new()
                 {
                     TableName = "stgborrowermortgage",
-                    RejectionTableNames ="stgborrowermortgage",
+                    RejectionTableNames ="stgborrowermortgagerejection",
                     MsgStruct = "Borrower Mortgage"
                 },
                 new()
@@ -111,7 +112,7 @@ namespace ComplianceMgmt.Api.Repository
 
                 foreach (var table in tables)
                 {
-                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName} LIMIT 10";
                     var clientData = await clientConnection.QueryAsync<dynamic>(query);
                     await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
                 }
@@ -201,29 +202,29 @@ namespace ComplianceMgmt.Api.Repository
             var reason = new StringBuilder();
 
             // CIN Validation
-            if (string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
+            if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
                 reason.AppendLine("CIN and PAN cannot both be blank.");
 
             // PAN Conditional Validation
-            if (!string.IsNullOrWhiteSpace(record.scin) && string.IsNullOrWhiteSpace(record.sbpanno))
+            if (!string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
                 reason.AppendLine("PAN is mandatory if CIN is provided.");
 
             // Date Validation
-            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
-                reason.AppendLine("Invalid Date or blank Date field.");
+            if (record.BDob == null || !DateTime.TryParseExact(record.BDob.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                reason.AppendLine("Invalid DOB or blank Date field.");
 
             // Monthly Income Validation
-            if (record.nbmonthlyincome == null || record.nbmonthlyincome < 0)
+            if (record.nbmonthlyincome == null || record.BMonthlyIncome < 0)
                 reason.AppendLine("Monthly income must be numeric and >= 0.");
 
             // Other Field Validations
-            if (string.IsNullOrWhiteSpace(record.sbname))
+            if (string.IsNullOrWhiteSpace(record.BName))
                 reason.AppendLine("Primary Borrower Name cannot be blank.");
-            if (string.IsNullOrWhiteSpace(record.dbdob) || !DateTime.TryParse(record.dbdob.ToString(), out DateTime _))
-                reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
-            if (string.IsNullOrWhiteSpace(record.saadhaar))
+            //if (record.BDob == null || !DateTime.TryParse(record.BDob.ToString(), out DateTime _))
+            //    reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
+            if (string.IsNullOrWhiteSpace(record.Aadhaar))
                 reason.AppendLine("Aadhaar must not be blank.");
-            if (string.IsNullOrWhiteSpace(record.sbgender))
+            if (string.IsNullOrWhiteSpace(record.BGender))
                 reason.AppendLine("Gender must not be blank.");
 
             return (reason.Length == 0, reason.ToString());
@@ -234,15 +235,15 @@ namespace ComplianceMgmt.Api.Repository
             var reason = new StringBuilder();
 
             // Example: Citizenship Validation (Check against Master Values)
-            if (!IsValidMasterValue("Citizenship", record.sbcitizenship))
+            if (!IsValidMasterValue("Citizenship", record.BCitizenship))
                 reason.AppendLine("Invalid Citizenship value.");
 
             // Gender Validation
-            if (!IsValidMasterValue("Gender", record.sbgender))
+            if (!IsValidMasterValue("Gender", record.BGender))
                 reason.AppendLine("Invalid Gender value.");
 
             // Occupation Validation
-            if (!IsValidMasterValue("Occupation", record.sboccupation))
+            if (!IsValidMasterValue("Occupation", record.BOoccupation))
                 reason.AppendLine("Invalid Occupation value.");
 
             return (reason.Length == 0, reason.ToString());
