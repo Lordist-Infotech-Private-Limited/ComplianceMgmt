@@ -1,7 +1,5 @@
 ﻿using BoldReports.Web.ReportViewer;
 using ComplianceMgmt.Api.Infrastructure;
-using ComplianceMgmt.Api.Models;
-using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -37,36 +35,36 @@ namespace ComplianceMgmt.Api.Controllers
             }
         }
 
-
-
         // Method will be called to initialize the report information to load the report with ReportHelper for processing.
         [NonAction]
         public void OnInitReportOptions(ReportViewerOptions reportOption)
         {
-            var connection = context.CreateConnection();
-            var query = @"SELECT * FROM statemaster";
-            var states = connection.Query<StateMaster>(query);
-            reportOption.ReportModel.ProcessingMode = ProcessingMode.Local;
+            //var connection = context.CreateConnection();
+            //var query = @"SELECT * FROM statemaster";
+            //var states = connection.Query<StateMaster>(query);
+            //reportOption.ReportModel.ProcessingMode = ProcessingMode.Local;
+            //string basePath = Path.Combine(hostingEnvironment.WebRootPath, "Resources");
+            //string reportPath = Path.Combine(basePath, reportOption.ReportModel.ReportPath);
+            //FileStream fileStream = new(reportPath, FileMode.Open, FileAccess.Read);
+            //MemoryStream stream = new();
+            //fileStream.CopyTo(stream);
+            //stream.Position = 0;
+            //stream.Close();
+            //reportOption.ReportModel.Stream = stream;
+            //reportOption.ReportModel.DataSources.Add(new BoldReports.Web.ReportDataSource { Name = "DataSource", Value = states });
+
             string basePath = Path.Combine(hostingEnvironment.WebRootPath, "Resources");
-            string reportPath = Path.Combine(basePath, reportOption.ReportModel.ReportPath);
-            FileStream fileStream = new(reportPath, FileMode.Open, FileAccess.Read);
-            MemoryStream stream = new();
-            fileStream.CopyTo(stream);
-            stream.Position = 0;
-            stream.Close();
-            reportOption.ReportModel.Stream = stream;
-            reportOption.ReportModel.DataSources.Add(new BoldReports.Web.ReportDataSource { Name = "DataSource", Value = states });
-            //string reportPath = Path.Combine(hostingEnvironment.WebRootPath, "StateReport.rdl");
+            string reportPath = Path.Combine(basePath, "StateReport.rdl");
 
-            //if (!System.IO.File.Exists(reportPath))
-            //{
-            //    throw new FileNotFoundException("Report file not found at path: " + reportPath);
-            //}
+            if (!System.IO.File.Exists(reportPath))
+            {
+                throw new FileNotFoundException("Report file not found at path: " + reportPath);
+            }
 
-            //FileStream reportStream = new(reportPath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            //reportOption.ReportModel.Stream = reportStream;
+            FileStream reportStream = new(reportPath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            reportOption.ReportModel.Stream = reportStream;
 
-            //Console.WriteLine($"Report initialized with path: {reportPath}");
+            Console.WriteLine($"Report initialized with path: {reportPath}");
         }
 
         // Method will be called when reported is loaded with internally to start to layout process with ReportHelper.

@@ -1,3 +1,4 @@
+using BoldReports.Web;
 using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
@@ -175,6 +176,8 @@ namespace ComplianceMgmt.Api
                 options.Configuration = "localhost:7275"; // Update with your Redis configuration
                 options.InstanceName = "HybridCache";
             });
+
+            ReportConfig.DefaultSettings = new ReportSettings().RegisterExtensions(new List<string> { "BoldReports.Data.MySQL" });
             //builder.Services.AddHybridCache(); // Not shown: optional configuration API.
             var app = builder.Build();
 

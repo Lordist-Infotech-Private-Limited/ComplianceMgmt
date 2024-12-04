@@ -1,0 +1,9 @@
+Online License Validation:
+
+Online license token: hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=
+Date and Time: 04-12-2024 16:55:48
+License API: https://websiteapiv2.boldbi.com/
+License API Call Status: Success
+License API Return Status: Licensed
+License Validation Message: 
+
