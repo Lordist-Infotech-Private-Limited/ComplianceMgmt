@@ -6,6 +6,6 @@ namespace ComplianceMgmt.Api.IRepository
     {
         Task<IEnumerable<TableSummary>> GetRecordCountAsync(DateOnly date);
         //Task BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data);
-        Task FetchAndInsertAllTablesAsync();
+        Task<bool> FetchAndInsertAllTablesAsync();
     }
 }

@@ -63,7 +63,7 @@ namespace ComplianceMgmt.Api.Repository
             }
         }
 
-        public async Task FetchAndInsertAllTablesAsync()
+        public async Task<bool> FetchAndInsertAllTablesAsync()
         {
             var tables = new List<MsgStructure>
             {
@@ -116,6 +116,8 @@ namespace ComplianceMgmt.Api.Repository
                     await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
                 }
             }
+
+            return true;
         }
 
         public async Task BulkInsertWithValidationAsync(
@@ -153,18 +155,25 @@ namespace ComplianceMgmt.Api.Repository
                     if (!constraintValidation.Item1)
                         rejectionReason.AppendLine($"Constraint Validation Failed: {constraintValidation.Item2}");
 
-                    // Prepare rejected record
-                    var rejectedRecord = new ExpandoObject() as IDictionary<string, object>;
-                    foreach (var kvp in (IDictionary<string, object>)record)
-                        rejectedRecord[kvp.Key] = kvp.Value;
+                    try
+                    {
+                        // Prepare rejected record
+                        var rejectedRecord = new ExpandoObject() as IDictionary<string, object>;
+                        foreach (var kvp in (IDictionary<string, object>)record)
+                            rejectedRecord[kvp.Key] = kvp.Value;
 
-                    rejectedRecord["RejectedReason"] = rejectionReason.ToString();
-                    rejectedRecord["ValidationType"] = !businessValidation.Item1 ? "Business" : "Constraint";
-                    rejectedRecord["IsValidated"] = false;
-                    rejectedRecord["CreatedBy"] = createdBy;
-                    rejectedRecord["CreatedDate"] = DateTime.UtcNow;
+                        rejectedRecord["RejectedReason"] = rejectionReason.ToString();
+                        rejectedRecord["ValidationType"] = !businessValidation.Item1 ? "Business" : "Constraint";
+                        rejectedRecord["IsValidated"] = false;
+                        rejectedRecord["CreatedBy"] = createdBy;
+                        rejectedRecord["CreatedDate"] = DateTime.UtcNow;
 
-                    rejectedRecords.Add(rejectedRecord);
+                        rejectedRecords.Add(rejectedRecord);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Error inserting records into {tableName}: {ex.Message}", ex);
+                    }
                 }
             }
 
@@ -272,6 +281,13 @@ namespace ComplianceMgmt.Api.Repository
                                 ? recordDictionary[column]
                                 : DBNull.Value;
 
+                            // Handle invalid DateTime values
+                            if (column == "Date" || column == "BDob")
+                            {
+                                if (propertyValue == null || !DateTime.TryParse(propertyValue.ToString(), out _))
+                                    propertyValue = DBNull.Value;
+                            }
+
                             parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
                         }
                     }
@@ -288,13 +304,17 @@ namespace ComplianceMgmt.Api.Repository
                 // Execute the insert query
                 using var command = new MySqlCommand(insertQuery.ToString(), connection);
                 command.Parameters.AddRange(parameters.ToArray());
+
+                Console.WriteLine($"Query: {insertQuery}");
+                Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+
                 try
                 {
                     await command.ExecuteNonQueryAsync();
                 }
-                catch (Exception ex)
+                catch (MySqlException ex)
                 {
-                    throw new Exception($"Error inserting records into {tableName}: {ex.Message}", ex);
+                    throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
                 }
             }
             else
