@@ -24,7 +24,7 @@ namespace ComplianceMgmt.Api.Controllers
                     throw new ArgumentNullException(nameof(jsonArray), "The payload cannot be null.");
                 }
 
-                HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
+                //HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
                 return ReportHelper.ProcessReport(jsonArray, this, memoryCache);
             }
             catch (Exception ex)
@@ -39,19 +39,19 @@ namespace ComplianceMgmt.Api.Controllers
         [NonAction]
         public void OnInitReportOptions(ReportViewerOptions reportOption)
         {
-            reportOption.ReportModel.ReportServerCredential = new System.Net.NetworkCredential("a927ee_comlian", "P@ssw0rd");
+            //reportOption.ReportModel.ReportServerCredential = new System.Net.NetworkCredential("a927ee_comlian", "P@ssw0rd");
 
-            reportOption.ReportModel.DataSourceCredentials.Add(new BoldReports.Web.DataSourceCredentials("DataSource", "a927ee_comlian", "P@ssw0rd"));
-
+            //reportOption.ReportModel.DataSourceCredentials.Add(new BoldReports.Web.DataSourceCredentials("DataSource", "a927ee_comlian", "P@ssw0rd"));
+          
             string basePath = Path.Combine(hostingEnvironment.WebRootPath, "Resources");
-            string reportPath = Path.Combine(basePath, "StateReport.rdl");
+            string reportPath = Path.Combine(basePath, reportOption.ReportModel.ReportPath);
 
             if (!System.IO.File.Exists(reportPath))
             {
                 throw new FileNotFoundException("Report file not found at path: " + reportPath);
             }
 
-            FileStream reportStream = new(reportPath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            FileStream reportStream = new(reportPath, FileMode.Open, FileAccess.Read);
             reportOption.ReportModel.Stream = reportStream;
 
             Console.WriteLine($"Report initialized with path: {reportPath}");
@@ -69,7 +69,7 @@ namespace ComplianceMgmt.Api.Controllers
         // Method will be called from Report Viewer client to get the image src for Image report item.
         public object GetResource(ReportResource resource)
         {
-            Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000"); // Set the allowed origin
+            //Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000"); // Set the allowed origin
             return ReportHelper.GetResource(resource, this, memoryCache);
         }
 
