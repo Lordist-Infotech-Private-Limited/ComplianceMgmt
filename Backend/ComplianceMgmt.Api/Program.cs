@@ -194,7 +194,7 @@ namespace ComplianceMgmt.Api
 
             var app = builder.Build();
 
-            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            //var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
             // Use a centralized exception handler
             app.UseExceptionHandler(errorApp =>
@@ -215,7 +215,8 @@ namespace ComplianceMgmt.Api
                         _ => StatusCodes.Status500InternalServerError
                     };
 
-                    logger.LogError(exception, "An unhandled exception occurred.");
+                    // Log the exception with Serilog
+                    Log.Error(exception, "An unhandled exception occurred: {Message}", exception?.Message);
 
                     var problemDetails = new ProblemDetails
                     {
@@ -230,7 +231,7 @@ namespace ComplianceMgmt.Api
                             _ => "An error occurred while processing your request."
                         },
                         Status = statusCode,
-                        Detail = exception?.Message, // Include detailed information only if needed
+                        Detail = app.Environment.IsDevelopment() ? exception?.ToString() : exception?.Message, // Include detailed information only if needed
                         Instance = context.Request.Path
                     };
 
