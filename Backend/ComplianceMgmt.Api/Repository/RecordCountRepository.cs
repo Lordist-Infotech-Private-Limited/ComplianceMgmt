@@ -274,8 +274,11 @@ namespace ComplianceMgmt.Api.Repository
             if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
             {
                 // Date Validation
-                if (record.Date == null)
+                if ((record.Date is MySql.Data.Types.MySqlDateTime mySqlDate && (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)) ||
+                    (record.Date is string dateString && string.IsNullOrWhiteSpace(dateString)) || record.Date == null)
+                {
                     reason.AppendLine("Date cannot be blank.");
+                }
             }
 
             if (tableName == "stgborrowerdetail")
