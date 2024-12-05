@@ -5,6 +5,7 @@ using ComplianceMgmt.Api.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using Serilog;
 using System.Dynamic;
 using System.Globalization;
 using System.Text;
@@ -193,7 +194,7 @@ namespace ComplianceMgmt.Api.Repository
             // Insert valid records into the main table in batches
             if (validRecords.Any())
             {
-                foreach (var batch in validRecords)
+                foreach (var batch in validRecords.Batch(batchSize))
                 {
                     await InsertRecordsAsync(connection, tableName, batch);
                 }
@@ -202,7 +203,7 @@ namespace ComplianceMgmt.Api.Repository
             // Insert rejected records into the rejection table in batches
             if (rejectedRecords.Any())
             {
-                foreach (var batch in rejectedRecords)
+                foreach (var batch in rejectedRecords.Batch(batchSize))
                 {
                     await InsertRecordsAsync(connection, rejectionTableName, batch);
                 }
@@ -719,6 +720,7 @@ namespace ComplianceMgmt.Api.Repository
                 command.CommandTimeout = 1800; 
                 Console.WriteLine($"Query: {insertQuery}");
                 Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+                Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
 
                 try
                 {

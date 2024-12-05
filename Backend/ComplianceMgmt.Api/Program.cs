@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
+using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -24,7 +25,19 @@ namespace ComplianceMgmt.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add JSON configuration file
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            // Configure Serilog
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+
+            builder.Host.UseSerilog(); // Replace default logger with Serilog
+
             Bold.Licensing.BoldLicenseProvider.RegisterLicense("hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=");
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -100,6 +113,9 @@ namespace ComplianceMgmt.Api
             });
 
             builder.Services.AddProblemDetails();
+
+
+           
 
             // Register DbContextFactory only
             builder.Services.AddTransient(x =>
@@ -263,7 +279,14 @@ namespace ComplianceMgmt.Api
 
             app.MapControllers();
 
-            app.Run();
+            try
+            {
+                app.Run();
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }
