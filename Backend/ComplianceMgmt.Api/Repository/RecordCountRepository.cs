@@ -213,7 +213,7 @@ namespace ComplianceMgmt.Api.Repository
         {
             var reason = new StringBuilder();
 
-            if (new[] { "stgborrowerdetail", "stgborrowerloan" }.Contains(tableName))
+            if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
             {
                 // Date Validation
                 if (record.Date == null)
@@ -247,10 +247,10 @@ namespace ComplianceMgmt.Api.Repository
 
                 if (string.IsNullOrWhiteSpace(record.BCitizenship))
                     reason.AppendLine("Primary Borrower Citizenship cannot be blank.");
-                
+
                 //if (record.BDob == null || !DateTime.TryParse(record.BDob.ToString(), out DateTime _))
                 //    reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
-                
+
                 if (string.IsNullOrWhiteSpace(record.Aadhaar))
                     reason.AppendLine("Aadhaar cannot be blank.");
 
@@ -260,7 +260,7 @@ namespace ComplianceMgmt.Api.Repository
             else if (tableName == "stgborrowerloan")
             {
                 if (record.BankId == null)
-                    reason.AppendLine("Bank ID cannot be blank.");
+                    reason.AppendLine("Compliance Mgmt System Generated Unique ID cannot be blank.");
 
                 if (string.IsNullOrWhiteSpace(record.BLoanNo))
                     reason.AppendLine("Loan Account Number cannot be blank.");
@@ -350,7 +350,7 @@ namespace ComplianceMgmt.Api.Repository
 
                 if (record.OtherDueOut == null)
                     reason.AppendLine("Other Dues cannot be blank.");
-            
+
                 if (record.LoanRepayDurMth == null || record.LoanRepayDurMth < 0)
                     reason.AppendLine("Loan Repayment During the Month must be numeric and >= 0.");
 
@@ -365,6 +365,120 @@ namespace ComplianceMgmt.Api.Repository
 
                 if (record.OtherOverDue == null || record.OtherOverDue < 0)
                     reason.AppendLine("Other Dues Overdues must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.AccntClosedDurMth))
+                    reason.AppendLine("Account closed during the month cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.AssetCat))
+                    reason.AppendLine("Asset Category/Classification (IRAC) cannot be blank.");
+
+                if (record.ClassDate == null)
+                    reason.AppendLine("Date of Classification cannot be blank.");
+                else if (!DateTime.TryParseExact(record.ClassDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Date of Classification.");
+
+                if (record.Pd != null && record.Pd < 0)
+                    reason.AppendLine("Probability of Default (PD) must be numeric and >= 0.");
+
+                if (record.Lgd != null && record.Lgd < 0)
+                    reason.AppendLine("Loss Given Default (LGD) must be numeric and >= 0.");
+
+                if (record.ProvAmt == null || record.ProvAmt < 0)
+                    reason.AppendLine("Provisions(Rs.) must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.RefFromNhb))
+                    reason.AppendLine("Refinance from NHB cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.UnderPmayClss))
+                    reason.AppendLine("Benefit Availed under PMAY-CLSS cannot be blank.");
+            }
+            else if (tableName == "stgcoborrowerdetails")
+            {
+                if (record.BankId == null)
+                    reason.AppendLine("Compliance Mgmt System Generated Unique ID cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.CbName))
+                    reason.AppendLine("Co-Borrower Name cannot be blank.");
+
+                if (record.CbDob != null && !DateTime.TryParseExact(record.CbDob.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Co-Borrower Date of Birth.");
+
+                if (string.IsNullOrWhiteSpace(record.CbCitizenship))
+                    reason.AppendLine("Co-Borrower Citizenship cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.CbPanNo))
+                    reason.AppendLine("PAN is mandatory if CIN is not provided.");
+
+                if (string.IsNullOrWhiteSpace(record.CbAadhaar))
+                    reason.AppendLine("Aadhaar cannot be blank.");
+
+                if (record.CbMonthlyIncome != null || record.CbMonthlyIncome < 0)
+                    reason.AppendLine("Co-Borrower Monthly income must be numeric and >= 0.");
+
+
+
+            }
+            else if (tableName == "stgborrowermortgage")
+            {
+                if (record.BankId == null)
+                    reason.AppendLine("Compliance Mgmt System Generated Unique ID cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.BLoanNo))
+                    reason.AppendLine("Loan Account Number cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.PropType))
+                    reason.AppendLine("Type of Property cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.PropAdd))
+                    reason.AppendLine("Asset / Property Address cannot be blank.");
+
+                if (record.LandArea != null && record.LandArea < 0)
+                    reason.AppendLine("Area of Land must be numeric and >= 0.");
+
+                if (record.BuildingArea != null && record.BuildingArea < 0)
+                    reason.AppendLine("Carpet Area of Building must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.TownName))
+                    reason.AppendLine("Name of Town/Village cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.District))
+                    reason.AppendLine("District cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.State))
+                    reason.AppendLine("State cannot be blank.");
+
+                if (record.Pin != null && record.Pin >= 100000 && record.Pin <= 999999)
+                    reason.AppendLine("Pincode must be of 6 digits.");
+
+                if (string.IsNullOrWhiteSpace(record.RuralUrban))
+                    reason.AppendLine("Urban or Rural cannot be blank.");
+
+                if (record.PropValAtSanct == null || record.PropValAtSanct < 0)
+                    reason.AppendLine("Value of Property at the Time of Sanction must be numeric and >= 0.");
+
+                if (record.PresentValue != null || record.PresentValue < 0)
+                    reason.AppendLine("Present Value of Property must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.Insurance))
+                    reason.AppendLine("Asset Insurance cannot be blank.");
+            }
+            else if (tableName == "stgborrowermortgageother")
+            {
+                if (record.BankId == null)
+                    reason.AppendLine("Compliance Mgmt System Generated Unique ID cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.BLoanNo))
+                    reason.AppendLine("Loan Account Number cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.CollType))
+                    reason.AppendLine("Type of Other Collateral cannot be blank.");
+
+                if (record.ValueAtSanct == null || record.ValueAtSanct < 0)
+                    reason.AppendLine("Value at the Time of Sanction must be numeric and >= 0.");
+
+                if (record.PresentValue != null || record.PresentValue < 0)
+                    reason.AppendLine("Present Value must be numeric and >= 0.");
+
             }
 
             return (reason.Length == 0, reason.ToString());
@@ -400,7 +514,7 @@ namespace ComplianceMgmt.Api.Repository
                     string.Equals(data.Code, record.BCitizenship, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Citizenship value.");
 
-                // Citizenship
+                // Gender
                 if (record.BGender != null && !masterData.Any(data => string.Equals(data.MasterName, "Gender", StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(data.Code, record.BGender, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Gender value.");
@@ -408,7 +522,7 @@ namespace ComplianceMgmt.Api.Repository
                 // Occupation
                 if (record.BOoccupation != null && !masterData.Any(data => string.Equals(data.MasterName, "Occupation", StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(data.Code, record.BOoccupation, StringComparison.OrdinalIgnoreCase)))
-                    reason.AppendLine("Invalid Gender value.");
+                    reason.AppendLine("Invalid Occupation value.");
 
                 // Religion
                 if (record.BReligion != null && !masterData.Any(data => string.Equals(data.MasterName, "Religion", StringComparison.OrdinalIgnoreCase) &&
@@ -456,6 +570,109 @@ namespace ComplianceMgmt.Api.Repository
                 if (record.MortGuarantee != null && !masterData.Any(data => string.Equals(data.MasterName, "Mortgage Guarantee", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(data.Code, record.MortGuarantee, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Mortgage Guarantee value.");
+
+                // Account closed during the month
+                if (record.AccntClosedDurMth != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.AccntClosedDurMth, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Account closed during the month value.");
+
+                // Asset Category/Classification (IRAC)
+                if (record.AssetCat != null && !masterData.Any(data => string.Equals(data.MasterName, "Asset Category/Classification", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.AssetCat, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Asset Category/Classification (IRAC) value.");
+
+                // Expected Credit Loss (ECL)
+                if (record.Ecl != null && !masterData.Any(data => string.Equals(data.MasterName, "Expected Credit Loss (ECL)", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.Ecl, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Expected Credit Loss (ECL) value.");
+
+                // Refinance from NHB
+                if (record.RefFromNhb != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.RefFromNhb, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Refinance from NHB value.");
+
+                // Refinance from NHB
+                if (record.UnderPmayClss != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.UnderPmayClss, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Benefit Availed under PMAY-CLSS value.");
+
+                // Refinance from NHB
+                if (record.SerfaseiAct != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.SerfaseiAct, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Notice(s) issued u/s 13(2) SARFAESI Act value.");
+
+                // Refinance from NHB
+                if (record.StayGranted != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.StayGranted, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid value for stay has been granted by DRT/DRAT.");
+            }
+            else if (tableName == "stgcoborrowerdetails")
+            {
+                // Citizenship
+                if (record.CbCitizenship != null && !masterData.Any(data => string.Equals(data.MasterName, "Citizenship", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.CbCitizenship, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Co-Borrower Citizenship value.");
+
+                // Aadhaar
+                if (record.CbAadhaar != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.CbAadhaar, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Aadhaar value.");
+
+                // Gender
+                if (record.CbGender != null && !masterData.Any(data => string.Equals(data.MasterName, "Gender", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.CbGender, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Gender value.");
+
+                // Occupation
+                if (record.CbOccupation != null && !masterData.Any(data => string.Equals(data.MasterName, "Occupation", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.CbOccupation, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Occupation value.");
+
+                // Religion
+                if (record.CbReligion != null && !masterData.Any(data => string.Equals(data.MasterName, "Religion", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.CbReligion, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Religion value.");
+
+                // Cast
+                if (record.CbCast != null && !masterData.Any(data => string.Equals(data.MasterName, "Cast", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.CbCast, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Cast value.");
+
+            }
+            else if (tableName == "stgborrowermortgage")
+            {
+                // Type of Property
+                if (record.PropType != null && !masterData.Any(data => string.Equals(data.MasterName, "Type of Property", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.PropType, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Property value.");
+
+                // District
+                if (record.District != null && !masterData.Any(data => string.Equals(data.MasterName, "District", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.District, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid District value.");
+
+                // State
+                if (record.State != null && !masterData.Any(data => string.Equals(data.MasterName, "STATE", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.State, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid State value.");
+
+                // Rural/Urban
+                if (record.RuralUrban != null && !masterData.Any(data => string.Equals(data.MasterName, "Rural/Urban", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.RuralUrban, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid State value.");
+
+                // Asset Insurance
+                if (record.Insurance != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.Insurance, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Asset Insurance value.");
+            }
+            else if (tableName == "stgborrowermortgageother")
+            {
+                // Type of Other Collateral
+                if (record.CollType != null && !masterData.Any(data => string.Equals(data.MasterName, "Type of Other Collateral", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.CollType, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Other Collateral value.");
+
             }
 
             return (reason.Length == 0, reason.ToString());
