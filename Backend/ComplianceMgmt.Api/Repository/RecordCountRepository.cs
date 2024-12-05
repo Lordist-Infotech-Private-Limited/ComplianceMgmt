@@ -17,7 +17,7 @@ namespace ComplianceMgmt.Api.Repository
         {
             try
             {
-                var formattedDate = date.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                var formattedDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
                 using (var connection = context.CreateConnection())
                 {
@@ -193,7 +193,7 @@ namespace ComplianceMgmt.Api.Repository
             // Insert valid records into the main table in batches
             if (validRecords.Any())
             {
-                foreach (var batch in validRecords.Batch(batchSize))
+                foreach (var batch in validRecords)
                 {
                     await InsertRecordsAsync(connection, tableName, batch);
                 }
@@ -202,7 +202,7 @@ namespace ComplianceMgmt.Api.Repository
             // Insert rejected records into the rejection table in batches
             if (rejectedRecords.Any())
             {
-                foreach (var batch in rejectedRecords.Batch(batchSize))
+                foreach (var batch in rejectedRecords)
                 {
                     await InsertRecordsAsync(connection, rejectionTableName, batch);
                 }
@@ -414,9 +414,6 @@ namespace ComplianceMgmt.Api.Repository
 
                 if (record.CbMonthlyIncome != null || record.CbMonthlyIncome < 0)
                     reason.AppendLine("Co-Borrower Monthly income must be numeric and >= 0.");
-
-
-
             }
             else if (tableName == "stgborrowermortgage")
             {
@@ -487,21 +484,6 @@ namespace ComplianceMgmt.Api.Repository
         private (bool isValid, string reason) ValidateConstraints(string tableName, dynamic record, ref List<MasterData> masterData)
         {
             var reason = new StringBuilder();
-
-            /*
-            // Example: Citizenship Validation (Check against Master Values)
-            if (!IsValidMasterValue("Citizenship", record.BCitizenship))
-                reason.AppendLine("Invalid Citizenship value.");
-
-            // Gender Validation
-            if (!IsValidMasterValue("Gender", record.BGender))
-                reason.AppendLine("Invalid Gender value.");
-
-            // Occupation Validation
-            if (!IsValidMasterValue("Occupation", record.BOoccupation))
-                reason.AppendLine("Invalid Occupation value.");
-            */
-
             if (tableName == "stgborrowerdetail")
             {
                 // Other ID Type
