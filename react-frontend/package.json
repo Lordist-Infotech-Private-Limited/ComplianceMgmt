@@ -52,5 +52,5 @@
   "devDependencies": {
     "tailwindcss": "^3.4.15"
   },
-  "proxy": "https://localhost:7275"
+"proxy": "https://adfapi.lordist.in"
 }

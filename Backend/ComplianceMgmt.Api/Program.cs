@@ -24,7 +24,7 @@ namespace ComplianceMgmt.Api
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
-                    policy.WithOrigins("https://adfapi.lordist.in") // Allow only your React app
+                    policy.WithOrigins("https://compliancemgmt.lordist.in") // Allow only your React app
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .WithMethods("GET", "POST", "OPTIONS");
@@ -32,13 +32,6 @@ namespace ComplianceMgmt.Api
             });
 
             builder.Services.AddOpenApi();
-
-            //var options = new WebApplicationOptions
-            //{
-            //    WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources") // Set your custom path here
-            //};
-
-            //builder = WebApplication.CreateBuilder(options);  // Use the options here
 
             // Add services to the container.
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -201,7 +194,7 @@ namespace ComplianceMgmt.Api
             // Ensure endpoints support OPTIONS requests
             app.MapMethods("/ReportViewer/PostReportAction", new[] { "OPTIONS" }, (HttpContext context) =>
             {
-                context.Response.Headers.Add("Access-Control-Allow-Origin", "https://adfapi.lordist.in");
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "https://compliancemgmt.lordist.in");
                 context.Response.Headers.Add("Access-Control-Allow-Methods", "POST, OPTIONS");
                 context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
                 context.Response.StatusCode = 204; // No content
