@@ -12,9 +12,9 @@ namespace ComplianceMgmt.Api.Controllers
         {
             try
             {
-                //var result = await recordCountRepository.GetRecordCountAsync(date);
+                var result = await recordCountRepository.GetRecordCountAsync(date);
                 var result1 = await recordCountRepository.FetchAndInsertAllTablesAsync();
-                return Ok(result1);
+                return Ok(result);
             }
             catch (Exception ex)
             {

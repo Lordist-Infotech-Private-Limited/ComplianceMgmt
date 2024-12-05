@@ -55,7 +55,6 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<ICoBorrowerDetailsRepository, CoBorrowerDetailsRepository>();
             builder.Services.AddScoped<IStatewiseLoanRepository, StatewiseLoanRepository>();
             builder.Services.AddScoped<IComplianceReportRepository, ComplianceReportRepository>();
-            builder.Services.AddSingleton<IHybridCache, HybridCache>();
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             builder.Services.AddSingleton<TokenService>();
@@ -101,7 +100,7 @@ namespace ComplianceMgmt.Api
             builder.Services.AddTransient(x =>
               new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Register SamadhaanDapperDbContext for DI
+            // Register ComplianceMgmtDbContext for DI
             builder.Services.AddScoped<ComplianceMgmtDbContext>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -163,14 +162,8 @@ namespace ComplianceMgmt.Api
         
             // Add in-memory cache
             builder.Services.AddMemoryCache();
-            // Add distributed cache (e.g., Redis)
-            builder.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = "localhost:7275"; // Update with your Redis configuration
-                options.InstanceName = "HybridCache";
-            });
 
-            ReportConfig.DefaultSettings = new ReportSettings().RegisterExtensions(new List<string> { "BoldReports.Data.MySQL" });
+            ReportConfig.DefaultSettings = new ReportSettings().RegisterExtensions(["BoldReports.Data.MySQL"]);
             //builder.Services.AddHybridCache(); // Not shown: optional configuration API.
             var app = builder.Build();
 
@@ -192,7 +185,7 @@ namespace ComplianceMgmt.Api
             app.UseCors("AllowSpecificOrigin");
 
             // Ensure endpoints support OPTIONS requests
-            app.MapMethods("/ReportViewer/PostReportAction", new[] { "OPTIONS" }, (HttpContext context) =>
+            app.MapMethods("/ReportViewer/PostReportAction", ["OPTIONS"], (HttpContext context) =>
             {
                 context.Response.Headers.Add("Access-Control-Allow-Origin", "https://compliancemgmt.lordist.in");
                 context.Response.Headers.Add("Access-Control-Allow-Methods", "POST, OPTIONS");
