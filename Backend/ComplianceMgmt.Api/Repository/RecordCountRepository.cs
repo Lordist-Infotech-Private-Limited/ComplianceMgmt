@@ -213,19 +213,23 @@ namespace ComplianceMgmt.Api.Repository
         {
             var reason = new StringBuilder();
 
-            if (tableName == "stgborrowerdetail")
+            if (new[] { "stgborrowerdetail", "stgborrowerloan" }.Contains(tableName))
             {
                 // Date Validation
                 if (record.Date == null)
                     reason.AppendLine("Date cannot be blank.");
+            }
+
+            if (tableName == "stgborrowerdetail")
+            {
 
                 // CIN Validation
                 if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
                     reason.AppendLine("CIN and PAN cannot both be blank.");
 
                 // PAN Conditional Validation
-                if (!string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
-                    reason.AppendLine("PAN is mandatory if CIN is provided.");
+                if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
+                    reason.AppendLine("PAN is mandatory if CIN is not provided.");
 
                 // DOB Validation
                 if (record.BDob == null)
@@ -253,6 +257,116 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.BGender))
                     reason.AppendLine("Gender cannot be blank.");
             }
+            else if (tableName == "stgborrowerloan")
+            {
+                if (record.BankId == null)
+                    reason.AppendLine("Bank ID cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.BLoanNo))
+                    reason.AppendLine("Loan Account Number cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.LoanType))
+                    reason.AppendLine("Type of Loan cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.LoanPurpose))
+                    reason.AppendLine("Loan Purpose cannot be blank.");
+                else
+                {
+                    // Number of Dwelling Unit(DU)
+                    string loanPurpose = record.LoanPurpose;
+
+                    if (new[] { "POL-01", "POL-02", "POL-03", "POL-04", "POL-05" }.Contains(loanPurpose))
+                    {
+                        if (string.IsNullOrWhiteSpace(record.DwellingUnit))
+                            reason.AppendLine("Number of Dwelling Unit (DU) cannot be blank.");
+                    }
+                }
+
+                if (record.SanctAmount == null || record.SanctAmount <= 0)
+                    reason.AppendLine("Sanctioned Amount (Rs.) must be numeric and > 0.");
+
+                // Date of Sanction Validation
+                if (record.SanctDate == null)
+                    reason.AppendLine("Date of Sanction cannot be blank.");
+                else if (!DateTime.TryParseExact(record.SanctDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Date of Sanction.");
+
+                if (record.MoratoriumPeriod == null || record.MoratoriumPeriod < 0)
+                    reason.AppendLine("Moratorium Period must be numeric and >= 0.");
+
+                if (record.LoanTenCont == null || record.LoanTenCont < 0)
+                    reason.AppendLine("Loan Tenure - Contractual must be numeric and >= 0.");
+
+                if (record.LoanTenResidual == null || record.LoanTenResidual < 0)
+                    reason.AppendLine("Loan Tenure - Residual must be numeric and >= 0.");
+
+                if (record.Roi == null || record.Roi <= 0)
+                    reason.AppendLine("Rate of Interest must be numeric and > 0.00");
+
+                if (string.IsNullOrWhiteSpace(record.IntType))
+                    reason.AppendLine("Type of Interest cannot be blank.");
+
+                if (record.Emi != null || record.Emi < 0)
+                    reason.AppendLine("Equated Monthly Installment (EMI) must be numeric and >= 0.");
+
+                if (record.PreEmi != null || record.PreEmi < 0)
+                    reason.AppendLine("Pre-EMI Interest (PEMI) must be numeric and >= 0.");
+
+                if (record.FirstDisbDate != null && !DateTime.TryParseExact(record.FirstDisbDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Date of first Disbursement.");
+
+                if (record.EmiStartDate != null && !DateTime.TryParseExact(record.EmiStartDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for EMI Start Date.");
+
+                if (record.PreEmiStartDate != null && !DateTime.TryParseExact(record.PreEmiStartDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
+
+                if (record.LoanDisbDuringMonth == null || record.LoanDisbDuringMonth < 0)
+                    reason.AppendLine("Loan Amount Disbursed during the Month must be numeric and >= 0.");
+
+                if (record.CummuLoanDisb == null || record.CummuLoanDisb < 0)
+                    reason.AppendLine("Cumulative Loan Disbursed must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.LoanStatus))
+                    reason.AppendLine("Loan Status cannot be blank.");
+
+                if (record.AmtUnderCons != null || record.AmtUnderCons < 0)
+                    reason.AppendLine("Amount outstanding under consideration must be numeric and >= 0.");
+
+                if (string.IsNullOrWhiteSpace(record.PartyName))
+                    reason.AppendLine("Counter Party cannot be blank.");
+
+                if (record.AmoutUnderGuar != null || record.AmoutUnderGuar < 0)
+                    reason.AppendLine("Amount outstanding under Guarantee must be numeric and >= 0.");
+
+                if (record.TotalLoanOut == null)
+                    reason.AppendLine("Total Loan Outstanding cannot be blank.");
+
+                if (record.POut == null)
+                    reason.AppendLine("Principal Outstanding cannot be blank.");
+
+                if (record.IOut == null)
+                    reason.AppendLine("Interest Outstanding cannot be blank.");
+
+                if (record.OtherDueOut == null)
+                    reason.AppendLine("Other Dues cannot be blank.");
+            
+                if (record.LoanRepayDurMth == null || record.LoanRepayDurMth < 0)
+                    reason.AppendLine("Loan Repayment During the Month must be numeric and >= 0.");
+
+                if (record.TotalLoanOverDue == null || record.TotalLoanOverDue < 0)
+                    reason.AppendLine("Total Loan Overdue must be numeric and >= 0.");
+
+                if (record.POverDue == null || record.POverDue < 0)
+                    reason.AppendLine("Principal Overdue must be numeric and >= 0.");
+
+                if (record.IOverDue == null || record.IOverDue < 0)
+                    reason.AppendLine("Interest Overdue must be numeric and >= 0.");
+
+                if (record.OtherOverDue == null || record.OtherOverDue < 0)
+                    reason.AppendLine("Other Dues Overdues must be numeric and >= 0.");
+            }
+
             return (reason.Length == 0, reason.ToString());
         }
 
@@ -305,6 +419,43 @@ namespace ComplianceMgmt.Api.Repository
                 if (record.BCast != null && !masterData.Any(data => string.Equals(data.MasterName, "Cast", StringComparison.OrdinalIgnoreCase) &&
                     string.Equals(data.Code, record.BCast, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Cast value.");
+            }
+            else if (tableName == "stgborrowerloan")
+            {
+                // Type of Loan
+                if (record.LoanType != null && !masterData.Any(data => string.Equals(data.MasterName, "Type of Loan", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.LoanType, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Loan value.");
+
+                // Loan Purpose
+                if (record.LoanPurpose != null && !masterData.Any(data => string.Equals(data.MasterName, "Purpose of Loan", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.LoanPurpose, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Loan value.");
+
+                // Number of Dwelling Unit(DU)
+                if (record.DwellingUnit != null && !masterData.Any(data => string.Equals(data.MasterName, "Number of Dwelling Unit (DU)", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.DwellingUnit, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Loan value.");
+
+                // Type of Interest
+                if (record.IntType != null && !masterData.Any(data => string.Equals(data.MasterName, "Type of Interest", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.IntType, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Type of Interest value.");
+
+                // Loan Status
+                if (record.LoanStatus != null && !masterData.Any(data => string.Equals(data.MasterName, "Loan Status", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.LoanStatus, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Loan Status value.");
+
+                // Counter Party
+                if (record.PartyName != null && !masterData.Any(data => string.Equals(data.MasterName, "Counter Party", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.PartyName, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Counter Party value.");
+
+                // Mortgage Guarantee
+                if (record.MortGuarantee != null && !masterData.Any(data => string.Equals(data.MasterName, "Mortgage Guarantee", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.MortGuarantee, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Mortgage Guarantee value.");
             }
 
             return (reason.Length == 0, reason.ToString());
@@ -366,7 +517,7 @@ namespace ComplianceMgmt.Api.Repository
                 // Execute the insert query
                 using var command = new MySqlCommand(insertQuery.ToString(), connection);
                 command.Parameters.AddRange(parameters.ToArray());
-
+                command.CommandTimeout = 1800; 
                 Console.WriteLine($"Query: {insertQuery}");
                 Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
 
