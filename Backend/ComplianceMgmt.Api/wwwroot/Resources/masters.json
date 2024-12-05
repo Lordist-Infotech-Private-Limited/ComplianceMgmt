@@ -1,0 +1,5972 @@
+[
+    {
+        "Master Name": "COR Category",
+        "Master Values Desc": "COR with Public Deposit",
+        "Code": "COR-01"
+    },
+    {
+        "Master Name": "COR Category",
+        "Master Values Desc": "COR with Public Deposit (prior permission required)",
+        "Code": "COR-02"
+    },
+    {
+        "Master Name": "COR Category",
+        "Master Values Desc": "COR without Public Deposit",
+        "Code": "COR-03"
+    },
+    {
+        "Master Name": "Citizenship",
+        "Master Values Desc": "Resident",
+        "Code": "CIT-01"
+    },
+    {
+        "Master Name": "Citizenship",
+        "Master Values Desc": "Non-Resident",
+        "Code": "CIT-02"
+    },
+    {
+        "Master Name": "Citizenship",
+        "Master Values Desc": "Others",
+        "Code": "CIT-03"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Hindu-01",
+        "Code": "RE-01"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Muslim-02",
+        "Code": "RE-02"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Sikh-03",
+        "Code": "RE-03"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Christian-04",
+        "Code": "RE-04"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Jain-05",
+        "Code": "RE-05"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Buddhist- 06",
+        "Code": "RE-06"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Zoroastrian-07",
+        "Code": "RE-07"
+    },
+    {
+        "Master Name": "Religion",
+        "Master Values Desc": "Other-08",
+        "Code": "RE-08"
+    },
+    {
+        "Master Name": "Cast",
+        "Master Values Desc": "General-01",
+        "Code": "CA-01"
+    },
+    {
+        "Master Name": "Cast",
+        "Master Values Desc": "EWS-02",
+        "Code": "CA-02"
+    },
+    {
+        "Master Name": "Cast",
+        "Master Values Desc": "OBC-03",
+        "Code": "CA-03"
+    },
+    {
+        "Master Name": "Cast",
+        "Master Values Desc": "SC-04",
+        "Code": "CA-04"
+    },
+    {
+        "Master Name": "Cast",
+        "Master Values Desc": "ST-05",
+        "Code": "CA-05"
+    },
+    {
+        "Master Name": "Gender",
+        "Master Values Desc": "Male-01",
+        "Code": "G-01"
+    },
+    {
+        "Master Name": "Gender",
+        "Master Values Desc": "Female-02",
+        "Code": "G-02"
+    },
+    {
+        "Master Name": "Gender",
+        "Master Values Desc": "Others-03",
+        "Code": "G-03"
+    },
+    {
+        "Master Name": "Occupation",
+        "Master Values Desc": "Salaried-01",
+        "Code": "OC-01"
+    },
+    {
+        "Master Name": "Occupation",
+        "Master Values Desc": "Self-Employed/Business-02",
+        "Code": "OC-02"
+    },
+    {
+        "Master Name": "Occupation",
+        "Master Values Desc": "Professional-03",
+        "Code": "OC-03"
+    },
+    {
+        "Master Name": "Occupation",
+        "Master Values Desc": "Others-04",
+        "Code": "OC-04"
+    },
+    {
+        "Master Name": "Occupation",
+        "Master Values Desc": "Housewife-05",
+        "Code": "OC-05"
+    },
+    {
+        "Master Name": "Type of Loan",
+        "Master Values Desc": "Housing-01",
+        "Code": "TOL-01"
+    },
+    {
+        "Master Name": "Type of Loan",
+        "Master Values Desc": "Non-Housing-02",
+        "Code": "TOL-02"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Construction-New Dwelling Unit(DU)-01",
+        "Code": "POL-01"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Purchase-New DU-02",
+        "Code": "POL-02"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Purchase- Old DU-03",
+        "Code": "POL-03"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Purchase Old/New DU by mortgaging existing DU-04",
+        "Code": "POL-04"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Plot+Construction (within 3 years)-05",
+        "Code": "POL-05"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Renovation/Reconstruction/Repairs-existing DU-06",
+        "Code": "POL-06"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Construction Loan-Slum Dwellers on guarantee of Central Govt. or indirectly to them through State Govt.-07",
+        "Code": "POL-07"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Against Security of Shares-08",
+        "Code": "POL-08"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Gold Jewellery-09",
+        "Code": "POL-09"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Plot-10",
+        "Code": "POL-10"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Personal-11",
+        "Code": "POL-11"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Business-12",
+        "Code": "POL-12"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Top-up-13",
+        "Code": "POL-13"
+    },
+    {
+        "Master Name": "Purpose of Loan",
+        "Master Values Desc": "Other-14",
+        "Code": "POL-14"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-01",
+        "Code": "DU-01"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-02",
+        "Code": "DU-02"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-03",
+        "Code": "DU-03"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-04",
+        "Code": "DU-04"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-05",
+        "Code": "DU-05"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-06",
+        "Code": "DU-06"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-07",
+        "Code": "DU-07"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-08",
+        "Code": "DU-08"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-09",
+        "Code": "DU-09"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-10",
+        "Code": "DU-10"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-11",
+        "Code": "DU-11"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-12",
+        "Code": "DU-12"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-13",
+        "Code": "DU-13"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-14",
+        "Code": "DU-14"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-15",
+        "Code": "DU-15"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-16",
+        "Code": "DU-16"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-17",
+        "Code": "DU-17"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-18",
+        "Code": "DU-18"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-19",
+        "Code": "DU-19"
+    },
+    {
+        "Master Name": "Number of Dwelling Unit (DU)",
+        "Master Values Desc": "DU-20",
+        "Code": "DU-20"
+    },
+    {
+        "Master Name": "Type of Interest",
+        "Master Values Desc": "Fixed-01",
+        "Code": "TOI-01"
+    },
+    {
+        "Master Name": "Type of Interest",
+        "Master Values Desc": "Floating-02",
+        "Code": "TOI-02"
+    },
+    {
+        "Master Name": "Type of Interest",
+        "Master Values Desc": "Other-03",
+        "Code": "TOI-03"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Standard-00",
+        "Code": "ACC-00"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "SMA0 - 01",
+        "Code": "ACC-01"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "SMA01 - 02",
+        "Code": "ACC-02"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "SMA02 - 03",
+        "Code": "ACC-03"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Sub-standard-04",
+        "Code": "ACC-04"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Doubtful I-05",
+        "Code": "ACC-05"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Doubtful II-06",
+        "Code": "ACC-06"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Doubtful III-07",
+        "Code": "ACC-07"
+    },
+    {
+        "Master Name": "Asset Category/Classification",
+        "Master Values Desc": "Loss-08",
+        "Code": "ACC-08"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Plot-01",
+        "Code": "TOP-01"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Independent House-02",
+        "Code": "TOP-02"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Flat/Apartment-03",
+        "Code": "TOP-03"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Shop-04",
+        "Code": "TOP-04"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Office-05",
+        "Code": "TOP-05"
+    },
+    {
+        "Master Name": "Type of Property",
+        "Master Values Desc": "Others-06",
+        "Code": "TOP-06"
+    },
+    {
+        "Master Name": "Rural/Urban",
+        "Master Values Desc": "Rural",
+        "Code": "RURAL"
+    },
+    {
+        "Master Name": "Rural/Urban",
+        "Master Values Desc": "Urban",
+        "Code": "URBAN"
+    },
+    {
+        "Master Name": "Unique ID Type",
+        "Master Values Desc": "Voter ID-01",
+        "Code": "UIDT-01"
+    },
+    {
+        "Master Name": "Unique ID Type",
+        "Master Values Desc": "Others-02",
+        "Code": "UIDT-02"
+    },
+    {
+        "Master Name": "RWA Classification ",
+        "Master Values Desc": "00-0%",
+        "Code": "RWA-01"
+    },
+    {
+        "Master Name": "RWA Classification ",
+        "Master Values Desc": "01-35%",
+        "Code": "RWA-02"
+    },
+    {
+        "Master Name": "RWA Classification ",
+        "Master Values Desc": "02-50%",
+        "Code": "RWA-03"
+    },
+    {
+        "Master Name": "RWA Classification ",
+        "Master Values Desc": "03-75%",
+        "Code": "RWA-04"
+    },
+    {
+        "Master Name": "RWA Classification ",
+        "Master Values Desc": "04-100%",
+        "Code": "RWA-05"
+    },
+    {
+        "Master Name": "Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage 1-01",
+        "Code": "ECL01"
+    },
+    {
+        "Master Name": "Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage 2-02",
+        "Code": "ECL02"
+    },
+    {
+        "Master Name": "Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage 3-03",
+        "Code": "ECL03"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "Securitised -01",
+        "Code": "LS-01"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "Direct Assignment -02",
+        "Code": "LS-02"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "Loan Purchased-03",
+        "Code": "LS-03"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "Co-originated/lending-04",
+        "Code": "LS-04"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "None of them-05",
+        "Code": "LS-05"
+    },
+    {
+        "Master Name": "Loan Status",
+        "Master Values Desc": "Not Applicable-06",
+        "Code": "LS-06"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "PSBs-01",
+        "Code": "CP-01"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "Other Banks-02",
+        "Code": "CP-02"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "HFCs-03",
+        "Code": "CP-03"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "ARCs-04",
+        "Code": "CP-04"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "Others-05",
+        "Code": "CP-05"
+    },
+    {
+        "Master Name": "Counter Party",
+        "Master Values Desc": "None of them-06",
+        "Code": "CP-06"
+    },
+    {
+        "Master Name": "Mortgage Guarantee",
+        "Master Values Desc": "CRGFT-01",
+        "Code": "MG-01"
+    },
+    {
+        "Master Name": "Mortgage Guarantee",
+        "Master Values Desc": "IMGC-02",
+        "Code": "MG-02"
+    },
+    {
+        "Master Name": "Mortgage Guarantee",
+        "Master Values Desc": "Other RBI registered MGC-03",
+        "Code": "MG-03"
+    },
+    {
+        "Master Name": "Mortgage Guarantee",
+        "Master Values Desc": "Central/Stae Government-04",
+        "Code": "MG-04"
+    },
+    {
+        "Master Name": "Mortgage Guarantee",
+        "Master Values Desc": "None-05",
+        "Code": "MG-05"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Not Applicable",
+        "Code": "00"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Jammu and Kashmir",
+        "Code": "01"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Himachal Pradesh",
+        "Code": "02"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Punjab",
+        "Code": "03"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Chandigarh",
+        "Code": "04"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Uttarakhand",
+        "Code": "05"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Haryana",
+        "Code": "06"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Delhi",
+        "Code": "07"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Rajasthan",
+        "Code": "08"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Uttar Pradesh",
+        "Code": "09"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Bihar",
+        "Code": "10"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Sikkim",
+        "Code": "11"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Arunachal Pradesh",
+        "Code": "12"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Nagaland",
+        "Code": "13"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Manipur",
+        "Code": "14"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Mizoram",
+        "Code": "15"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Tripura",
+        "Code": "16"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Meghalaya",
+        "Code": "17"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Assam",
+        "Code": "18"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "West Bengal",
+        "Code": "19"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Jharkhand",
+        "Code": "20"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Odisha",
+        "Code": "21"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Chhattisgarh",
+        "Code": "22"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Madhya Pradesh",
+        "Code": "23"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Gujarat",
+        "Code": "24"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Daman and Diu",
+        "Code": "25"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Dadra and Nagar Haveli",
+        "Code": "26"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Maharashtra",
+        "Code": "27"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Andhra Pradesh",
+        "Code": "28"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Karnataka",
+        "Code": "29"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Goa",
+        "Code": "30"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Lakshadweep",
+        "Code": "31"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Kerala",
+        "Code": "32"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Tamil Nadu",
+        "Code": "33"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Puducherry",
+        "Code": "34"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Andaman and Nicobar Islands",
+        "Code": "35"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Telangana",
+        "Code": "36"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "Ladakh",
+        "Code": "37"
+    },
+    {
+        "Master Name": "STATE",
+        "Master Values Desc": "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
+        "Code": "38"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NICOBARS",
+        "Code": "603"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH AND MIDDLE ANDAMAN",
+        "Code": "632"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH ANDAMANS",
+        "Code": "602"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANANTAPUR",
+        "Code": "502"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHITTOOR",
+        "Code": "503"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST GODAVARI",
+        "Code": "505"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GUNTUR",
+        "Code": "506"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KRISHNA",
+        "Code": "510"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KURNOOL",
+        "Code": "511"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PRAKASAM",
+        "Code": "517"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SPSR NELLORE",
+        "Code": "515"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SRIKAKULAM",
+        "Code": "519"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VISAKHAPATANAM",
+        "Code": "520"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VIZIANAGARAM",
+        "Code": "521"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST GODAVARI",
+        "Code": "523"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Y.S.R.",
+        "Code": "504"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANJAW",
+        "Code": "628"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHANGLANG",
+        "Code": "229"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DIBANG VALLEY",
+        "Code": "230"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST KAMENG",
+        "Code": "231"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST SIANG",
+        "Code": "232"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAMLE",
+        "Code": "718"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KRA DAADI",
+        "Code": "677"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KURUNG KUMEY",
+        "Code": "233"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LEPARADA",
+        "Code": "724"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LOHIT",
+        "Code": "234"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LONGDING",
+        "Code": "666"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LOWER DIBANG VALLEY",
+        "Code": "235"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LOWER SIANG",
+        "Code": "719"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LOWER SUBANSIRI",
+        "Code": "236"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAMSAI",
+        "Code": "678"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PAKKE KESSANG",
+        "Code": "723"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PAPUM PARE",
+        "Code": "237"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHI YOMI",
+        "Code": "725"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIANG",
+        "Code": "679"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TAWANG",
+        "Code": "238"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIRAP",
+        "Code": "239"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UPPER SIANG",
+        "Code": "240"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UPPER SUBANSIRI",
+        "Code": "241"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST KAMENG",
+        "Code": "242"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST SIANG",
+        "Code": "243"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAKSA",
+        "Code": "616"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARPETA",
+        "Code": "280"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Biswanath",
+        "Code": "705"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BONGAIGAON",
+        "Code": "281"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CACHAR",
+        "Code": "282"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHARAIDEO",
+        "Code": "708"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHIRANG",
+        "Code": "612"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DARRANG",
+        "Code": "283"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHEMAJI",
+        "Code": "284"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHUBRI",
+        "Code": "285"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DIBRUGARH",
+        "Code": "286"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DIMA HASAO",
+        "Code": "299"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GOALPARA",
+        "Code": "287"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GOLAGHAT",
+        "Code": "288"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAILAKANDI",
+        "Code": "289"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HOJAI",
+        "Code": "709"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JORHAT",
+        "Code": "290"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAMRUP",
+        "Code": "291"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAMRUP METRO",
+        "Code": "618"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARBI ANGLONG",
+        "Code": "292"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARIMGANJ",
+        "Code": "293"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOKRAJHAR",
+        "Code": "294"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LAKHIMPUR",
+        "Code": "295"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAJULI",
+        "Code": "706"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MARIGAON",
+        "Code": "296"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAGAON",
+        "Code": "297"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NALBARI",
+        "Code": "298"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIVASAGAR",
+        "Code": "300"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SONITPUR",
+        "Code": "301"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH SALMARA MANCACHAR",
+        "Code": "707"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TINSUKIA",
+        "Code": "302"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UDALGURI",
+        "Code": "617"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST KARBI ANGLONG",
+        "Code": "710"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ARARIA",
+        "Code": "188"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ARWAL",
+        "Code": "611"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AURANGABAD (BIHAR)",
+        "Code": "189"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANKA",
+        "Code": "190"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BEGUSARAI",
+        "Code": "191"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHAGALPUR",
+        "Code": "192"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHOJPUR",
+        "Code": "193"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BUXAR",
+        "Code": "194"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DARBHANGA",
+        "Code": "195"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GAYA",
+        "Code": "196"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GOPALGANJ",
+        "Code": "197"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAMUI",
+        "Code": "198"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JEHANABAD",
+        "Code": "199"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAIMUR (BHABUA)",
+        "Code": "200"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KATIHAR",
+        "Code": "201"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHAGARIA",
+        "Code": "202"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KISHANGANJ",
+        "Code": "203"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LAKHISARAI",
+        "Code": "204"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MADHEPURA",
+        "Code": "205"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MADHUBANI",
+        "Code": "206"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUNGER",
+        "Code": "207"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUZAFFARPUR",
+        "Code": "208"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NALANDA",
+        "Code": "209"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAWADA",
+        "Code": "210"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PASHCHIM CHAMPARAN",
+        "Code": "211"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PATNA",
+        "Code": "212"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PURBI CHAMPARAN",
+        "Code": "213"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PURNIA",
+        "Code": "214"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ROHTAS",
+        "Code": "215"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAHARSA",
+        "Code": "216"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAMASTIPUR",
+        "Code": "217"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHANDIGARH",
+        "Code": "44"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SARAN",
+        "Code": "218"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHEIKHPURA",
+        "Code": "219"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHEOHAR",
+        "Code": "220"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SITAMARHI",
+        "Code": "221"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIWAN",
+        "Code": "222"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SUPAUL",
+        "Code": "223"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VAISHALI",
+        "Code": "224"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALOD",
+        "Code": "646"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALODA BAZAR",
+        "Code": "644"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALRAMPUR (CHHATTISGARH)",
+        "Code": "649"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BASTAR",
+        "Code": "374"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BEMETARA",
+        "Code": "650"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BIJAPUR",
+        "Code": "636"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BILASPUR (CHHATTISGARH)",
+        "Code": "375"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DANTEWADA",
+        "Code": "376"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHAMTARI",
+        "Code": "377"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DURG",
+        "Code": "378"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GARIYABAND",
+        "Code": "645"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Gaurella Pendra Marwahi",
+        "Code": "734"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JANJGIR-CHAMPA",
+        "Code": "379"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JASHPUR",
+        "Code": "380"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KABIRDHAM",
+        "Code": "382"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANKER",
+        "Code": "381"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KONDAGAON",
+        "Code": "643"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KORBA",
+        "Code": "383"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOREA",
+        "Code": "384"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHASAMUND",
+        "Code": "385"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUNGELI",
+        "Code": "647"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NARAYANPUR",
+        "Code": "637"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAIGARH",
+        "Code": "386"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAIPUR",
+        "Code": "387"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJNANDGAON",
+        "Code": "388"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SUKMA",
+        "Code": "642"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SURAJPUR",
+        "Code": "648"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SURGUJA",
+        "Code": "389"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CENTRAL",
+        "Code": "77"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST",
+        "Code": "78"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NEW DELHI",
+        "Code": "79"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH",
+        "Code": "80"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH EAST",
+        "Code": "81"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH WEST",
+        "Code": "82"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHAHDARA",
+        "Code": "671"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH",
+        "Code": "83"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "South East",
+        "Code": "670"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH WEST",
+        "Code": "84"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST",
+        "Code": "85"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH GOA",
+        "Code": "551"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH GOA",
+        "Code": "552"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AHMADABAD",
+        "Code": "438"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMRELI",
+        "Code": "439"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANAND",
+        "Code": "440"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ARVALLI",
+        "Code": "672"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANAS KANTHA",
+        "Code": "441"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHARUCH",
+        "Code": "442"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHAVNAGAR",
+        "Code": "443"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BOTAD",
+        "Code": "676"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHHOTAUDEPUR",
+        "Code": "668"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DANG",
+        "Code": "444"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEVBHUMI DWARKA",
+        "Code": "674"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DOHAD",
+        "Code": "445"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GANDHINAGAR",
+        "Code": "446"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GIR SOMNATH",
+        "Code": "675"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAMNAGAR",
+        "Code": "447"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JUNAGADH",
+        "Code": "448"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KACHCHH",
+        "Code": "449"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHEDA",
+        "Code": "450"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHESANA",
+        "Code": "451"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Mahisagar",
+        "Code": "669"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MORBI",
+        "Code": "673"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NARMADA",
+        "Code": "452"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAVSARI",
+        "Code": "453"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PANCH MAHALS",
+        "Code": "454"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PATAN",
+        "Code": "455"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PORBANDAR",
+        "Code": "456"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJKOT",
+        "Code": "457"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SABAR KANTHA",
+        "Code": "458"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SURAT",
+        "Code": "459"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SURENDRANAGAR",
+        "Code": "460"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TAPI",
+        "Code": "641"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VADODARA",
+        "Code": "461"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VALSAD",
+        "Code": "462"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMBALA",
+        "Code": "58"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHIWANI",
+        "Code": "59"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHARKI DADRI",
+        "Code": "701"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FARIDABAD",
+        "Code": "60"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FATEHABAD",
+        "Code": "61"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GURUGRAM",
+        "Code": "62"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HISAR",
+        "Code": "63"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHAJJAR",
+        "Code": "64"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JIND",
+        "Code": "65"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAITHAL",
+        "Code": "66"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARNAL",
+        "Code": "67"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KURUKSHETRA",
+        "Code": "68"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHENDRAGARH",
+        "Code": "69"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NUH",
+        "Code": "604"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PALWAL",
+        "Code": "619"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PANCHKULA",
+        "Code": "70"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PANIPAT",
+        "Code": "71"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "REWARI",
+        "Code": "72"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ROHTAK",
+        "Code": "73"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIRSA",
+        "Code": "74"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SONIPAT",
+        "Code": "75"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "YAMUNANAGAR",
+        "Code": "76"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BILASPUR (HIMACHAL PRADESH)",
+        "Code": "15"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHAMBA",
+        "Code": "16"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAMIRPUR (HIMACHAL PRADESH)",
+        "Code": "17"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANGRA",
+        "Code": "18"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KINNAUR",
+        "Code": "19"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KULLU",
+        "Code": "20"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LAHUL AND SPITI",
+        "Code": "21"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANDI",
+        "Code": "22"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHIMLA",
+        "Code": "23"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIRMAUR",
+        "Code": "24"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOLAN",
+        "Code": "25"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UNA",
+        "Code": "26"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANANTNAG",
+        "Code": "1"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANDIPORA",
+        "Code": "623"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARAMULLA",
+        "Code": "3"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Budgam",
+        "Code": "2"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DODA",
+        "Code": "4"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GANDERBAL",
+        "Code": "626"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAMMU",
+        "Code": "5"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KATHUA",
+        "Code": "7"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KISHTWAR",
+        "Code": "620"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KULGAM",
+        "Code": "622"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KUPWARA",
+        "Code": "8"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "POONCH",
+        "Code": "10"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PULWAMA",
+        "Code": "11"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJOURI",
+        "Code": "12"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAMBAN",
+        "Code": "621"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "REASI",
+        "Code": "627"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAMBA",
+        "Code": "624"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHOPIAN",
+        "Code": "625"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SRINAGAR",
+        "Code": "13"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UDHAMPUR",
+        "Code": "14"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BOKARO",
+        "Code": "322"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHATRA",
+        "Code": "323"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEOGHAR",
+        "Code": "324"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHANBAD",
+        "Code": "325"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DUMKA",
+        "Code": "326"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST SINGHBUM",
+        "Code": "327"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GARHWA",
+        "Code": "328"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GIRIDIH",
+        "Code": "329"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GODDA",
+        "Code": "330"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GUMLA",
+        "Code": "331"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAZARIBAGH",
+        "Code": "332"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAMTARA",
+        "Code": "333"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHUNTI",
+        "Code": "606"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KODERMA",
+        "Code": "334"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LATEHAR",
+        "Code": "335"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LOHARDAGA",
+        "Code": "336"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PAKUR",
+        "Code": "337"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PALAMU",
+        "Code": "338"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAMGARH",
+        "Code": "607"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RANCHI",
+        "Code": "339"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAHEBGANJ",
+        "Code": "340"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SARAIKELA KHARSAWAN",
+        "Code": "341"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIMDEGA",
+        "Code": "342"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST SINGHBHUM",
+        "Code": "343"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAGALKOTE",
+        "Code": "524"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALLARI",
+        "Code": "528"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BELAGAVI",
+        "Code": "527"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BENGALURU RURAL",
+        "Code": "526"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BENGALURU URBAN",
+        "Code": "525"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BIDAR",
+        "Code": "529"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHAMARAJANAGARA",
+        "Code": "531"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHIKKABALLAPURA",
+        "Code": "630"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHIKKAMAGALURU",
+        "Code": "532"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHITRADURGA",
+        "Code": "533"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DAKSHINA KANNADA",
+        "Code": "534"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DAVANGERE",
+        "Code": "535"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHARWAD",
+        "Code": "536"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GADAG",
+        "Code": "537"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HASSAN",
+        "Code": "539"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAVERI",
+        "Code": "540"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KALABURAGI",
+        "Code": "538"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KODAGU",
+        "Code": "541"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOLAR",
+        "Code": "542"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOPPAL",
+        "Code": "543"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANDYA",
+        "Code": "544"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MYSURU",
+        "Code": "545"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAICHUR",
+        "Code": "546"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAMANAGARA",
+        "Code": "631"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHIVAMOGGA",
+        "Code": "547"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TUMAKURU",
+        "Code": "548"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UDUPI",
+        "Code": "549"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UTTARA KANNADA",
+        "Code": "550"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VIJAYAPURA",
+        "Code": "530"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "YADGIR",
+        "Code": "635"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ALAPPUZHA",
+        "Code": "554"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ERNAKULAM",
+        "Code": "555"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "IDUKKI",
+        "Code": "556"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANNUR",
+        "Code": "557"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KASARAGOD",
+        "Code": "558"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOLLAM",
+        "Code": "559"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOTTAYAM",
+        "Code": "560"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOZHIKODE",
+        "Code": "561"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MALAPPURAM",
+        "Code": "562"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PALAKKAD",
+        "Code": "563"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PATHANAMTHITTA",
+        "Code": "564"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THIRUVANANTHAPURAM",
+        "Code": "565"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THRISSUR",
+        "Code": "566"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WAYANAD",
+        "Code": "567"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARGIL",
+        "Code": "6"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LEH LADAKH",
+        "Code": "9"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LAKSHADWEEP DISTRICT",
+        "Code": "553"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AGAR MALWA",
+        "Code": "667"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ALIRAJPUR",
+        "Code": "639"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANUPPUR",
+        "Code": "390"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ASHOKNAGAR",
+        "Code": "391"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALAGHAT",
+        "Code": "392"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARWANI",
+        "Code": "393"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BETUL",
+        "Code": "394"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHIND",
+        "Code": "395"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHOPAL",
+        "Code": "396"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BURHANPUR",
+        "Code": "397"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHHATARPUR",
+        "Code": "398"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHHINDWARA",
+        "Code": "399"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DAMOH",
+        "Code": "400"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DATIA",
+        "Code": "401"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEWAS",
+        "Code": "402"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHAR",
+        "Code": "403"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DINDORI",
+        "Code": "404"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST NIMAR",
+        "Code": "405"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GUNA",
+        "Code": "406"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GWALIOR",
+        "Code": "407"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HARDA",
+        "Code": "408"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HOSHANGABAD",
+        "Code": "409"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "INDORE",
+        "Code": "410"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JABALPUR",
+        "Code": "411"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHABUA",
+        "Code": "412"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KATNI",
+        "Code": "413"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHARGONE",
+        "Code": "414"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANDLA",
+        "Code": "415"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANDSAUR",
+        "Code": "416"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MORENA",
+        "Code": "417"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NARSINGHPUR",
+        "Code": "418"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NEEMUCH",
+        "Code": "419"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Niwari",
+        "Code": "722"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PANNA",
+        "Code": "420"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAISEN",
+        "Code": "421"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJGARH",
+        "Code": "422"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RATLAM",
+        "Code": "423"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "REWA",
+        "Code": "424"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAGAR",
+        "Code": "425"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SATNA",
+        "Code": "426"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SEHORE",
+        "Code": "427"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SEONI",
+        "Code": "428"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHAHDOL",
+        "Code": "429"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHAJAPUR",
+        "Code": "430"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHEOPUR",
+        "Code": "431"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHIVPURI",
+        "Code": "432"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIDHI",
+        "Code": "433"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SINGRAULI",
+        "Code": "638"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIKAMGARH",
+        "Code": "434"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UJJAIN",
+        "Code": "435"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UMARIA",
+        "Code": "436"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VIDISHA",
+        "Code": "437"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AHMEDNAGAR",
+        "Code": "466"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AKOLA",
+        "Code": "467"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMRAVATI",
+        "Code": "468"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AURANGABAD (MAHARASHTRA)",
+        "Code": "469"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BEED",
+        "Code": "470"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHANDARA",
+        "Code": "471"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BULDHANA",
+        "Code": "472"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHANDRAPUR",
+        "Code": "473"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHULE",
+        "Code": "474"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GADCHIROLI",
+        "Code": "475"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GONDIA",
+        "Code": "476"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HINGOLI",
+        "Code": "477"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALGAON",
+        "Code": "478"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALNA",
+        "Code": "479"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOLHAPUR",
+        "Code": "480"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LATUR",
+        "Code": "481"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUMBAI",
+        "Code": "482"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUMBAI SUBURBAN",
+        "Code": "483"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAGPUR",
+        "Code": "484"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NANDED",
+        "Code": "485"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NANDURBAR",
+        "Code": "486"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NASHIK",
+        "Code": "487"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "OSMANABAD",
+        "Code": "488"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PALGHAR",
+        "Code": "665"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PARBHANI",
+        "Code": "489"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PUNE",
+        "Code": "490"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAIGAD",
+        "Code": "491"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RATNAGIRI",
+        "Code": "492"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SANGLI",
+        "Code": "493"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SATARA",
+        "Code": "494"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SINDHUDURG",
+        "Code": "495"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOLAPUR",
+        "Code": "496"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THANE",
+        "Code": "497"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WARDHA",
+        "Code": "498"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WASHIM",
+        "Code": "499"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "YAVATMAL",
+        "Code": "500"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BISHNUPUR",
+        "Code": "252"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHANDEL",
+        "Code": "253"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHURACHANDPUR",
+        "Code": "254"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "IMPHAL EAST",
+        "Code": "255"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "IMPHAL WEST",
+        "Code": "256"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JIRIBAM",
+        "Code": "713"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAKCHING",
+        "Code": "711"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAMJONG",
+        "Code": "717"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANGPOKPI",
+        "Code": "712"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NONEY",
+        "Code": "714"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PHERZAWL",
+        "Code": "715"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SENAPATI",
+        "Code": "257"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TAMENGLONG",
+        "Code": "258"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TENGNOUPAL",
+        "Code": "716"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THOUBAL",
+        "Code": "259"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UKHRUL",
+        "Code": "260"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST GARO HILLS",
+        "Code": "273"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST JAINTIA HILLS",
+        "Code": "657"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST KHASI HILLS",
+        "Code": "274"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH GARO HILLS",
+        "Code": "656"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RI BHOI",
+        "Code": "276"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH GARO HILLS",
+        "Code": "277"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH WEST GARO HILLS",
+        "Code": "663"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH WEST KHASI HILLS",
+        "Code": "658"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST GARO HILLS",
+        "Code": "278"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST JAINTIA HILLS",
+        "Code": "275"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST KHASI HILLS",
+        "Code": "279"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AIZAWL",
+        "Code": "261"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHAMPHAI",
+        "Code": "262"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Hnahthial",
+        "Code": "726"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHAWZAWL",
+        "Code": "728"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOLASIB",
+        "Code": "263"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LAWNGTLAI",
+        "Code": "264"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LUNGLEI",
+        "Code": "265"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAMIT",
+        "Code": "266"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAIHA",
+        "Code": "267"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAITUAL",
+        "Code": "727"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SERCHHIP",
+        "Code": "268"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DIMAPUR",
+        "Code": "244"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KIPHIRE",
+        "Code": "614"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOHIMA",
+        "Code": "245"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LONGLENG",
+        "Code": "615"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MOKOKCHUNG",
+        "Code": "246"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MON",
+        "Code": "247"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PEREN",
+        "Code": "613"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PHEK",
+        "Code": "248"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TUENSANG",
+        "Code": "249"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WOKHA",
+        "Code": "250"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ZUNHEBOTO",
+        "Code": "251"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ANUGUL",
+        "Code": "344"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALANGIR",
+        "Code": "345"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALESHWAR",
+        "Code": "346"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARGARH",
+        "Code": "347"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHADRAK",
+        "Code": "348"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BOUDH",
+        "Code": "349"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CUTTACK",
+        "Code": "350"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEOGARH",
+        "Code": "351"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHENKANAL",
+        "Code": "352"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GAJAPATI",
+        "Code": "353"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GANJAM",
+        "Code": "354"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAGATSINGHAPUR",
+        "Code": "355"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAJAPUR",
+        "Code": "356"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHARSUGUDA",
+        "Code": "357"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KALAHANDI",
+        "Code": "358"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANDHAMAL",
+        "Code": "359"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KENDRAPARA",
+        "Code": "360"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KENDUJHAR",
+        "Code": "361"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHORDHA",
+        "Code": "362"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KORAPUT",
+        "Code": "363"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MALKANGIRI",
+        "Code": "364"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAYURBHANJ",
+        "Code": "365"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NABARANGPUR",
+        "Code": "366"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAYAGARH",
+        "Code": "367"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NUAPADA",
+        "Code": "368"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PURI",
+        "Code": "369"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAYAGADA",
+        "Code": "370"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAMBALPUR",
+        "Code": "371"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SONEPUR",
+        "Code": "372"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SUNDARGARH",
+        "Code": "373"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARAIKAL",
+        "Code": "598"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHE",
+        "Code": "599"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PONDICHERRY",
+        "Code": "600"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "YANAM",
+        "Code": "601"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMRITSAR",
+        "Code": "27"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARNALA",
+        "Code": "605"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BATHINDA",
+        "Code": "28"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FARIDKOT",
+        "Code": "29"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FATEHGARH SAHIB",
+        "Code": "30"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FAZILKA",
+        "Code": "651"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FIROZEPUR",
+        "Code": "31"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GURDASPUR",
+        "Code": "32"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HOSHIARPUR",
+        "Code": "33"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALANDHAR",
+        "Code": "34"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAPURTHALA",
+        "Code": "35"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LUDHIANA",
+        "Code": "36"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANSA",
+        "Code": "37"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MOGA",
+        "Code": "38"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PATHANKOT",
+        "Code": "662"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PATIALA",
+        "Code": "41"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RUPNAGAR",
+        "Code": "42"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SANGRUR",
+        "Code": "43"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "S.A.S Nagar",
+        "Code": "608"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Shahid Bhagat Singh Nagar",
+        "Code": "40"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SRI MUKTSAR SAHIB",
+        "Code": "39"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Tarn Taran",
+        "Code": "609"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AJMER",
+        "Code": "86"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ALWAR",
+        "Code": "87"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANSWARA",
+        "Code": "88"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARAN",
+        "Code": "89"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARMER",
+        "Code": "90"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHARATPUR",
+        "Code": "91"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHILWARA",
+        "Code": "92"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BIKANER",
+        "Code": "93"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BUNDI",
+        "Code": "94"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHITTORGARH",
+        "Code": "95"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHURU",
+        "Code": "96"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DAUSA",
+        "Code": "97"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHOLPUR",
+        "Code": "98"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DUNGARPUR",
+        "Code": "99"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GANGANAGAR",
+        "Code": "100"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HANUMANGARH",
+        "Code": "101"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAIPUR",
+        "Code": "102"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAISALMER",
+        "Code": "103"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALORE",
+        "Code": "104"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHALAWAR",
+        "Code": "105"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHUNJHUNU",
+        "Code": "106"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JODHPUR",
+        "Code": "107"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARAULI",
+        "Code": "108"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOTA",
+        "Code": "109"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAGAUR",
+        "Code": "110"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PALI",
+        "Code": "111"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PRATAPGARH (RAJASTHAN)",
+        "Code": "629"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJSAMAND",
+        "Code": "112"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAWAI MADHOPUR",
+        "Code": "113"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIKAR",
+        "Code": "114"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIROHI",
+        "Code": "115"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TONK",
+        "Code": "116"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UDAIPUR",
+        "Code": "117"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "EAST DISTRICT",
+        "Code": "225"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NORTH DISTRICT",
+        "Code": "226"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SOUTH DISTRICT",
+        "Code": "227"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WEST DISTRICT",
+        "Code": "228"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Ariyalur",
+        "Code": "610"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHENGALPATTU",
+        "Code": "730"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHENNAI",
+        "Code": "568"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "COIMBATORE",
+        "Code": "569"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CUDDALORE",
+        "Code": "570"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DHARMAPURI",
+        "Code": "571"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DINDIGUL",
+        "Code": "572"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ERODE",
+        "Code": "573"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KALLAKURICHI",
+        "Code": "729"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANCHIPURAM",
+        "Code": "574"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANNIYAKUMARI",
+        "Code": "575"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARUR",
+        "Code": "576"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KRISHNAGIRI",
+        "Code": "577"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MADURAI",
+        "Code": "578"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Mayiladuthurai",
+        "Code": "735"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAGAPATTINAM",
+        "Code": "579"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAMAKKAL",
+        "Code": "580"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PERAMBALUR",
+        "Code": "581"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PUDUKKOTTAI",
+        "Code": "582"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAMANATHAPURAM",
+        "Code": "583"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Ranipet",
+        "Code": "731"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SALEM",
+        "Code": "584"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIVAGANGA",
+        "Code": "585"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TENKASI",
+        "Code": "733"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THANJAVUR",
+        "Code": "586"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THENI",
+        "Code": "588"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THE NILGIRIS",
+        "Code": "587"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THIRUVALLUR",
+        "Code": "589"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "THIRUVARUR",
+        "Code": "590"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIRUCHIRAPPALLI",
+        "Code": "591"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIRUNELVELI",
+        "Code": "592"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Tirupathur",
+        "Code": "732"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIRUPPUR",
+        "Code": "634"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TIRUVANNAMALAI",
+        "Code": "593"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TUTICORIN",
+        "Code": "594"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VELLORE",
+        "Code": "595"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VILLUPURAM",
+        "Code": "596"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VIRUDHUNAGAR",
+        "Code": "597"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ADILABAD",
+        "Code": "501"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHADRADRI KOTHAGUDEM",
+        "Code": "690"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HYDERABAD",
+        "Code": "507"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Jagitial",
+        "Code": "681"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JANGOAN",
+        "Code": "689"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAYASHANKAR BHUPALAPALLY",
+        "Code": "687"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JOGULAMBA GADWAL",
+        "Code": "695"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAMAREDDY",
+        "Code": "685"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KARIMNAGAR",
+        "Code": "508"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHAMMAM",
+        "Code": "509"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KUMURAM BHEEM ASIFABAD",
+        "Code": "699"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHABUBABAD",
+        "Code": "688"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHABUBNAGAR",
+        "Code": "512"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MANCHERIAL",
+        "Code": "684"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MEDAK",
+        "Code": "513"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MEDCHAL MALKAJGIRI",
+        "Code": "700"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Mulugu",
+        "Code": "720"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAGARKURNOOL",
+        "Code": "694"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NALGONDA",
+        "Code": "514"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Narayanpet",
+        "Code": "721"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Nirmal",
+        "Code": "680"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NIZAMABAD",
+        "Code": "516"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PEDDAPALLI",
+        "Code": "682"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAJANNA SIRCILLA",
+        "Code": "683"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RANGA REDDY",
+        "Code": "518"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SANGAREDDY",
+        "Code": "691"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIDDIPET",
+        "Code": "692"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SURYAPET",
+        "Code": "696"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VIKARABAD",
+        "Code": "698"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WANAPARTHY",
+        "Code": "693"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WARANGAL RURAL",
+        "Code": "522"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "WARANGAL URBAN",
+        "Code": "686"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "YADADRI BHUVANAGIRI",
+        "Code": "697"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DADRA AND NAGAR HAVELI",
+        "Code": "465"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DAMAN",
+        "Code": "463"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DIU",
+        "Code": "464"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Dhalai",
+        "Code": "269"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Gomati",
+        "Code": "654"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Khowai",
+        "Code": "652"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "North Tripura",
+        "Code": "270"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Sepahijala",
+        "Code": "653"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "South Tripura",
+        "Code": "271"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Unakoti",
+        "Code": "655"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "West Tripura",
+        "Code": "272"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AGRA",
+        "Code": "118"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ALIGARH",
+        "Code": "119"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMBEDKAR NAGAR",
+        "Code": "121"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Amethi",
+        "Code": "640"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AMROHA",
+        "Code": "154"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AURAIYA",
+        "Code": "122"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AYODHYA",
+        "Code": "140"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "AZAMGARH",
+        "Code": "123"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAGHPAT",
+        "Code": "124"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAHRAICH",
+        "Code": "125"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALLIA",
+        "Code": "126"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BALRAMPUR (UTTAR PRADESH)",
+        "Code": "127"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANDA",
+        "Code": "128"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BARABANKI",
+        "Code": "129"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAREILLY",
+        "Code": "130"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BASTI",
+        "Code": "131"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BHADOHI",
+        "Code": "179"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BIJNOR",
+        "Code": "132"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BUDAUN",
+        "Code": "133"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BULANDSHAHR",
+        "Code": "134"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHANDAULI",
+        "Code": "135"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHITRAKOOT",
+        "Code": "136"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEORIA",
+        "Code": "137"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ETAH",
+        "Code": "138"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ETAWAH",
+        "Code": "139"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FARRUKHABAD",
+        "Code": "141"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FATEHPUR",
+        "Code": "142"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "FIROZABAD",
+        "Code": "143"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GAUTAM BUDDHA NAGAR",
+        "Code": "144"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GHAZIABAD",
+        "Code": "145"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GHAZIPUR",
+        "Code": "146"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GONDA",
+        "Code": "147"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "GORAKHPUR",
+        "Code": "148"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAMIRPUR (UTTAR PRADESH)",
+        "Code": "149"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HAPUR",
+        "Code": "661"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HARDOI",
+        "Code": "150"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HATHRAS",
+        "Code": "163"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALAUN",
+        "Code": "151"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JAUNPUR",
+        "Code": "152"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JHANSI",
+        "Code": "153"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANNAUJ",
+        "Code": "155"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANPUR DEHAT",
+        "Code": "156"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KANPUR NAGAR",
+        "Code": "157"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Kasganj",
+        "Code": "633"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KAUSHAMBI",
+        "Code": "158"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KHERI",
+        "Code": "159"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KUSHI NAGAR",
+        "Code": "160"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LALITPUR",
+        "Code": "161"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "LUCKNOW",
+        "Code": "162"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHARAJGANJ",
+        "Code": "164"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAHOBA",
+        "Code": "165"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAINPURI",
+        "Code": "166"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MATHURA",
+        "Code": "167"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MAU",
+        "Code": "168"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MEERUT",
+        "Code": "169"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MIRZAPUR",
+        "Code": "170"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MORADABAD",
+        "Code": "171"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MUZAFFARNAGAR",
+        "Code": "172"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PILIBHIT",
+        "Code": "173"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PRATAPGARH (UTTAR PRADESH)",
+        "Code": "174"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PRAYAGRAJ",
+        "Code": "120"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAE BARELI",
+        "Code": "175"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RAMPUR",
+        "Code": "176"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAHARANPUR",
+        "Code": "177"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SAMBHAL",
+        "Code": "659"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SANT KABEER NAGAR",
+        "Code": "178"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHAHJAHANPUR",
+        "Code": "180"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHAMLI",
+        "Code": "660"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SHRAVASTI",
+        "Code": "181"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SIDDHARTH NAGAR",
+        "Code": "182"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SITAPUR",
+        "Code": "183"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SONBHADRA",
+        "Code": "184"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "SULTANPUR",
+        "Code": "185"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UNNAO",
+        "Code": "186"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "VARANASI",
+        "Code": "187"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "ALMORA",
+        "Code": "45"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BAGESHWAR",
+        "Code": "46"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHAMOLI",
+        "Code": "47"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "CHAMPAWAT",
+        "Code": "48"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DEHRADUN",
+        "Code": "49"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HARIDWAR",
+        "Code": "50"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NAINITAL",
+        "Code": "51"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PAURI GARHWAL",
+        "Code": "52"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PITHORAGARH",
+        "Code": "53"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "RUDRA PRAYAG",
+        "Code": "54"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "TEHRI GARHWAL",
+        "Code": "55"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UDAM SINGH NAGAR",
+        "Code": "56"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "UTTAR KASHI",
+        "Code": "57"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "24 PARAGANAS NORTH",
+        "Code": "303"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "24 PARAGANAS SOUTH",
+        "Code": "304"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Alipurduar",
+        "Code": "664"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BANKURA",
+        "Code": "305"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "BIRBHUM",
+        "Code": "307"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "COOCHBEHAR",
+        "Code": "308"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DARJEELING",
+        "Code": "309"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DINAJPUR DAKSHIN",
+        "Code": "310"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "DINAJPUR UTTAR",
+        "Code": "311"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HOOGHLY",
+        "Code": "312"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "HOWRAH",
+        "Code": "313"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "JALPAIGURI",
+        "Code": "314"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "Jhargram",
+        "Code": "703"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KALIMPONG",
+        "Code": "702"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "KOLKATA",
+        "Code": "315"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MALDAH",
+        "Code": "316"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MEDINIPUR EAST",
+        "Code": "317"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MEDINIPUR WEST",
+        "Code": "318"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "MURSHIDABAD",
+        "Code": "319"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "NADIA",
+        "Code": "320"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PASCHIM BARDHAMAN",
+        "Code": "704"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PURBA BARDHAMAN",
+        "Code": "306"
+    },
+    {
+        "Master Name": "District",
+        "Master Values Desc": "PURULIA",
+        "Code": "321"
+    },
+    {
+        "Master Name": "Asset Category/Classification (IndAs)-Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage-01",
+        "Code": "ACCI-01"
+    },
+    {
+        "Master Name": "Asset Category/Classification (IndAs)-Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage-02",
+        "Code": "ACCI-02"
+    },
+    {
+        "Master Name": "Asset Category/Classification (IndAs)-Expected Credit Loss (ECL)",
+        "Master Values Desc": "Stage-03",
+        "Code": "ACCI-03"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Public Agencies incld. State Housing Boards- Residential Dwelling Unit(DU) construction-01",
+        "Code": "LT-01"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Corporate/Government Agencies-Employee Housing-02",
+        "Code": "LT-02"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Integrated Housing Projects(Commercial Area not exceeding 10% of total project FSI)-03",
+        "Code": "LT-03"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Slum Improvement Schemes of Slum Clearance Boards/Other Public Agencies-04",
+        "Code": "LT-04"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Builders-Construction of residential DU-05",
+        "Code": "LT-05"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Line of Credit-06",
+        "Code": "LT-06"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Business-07",
+        "Code": "LT-07"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Project Loan-Commercial/Other than residential-08",
+        "Code": "LT-08"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Lease Rental Discounting-09",
+        "Code": "LT-09"
+    },
+    {
+        "Master Name": "Loan Type",
+        "Master Values Desc": "Others-10",
+        "Code": "LT-10"
+    },
+    {
+        "Master Name": "Other Lenders in the Project (Name and PLI-Category)",
+        "Master Values Desc": "HFC-01",
+        "Code": "OL-01"
+    },
+    {
+        "Master Name": "Other Lenders in the Project (Name and PLI-Category)",
+        "Master Values Desc": "Bank-02",
+        "Code": "OL-02"
+    },
+    {
+        "Master Name": "Other Lenders in the Project (Name and PLI-Category)",
+        "Master Values Desc": "NBFC-03",
+        "Code": "OL-03"
+    },
+    {
+        "Master Name": "Other Lenders in the Project (Name and PLI-Category)",
+        "Master Values Desc": "Others-04",
+        "Code": "OL-04"
+    },
+    {
+        "Master Name": "Other Lenders in the Project (Name and PLI-Category)",
+        "Master Values Desc": "NA-05",
+        "Code": "OL-05"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Mutual Funds-01",
+        "Code": "IC-01"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Government Securities-02",
+        "Code": "IC-02"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Equity Shares-03",
+        "Code": "IC-03"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Preference Shares-04",
+        "Code": "IC-04"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Bonds and Debentures-05",
+        "Code": "IC-05"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Pass Through Certficates- 06",
+        "Code": "IC-06"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Commercial Papers-07",
+        "Code": "IC-07"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Units of Venture Funds-08",
+        "Code": "IC-08"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Units of Unit Trust of India-09",
+        "Code": "IC-09"
+    },
+    {
+        "Master Name": "Investment Category",
+        "Master Values Desc": "Others-10",
+        "Code": "IC-10"
+    },
+    {
+        "Master Name": "Mutual Funds (If 01)",
+        "Master Values Desc": "Equity Oriented Funds-01",
+        "Code": "MF-01"
+    },
+    {
+        "Master Name": "Mutual Funds (If 01)",
+        "Master Values Desc": "Debt Oriented Funds-02",
+        "Code": "MF-02"
+    },
+    {
+        "Master Name": "Mutual Funds (If 01)",
+        "Master Values Desc": "Hybrid-03",
+        "Code": "MF-03"
+    },
+    {
+        "Master Name": "If Preference Shares or Bonds and Debentures (If 04 or 05)",
+        "Master Values Desc": "Convertible-01",
+        "Code": "PSBD-01"
+    },
+    {
+        "Master Name": "If Preference Shares or Bonds and Debentures (If 04 or 05)",
+        "Master Values Desc": "Non Convertible",
+        "Code": "PSBD-02"
+    },
+    {
+        "Master Name": "If Preference Shares or Bonds and Debentures (If 04 or 05)",
+        "Master Values Desc": "Others-03",
+        "Code": "PSBD-03"
+    },
+    {
+        "Master Name": "If Bonds and Debentures (If 05)",
+        "Master Values Desc": "Subordinated Debt-01",
+        "Code": "BD-01"
+    },
+    {
+        "Master Name": "If Bonds and Debentures (If 05)",
+        "Master Values Desc": "Hybrid Debt -02",
+        "Code": "BD-02"
+    },
+    {
+        "Master Name": "If Bonds and Debentures (If 05)",
+        "Master Values Desc": "Perpetual Debt-03",
+        "Code": "BD-03"
+    },
+    {
+        "Master Name": "If Bonds and Debentures (If 05)",
+        "Master Values Desc": "Others-04",
+        "Code": "BD-04"
+    },
+    {
+        "Master Name": "If Bonds and Debentures1 (If 05)",
+        "Master Values Desc": "Secured-01",
+        "Code": "BD1-01"
+    },
+    {
+        "Master Name": "If Bonds and Debentures1 (If 05)",
+        "Master Values Desc": "Unsecured-02",
+        "Code": "BD1-02"
+    },
+    {
+        "Master Name": "Type of Guarantee",
+        "Master Values Desc": "Guaranteed by Sovereign-01",
+        "Code": "TG-01"
+    },
+    {
+        "Master Name": "Type of Guarantee",
+        "Master Values Desc": "Guaranteed by others-02",
+        "Code": "TG-02"
+    },
+    {
+        "Master Name": "Type of Guarantee",
+        "Master Values Desc": "Not Guaranteed/ Applicable-03",
+        "Code": "TG-03"
+    },
+    {
+        "Master Name": "SLR Purpose",
+        "Master Values Desc": "Yes-01",
+        "Code": "SLR-01"
+    },
+    {
+        "Master Name": "SLR Purpose",
+        "Master Values Desc": "No-02",
+        "Code": "SLR-02"
+    },
+    {
+        "Master Name": "Marketability",
+        "Master Values Desc": "Marketable-01",
+        "Code": "MA-01"
+    },
+    {
+        "Master Name": "Marketability",
+        "Master Values Desc": "Non-Marketable-02",
+        "Code": "MA-02"
+    },
+    {
+        "Master Name": "Rating",
+        "Master Values Desc": "Applicable-01",
+        "Code": "RA-01"
+    },
+    {
+        "Master Name": "Rating",
+        "Master Values Desc": "Not Applicable-02",
+        "Code": "RA-02"
+    },
+    {
+        "Master Name": "If applicable - Rating Category at time of Investment",
+        "Master Values Desc": "Below minimum Investment Grade Rating-01",
+        "Code": "RC-01"
+    },
+    {
+        "Master Name": "If applicable - Rating Category at time of Investment",
+        "Master Values Desc": "Minimum Investment Grade Rating and above-02",
+        "Code": "RC-02"
+    },
+    {
+        "Master Name": "If applicable - Current Rating Category",
+        "Master Values Desc": "Below minimum Investment Grade Rating-01",
+        "Code": "CR-01"
+    },
+    {
+        "Master Name": "If applicable - Current Rating Category",
+        "Master Values Desc": "Minimum Investment Grade Rating and above-02",
+        "Code": "CR-02"
+    },
+    {
+        "Master Name": "Destination of Investment",
+        "Master Values Desc": "Inside India-01",
+        "Code": "DES-01"
+    },
+    {
+        "Master Name": "Destination of Investment",
+        "Master Values Desc": "Outside India-02",
+        "Code": "DES-02"
+    },
+    {
+        "Master Name": "Classification of Investment",
+        "Master Values Desc": "Long Term-01",
+        "Code": "CLA-01"
+    },
+    {
+        "Master Name": "Classification of Investment",
+        "Master Values Desc": "Short Term-02",
+        "Code": "CLA-02"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Central Government-01",
+        "Code": "CAT-01"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "State Governments-02",
+        "Code": "CAT-02"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Public Sector Undertakings-03",
+        "Code": "CAT-03"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Scheduled Commerical Banks-04",
+        "Code": "CAT-04"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Financial Institutions-05",
+        "Code": "CAT-05"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Housing Finance Companies-06",
+        "Code": "CAT-06"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "NBFCs-07",
+        "Code": "CAT-07"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Mutual Fund Companies- 08",
+        "Code": "CAT-08"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Partnership Firms-09",
+        "Code": "CAT-09"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Sole Proprietary Concerns-10",
+        "Code": "CAT-10"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Venture Funds-11",
+        "Code": "CAT-11"
+    },
+    {
+        "Master Name": "Category of Investee",
+        "Master Values Desc": "Others-12",
+        "Code": "CAT-12"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Holding-01",
+        "Code": "CLS-01"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Subsidiary-02",
+        "Code": "CLS-02"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Associate-03",
+        "Code": "CLS-03"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Other Companies in the Same Group-04",
+        "Code": "CLS-04"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Not Applicable-05",
+        "Code": "CLS-05"
+    },
+    {
+        "Master Name": "Type of Instrument",
+        "Master Values Desc": "Current Account Balances with Banks-01",
+        "Code": "TOIN-01"
+    },
+    {
+        "Master Name": "Type of Instrument",
+        "Master Values Desc": "Cheques/Drafts on Hand-02",
+        "Code": "TOIN-02"
+    },
+    {
+        "Master Name": "Type of Instrument",
+        "Master Values Desc": "Fixed Deposits-03",
+        "Code": "TOIN-03"
+    },
+    {
+        "Master Name": "Type of Instrument",
+        "Master Values Desc": "Certificate of Deposits-04",
+        "Code": "TOIN-04"
+    },
+    {
+        "Master Name": "Type of Instrument",
+        "Master Values Desc": "Others-05",
+        "Code": "TOIN-05"
+    },
+    {
+        "Master Name": "Purpose of Holding",
+        "Master Values Desc": "SLR Purpose-01",
+        "Code": "POH-01"
+    },
+    {
+        "Master Name": "Purpose of Holding",
+        "Master Values Desc": "Some Specific Purpose-02",
+        "Code": "POH-02"
+    },
+    {
+        "Master Name": "Purpose of Holding",
+        "Master Values Desc": "General Purpose-03",
+        "Code": "POH-03"
+    },
+    {
+        "Master Name": "Nature",
+        "Master Values Desc": "Unencumbered-01",
+        "Code": "NAT-01"
+    },
+    {
+        "Master Name": "Nature",
+        "Master Values Desc": "Encumbered-02",
+        "Code": "NAT-02"
+    },
+    {
+        "Master Name": "Nature",
+        "Master Values Desc": "Earmarked Balances with Banks-03",
+        "Code": "NAT-03"
+    },
+    {
+        "Master Name": "Residual Maturity",
+        "Master Values Desc": "Less than 31 days-01",
+        "Code": "RES-01"
+    },
+    {
+        "Master Name": "Residual Maturity",
+        "Master Values Desc": "31 days to 90 days-02",
+        "Code": "RES-02"
+    },
+    {
+        "Master Name": "Residual Maturity",
+        "Master Values Desc": "More than 90 days-03",
+        "Code": "RES-03"
+    },
+    {
+        "Master Name": "Residual Maturity",
+        "Master Values Desc": "Not Applicable-04",
+        "Code": "RES-04"
+    },
+    {
+        "Master Name": "Type of Account",
+        "Master Values Desc": "Current-01",
+        "Code": "TYA-01"
+    },
+    {
+        "Master Name": "Type of Account",
+        "Master Values Desc": "Saving-02",
+        "Code": "TYA-02"
+    },
+    {
+        "Master Name": "Type of Account",
+        "Master Values Desc": "Other-03",
+        "Code": "TYA-03"
+    },
+    {
+        "Master Name": "Type",
+        "Master Values Desc": "Cumulative-01",
+        "Code": "TY-01"
+    },
+    {
+        "Master Name": "Type",
+        "Master Values Desc": "Non-Cumulative-02",
+        "Code": "TY-02"
+    },
+    {
+        "Master Name": "Type",
+        "Master Values Desc": "Other-03",
+        "Code": "TY-03"
+    },
+    {
+        "Master Name": "Frequency of Interest Payable",
+        "Master Values Desc": "Monthly-01",
+        "Code": "FRQ-01"
+    },
+    {
+        "Master Name": "Frequency of Interest Payable",
+        "Master Values Desc": "Quarterly-02",
+        "Code": "FRQ-02"
+    },
+    {
+        "Master Name": "Frequency of Interest Payable",
+        "Master Values Desc": "Half-Yearly-03",
+        "Code": "FRQ-03"
+    },
+    {
+        "Master Name": "Frequency of Interest Payable",
+        "Master Values Desc": "Annually-04",
+        "Code": "FRQ-04"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Interest Accured but not due-01",
+        "Code": "CLS-01"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Security Deposits-02",
+        "Code": "CLS-02"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Inter-Corporate Deposits-03",
+        "Code": "CLS-03"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Derivative Financial Instruments-04",
+        "Code": "CLS-04"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Trade Receivables-05",
+        "Code": "CLS-05"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Others-06",
+        "Code": "CLS-06"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Holding-01",
+        "Code": "CLSE-01"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Subsidiary-02",
+        "Code": "CLSE-02"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Associate-03",
+        "Code": "CLSE-03"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Other Companies in the Same Group-04",
+        "Code": "CLSE-04"
+    },
+    {
+        "Master Name": "Classification of Entity",
+        "Master Values Desc": "Not Applicable-05",
+        "Code": "CLSE-05"
+    },
+    {
+        "Master Name": "Type of Security",
+        "Master Values Desc": "Secured-01",
+        "Code": "TYSE-01"
+    },
+    {
+        "Master Name": "Type of Security",
+        "Master Values Desc": "Partly Secured-02",
+        "Code": "TYSE-02"
+    },
+    {
+        "Master Name": "Type of Security",
+        "Master Values Desc": "Unsecured-03",
+        "Code": "TYSE-03"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Land-01",
+        "Code": "CLAS-01"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Buildings-02",
+        "Code": "CLAS-02"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Furniture and Fixtures-03",
+        "Code": "CLAS-03"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Office Equipment-04",
+        "Code": "CLAS-04"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Vehicle-05",
+        "Code": "CLAS-05"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Right to Use Asset-06",
+        "Code": "CLAS-06"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Investment Property-07",
+        "Code": "CLAS-07"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Computer Software-08",
+        "Code": "CLAS-08"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Other Intangible Assets-09",
+        "Code": "CLAS-09"
+    },
+    {
+        "Master Name": "Classification",
+        "Master Values Desc": "Others-10",
+        "Code": "CLAS-10"
+    },
+    {
+        "Master Name": "Type of Asset",
+        "Master Values Desc": "Tangible -01",
+        "Code": "TYPA-01"
+    },
+    {
+        "Master Name": "Type of Asset",
+        "Master Values Desc": "Intangible -02",
+        "Code": "TYPA-02"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Capital Advances-01",
+        "Code": "CLASO-01"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Other Advances-02",
+        "Code": "CLASO-02"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Prepaid Expenses-03",
+        "Code": "CLASO-03"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Current Tax Assets (Net)-04",
+        "Code": "CLASO-04"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Deferred Tax Assets (Net)-05",
+        "Code": "CLASO-05"
+    },
+    {
+        "Master Name": "Classification - Other",
+        "Master Values Desc": "Other Misc.-06",
+        "Code": "CLASO-06"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Govt.-01",
+        "Code": "TOC-01"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Public Limited-02",
+        "Code": "TOC-02"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Private Limited -03",
+        "Code": "TOC-03"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Joint Venture-04",
+        "Code": "TOC-04"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Public–Private Partnership (PPP)-05",
+        "Code": "TOC-05"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Cooperative Society-06",
+        "Code": "TOC-06"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Partneship Firm-07",
+        "Code": "TOC-07"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Sole Proprietorship (Individual Loan)-08",
+        "Code": "TOC-08"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Sole Proprietorship (Corporate/ Project Loan)-09",
+        "Code": "TOC-09"
+    },
+    {
+        "Master Name": "Type of Constitution",
+        "Master Values Desc": "Others-10",
+        "Code": "TOC-10"
+    },
+    {
+        "Master Name": "Loan Category",
+        "Master Values Desc": "Housing-01",
+        "Code": "LC-01"
+    },
+    {
+        "Master Name": "Loan Category",
+        "Master Values Desc": "Non-Housing-02",
+        "Code": "LC-02"
+    },
+    {
+        "Master Name": "Sub Category of Loan",
+        "Master Values Desc": "CRE(RH)-01",
+        "Code": "SCOL-01"
+    },
+    {
+        "Master Name": "Sub Category of Loan",
+        "Master Values Desc": "CRE-Others-02",
+        "Code": "SCOL-02"
+    },
+    {
+        "Master Name": "Sub Category of Loan",
+        "Master Values Desc": "Others-03",
+        "Code": "SCOL-03"
+    },
+    {
+        "Master Name": "Yes/No",
+        "Master Values Desc": "Yes",
+        "Code": "Yes"
+    },
+    {
+        "Master Name": "Yes/No",
+        "Master Values Desc": "No",
+        "Code": "No"
+    },
+    {
+        "Master Name": "Yes/No",
+        "Master Values Desc": "Not Applicable",
+        "Code": "NA"
+    },
+    {
+        "Master Name": "Mortgate Security Type",
+        "Master Values Desc": "Mortgage over the project site-01",
+        "Code": "MST-01"
+    },
+    {
+        "Master Name": "Mortgate Security Type",
+        "Master Values Desc": "Fixed charge over the project assets-02",
+        "Code": "MST-02"
+    },
+    {
+        "Master Name": "Mortgate Security Type",
+        "Master Values Desc": "Floating charge over the project assets-03",
+        "Code": "MST-03"
+    },
+    {
+        "Master Name": "Mortgate Security Type",
+        "Master Values Desc": "Charge over the Shares-04",
+        "Code": "MST-04"
+    },
+    {
+        "Master Name": "Mortgate Security Type",
+        "Master Values Desc": "Others-05",
+        "Code": "MST-05"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Builders-01",
+        "Code": "BT-01"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Corporates-02",
+        "Code": "BT-02"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Public Agencies (including State Housing Boards)-03",
+        "Code": "BT-03"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Government Agencies-04",
+        "Code": "BT-04"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Slum Clearance Boards-05",
+        "Code": "BT-05"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Sole Proprietorship-06",
+        "Code": "BT-06"
+    },
+    {
+        "Master Name": "Borrower Type",
+        "Master Values Desc": "Others-07",
+        "Code": "BT-07"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Residential Projects-01",
+        "Code": "CLP-01"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Commercial Projects-02",
+        "Code": "CLP-02"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Integrated Housing Projects (Commercial Area not exceeding 10% of total project FSI)-03",
+        "Code": "CLP-03"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Employee Housing-04",
+        "Code": "CLP-04"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Slum Improvement -05",
+        "Code": "CLP-05"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Lease Rental Discounting-06",
+        "Code": "CLP-06"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Line of Credit-07",
+        "Code": "CLP-07"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Business-08",
+        "Code": "CLP-08"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Others-09",
+        "Code": "CLP-09"
+    },
+    {
+        "Master Name": "Corp_Loan_Purpose",
+        "Master Values Desc": "Purchase / Construction of DU-10",
+        "Code": "CLP-10"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Standard-00",
+        "Code": "CAC-00"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "SMA00",
+        "Code": "CAC-01"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "SMA01",
+        "Code": "CAC-02"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "SMA02",
+        "Code": "CAC-03"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Sub-standard-04",
+        "Code": "CAC-04"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Doubtful I-05",
+        "Code": "CAC-05"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Doubtful II-06",
+        "Code": "CAC-06"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Doubtful III-07",
+        "Code": "CAC-07"
+    },
+    {
+        "Master Name": "Corp_Asset_Classification",
+        "Master Values Desc": "Loss-08",
+        "Code": "CAC-08"
+    },
+    {
+        "Master Name": "RERA_Registered",
+        "Master Values Desc": "Yes",
+        "Code": "Yes"
+    },
+    {
+        "Master Name": "RERA_Registered",
+        "Master Values Desc": "No",
+        "Code": "No"
+    },
+    {
+        "Master Name": "RERA_Registered",
+        "Master Values Desc": "NA",
+        "Code": "NA"
+    },
+    {
+        "Master Name": "TYPE OF DEPOSIT",
+        "Master Values Desc": "CD",
+        "Code": "CD"
+    },
+    {
+        "Master Name": "TYPE OF DEPOSIT",
+        "Master Values Desc": "FD",
+        "Code": "FD"
+    },
+    {
+        "Master Name": "Type of Other Collateral",
+        "Master Values Desc": "Deposit-01",
+        "Code": "TOOC-01"
+    },
+    {
+        "Master Name": "Type of Other Collateral",
+        "Master Values Desc": "Securities/Debentures-02",
+        "Code": "TOOC-02"
+    },
+    {
+        "Master Name": "Type of Other Collateral",
+        "Master Values Desc": "Gold-03",
+        "Code": "TOOC-03"
+    },
+    {
+        "Master Name": "Type of Other Collateral",
+        "Master Values Desc": "Others-04",
+        "Code": "TOOC-04"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ALLAHABAD BANK",
+        "Code": "BNK-01"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF BARODA",
+        "Code": "BNK-02"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF INDIA",
+        "Code": "BNK-03"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF MAHARASHTRA",
+        "Code": "BNK-04"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CANARA BANK",
+        "Code": "BNK-05"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CENTRAL BANK OF INDIA",
+        "Code": "BNK-06"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CORPORATION BANK",
+        "Code": "BNK-07"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "DENA BANK",
+        "Code": "BNK-08"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "IDBI BANK LIMITED",
+        "Code": "BNK-09"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "INDIAN BANK",
+        "Code": "BNK-10"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "INDIAN OVERSEAS BANK",
+        "Code": "BNK-11"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "UCO BANK",
+        "Code": "BNK-12"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "UNION BANK OF INDIA",
+        "Code": "BNK-13"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "UNITED BANK OF INDIA",
+        "Code": "BNK-14"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "VIJAYA BANK",
+        "Code": "BNK-15"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "STATE BANK OF INDIA",
+        "Code": "BNK-16"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "AXIS BANK LIMITED",
+        "Code": "BNK-17"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANDHAN BANK LIMITED",
+        "Code": "BNK-18"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "DCB BANK LIMITED",
+        "Code": "BNK-19"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "HDFC BANK LTD.",
+        "Code": "BNK-20"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ICICI BANK LIMITED",
+        "Code": "BNK-21"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "IDFC FIRST BANK LIMITED",
+        "Code": "BNK-22"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "INDUSIND BANK LTD",
+        "Code": "BNK-23"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KOTAK MAHINDRA BANK LTD.",
+        "Code": "BNK-24"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "YES BANK LTD.",
+        "Code": "BNK-25"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CATHOLIC SYRIAN BANK LTD",
+        "Code": "BNK-26"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CITY UNION BANK LIMITED",
+        "Code": "BNK-27"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "FEDERAL BANK LTD",
+        "Code": "BNK-28"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ING Vysya Bank Ltd.",
+        "Code": "BNK-29"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "JAMMU AND KASHMIR BANK LTD",
+        "Code": "BNK-30"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KARNATAKA BANK LTD",
+        "Code": "BNK-31"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KARUR VYSYA BANK LTD",
+        "Code": "BNK-32"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "LAKSHMI VILAS BANK LTD",
+        "Code": "BNK-33"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "NAINITAL BANK LTD",
+        "Code": "BNK-34"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "RBL BANK LIMITED",
+        "Code": "BNK-35"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SOUTH INDIAN BANK LTD",
+        "Code": "BNK-36"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "TAMILNAD MERCANTILE BANK LTD",
+        "Code": "BNK-37"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "THE DHANALAKSHMI BANK LTD",
+        "Code": "BNK-38"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "AB BANK LIMITED",
+        "Code": "BNK-39"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ABU DHABI COMMERCIAL BANK PJSC",
+        "Code": "BNK-40"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "AMERICAN EXPRESS BANKING CORP.",
+        "Code": "BNK-41"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "AUSTRALIA AND NEW ZEALAND BANKING GROUP LIMITED",
+        "Code": "BNK-42"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF AMERICA NATIONAL ASSOCIATION",
+        "Code": "BNK-43"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF BAHRAIN AND KUWAIT B.S.C.",
+        "Code": "BNK-44"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF CEYLON",
+        "Code": "BNK-45"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Bank of China",
+        "Code": "BNK-46"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BANK OF NOVA SCOTIA",
+        "Code": "BNK-47"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Bank PT Bank Maybank Indonesia",
+        "Code": "BNK-48"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BARCLAYS BANK PLC",
+        "Code": "BNK-49"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "BNP PARIBAS",
+        "Code": "BNK-50"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CITIBANK N.A",
+        "Code": "BNK-51"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "COMMONWEALTH BANK OF AUSTRALIA",
+        "Code": "BNK-52"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "COOPERATIEVE RABOBANK U.A.",
+        "Code": "BNK-53"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CREDIT AGRICOLE CORPORATE AND INVESTMENT BANK",
+        "Code": "BNK-54"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CREDIT SUISSE AG",
+        "Code": "BNK-55"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CTBC BANK CO. LTD.",
+        "Code": "BNK-56"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "DBS BANK LTD.",
+        "Code": "BNK-57"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "DEUTSCHE BANK AG",
+        "Code": "BNK-58"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "DOHA BANK QSC",
+        "Code": "BNK-59"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Emirates NBD Bank(P.J.S.C)",
+        "Code": "BNK-60"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "FIRST ABU DHABI BANK PJSC",
+        "Code": "BNK-61"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "FIRSTRAND BANK LTD",
+        "Code": "BNK-62"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "HONGKONG AND SHANGHAI BANKING CORPN.LTD.",
+        "Code": "BNK-63"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "INDUSTRIAL AND COMMERCIAL BANK OF CHINA",
+        "Code": "BNK-64"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "INDUSTRIAL BANK OF KOREA",
+        "Code": "BNK-65"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "JPMORGAN CHASE BANK NATIONAL ASSOCIATION",
+        "Code": "BNK-66"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "JSC VTB BANK",
+        "Code": "BNK-67"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KBC BANK NV",
+        "Code": "BNK-68"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KEB HANA BANK",
+        "Code": "BNK-69"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Kookmin Bank",
+        "Code": "BNK-70"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "KRUNG THAI BANK PUBLIC COMPANY LIMITED",
+        "Code": "BNK-71"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "MASHREQ BANK PSC",
+        "Code": "BNK-72"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "MIZUHO BANK LTD",
+        "Code": "BNK-73"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "MUFG Bank Ltd.",
+        "Code": "BNK-74"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "NATIONAL AUSTRALIA BANK",
+        "Code": "BNK-75"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Qatar National Bank (Q.P.S.C.)",
+        "Code": "BNK-76"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SBERBANK",
+        "Code": "BNK-77"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SBM Bank(India) Ltd.",
+        "Code": "BNK-78"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SHINHAN BANK",
+        "Code": "BNK-79"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SOCIETE GENERALE",
+        "Code": "BNK-80"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SONALI BANK",
+        "Code": "BNK-81"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "STANDARD CHARTERED BANK",
+        "Code": "BNK-82"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "SUMITOMO MITSUI BANKING CORPORATION",
+        "Code": "BNK-83"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "THE ROYAL BANK OF SCOTLAND PLC",
+        "Code": "BNK-84"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "UBS AG",
+        "Code": "BNK-85"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "UNITED OVERSEAS BANK LTD",
+        "Code": "BNK-86"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "WESTPAC BANKING CORPORATION",
+        "Code": "BNK-87"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "WOORI BANK",
+        "Code": "BNK-88"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Aditya Birla Idea Payments Bank Limited (ABIPBL)",
+        "Code": "BNK-89"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Airtel Payments Bank Ltd",
+        "Code": "BNK-90"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Fino Payments Bank Limited",
+        "Code": "BNK-91"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "India Post Payment Banks",
+        "Code": "BNK-92"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Jio Payments Bank Ltd",
+        "Code": "BNK-93"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "NSDL PAYMENTS BANK LIMITED",
+        "Code": "BNK-94"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Paytm Payments Bank Limited",
+        "Code": "BNK-95"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "AU Small Finance Bank Limited",
+        "Code": "BNK-96"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CAPITAL SMALL FINANCE BANK LTD.",
+        "Code": "BNK-97"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Equitas Small Finance Bank",
+        "Code": "BNK-98"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ESAF Small Finance Bank",
+        "Code": "BNK-99"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Jana Small Finance Bank Ltd",
+        "Code": "BNK-100"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "M/s Fincare Small Finance Bank Limited",
+        "Code": "BNK-101"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "North East Small Finance Bank Ltd.",
+        "Code": "BNK-102"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Suryoday Small Finance Bank",
+        "Code": "BNK-103"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Ujjivan Small Finance Bank Limited",
+        "Code": "BNK-104"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Utkarsh Small Finance Bank Limited",
+        "Code": "BNK-105"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CRIF High Mark Credit Information Services Private Limited",
+        "Code": "BNK-106"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Equifax Credit Information Services Pvt. Ltd.",
+        "Code": "BNK-107"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Experian Credit Information Company of India Private Limited (ECICI)",
+        "Code": "BNK-108"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "TransUnion CIBIL Limited",
+        "Code": "BNK-109"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Export-Import Bank of India",
+        "Code": "BNK-110"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "National Bank for Agriculture and Rural Development (NABARD)",
+        "Code": "BNK-111"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "NATIONAL HOUSING BANK (NHB)",
+        "Code": "BNK-112"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Small Industries Development Bank of India",
+        "Code": "BNK-113"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Acuite Ratings",
+        "Code": "BNK-114"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Brickwork Ratings",
+        "Code": "BNK-115"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Care Ratings",
+        "Code": "BNK-116"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "CRISIL",
+        "Code": "BNK-117"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "ICRA",
+        "Code": "BNK-118"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "India Ratings",
+        "Code": "BNK-119"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "PUNJAB NATIONAL BANK",
+        "Code": "BNK-120"
+    },
+    {
+        "Master Name": "Bank Name",
+        "Master Values Desc": "Syndicate Bank",
+        "Code": "BNK-121"
+    }
+]

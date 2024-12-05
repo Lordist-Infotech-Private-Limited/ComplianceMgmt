@@ -4,6 +4,7 @@ using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System.Dynamic;
 using System.Globalization;
 using System.Text;
@@ -112,7 +113,7 @@ namespace ComplianceMgmt.Api.Repository
 
                 foreach (var table in tables)
                 {
-                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName} LIMIT 10";
+                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
                     var clientData = await clientConnection.QueryAsync<dynamic>(query);
                     await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
                 }
@@ -136,12 +137,23 @@ namespace ComplianceMgmt.Api.Repository
 
             var validRecords = new List<dynamic>();
             var rejectedRecords = new List<dynamic>();
+            
+            var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Resources" ,"masters.json");
+            
+            if (!File.Exists(jsonFilePath))
+                throw new FileNotFoundException($"Masters.json file not found.");
+
+            var masterData = new List<MasterData>();
+
+            var jsonContent = File.ReadAllText(jsonFilePath);
+            masterData = JsonConvert.DeserializeObject<List<MasterData>>(jsonContent);
+
 
             // Validate each record and segregate
             foreach (var record in data)
             {
-                var businessValidation = ValidateBusinessRules(record);
-                var constraintValidation = ValidateConstraints(record);
+                var businessValidation = ValidateBusinessRules(tableName,record);
+                var constraintValidation = ValidateConstraints(tableName,record, ref masterData);
 
                 if (businessValidation.Item1 && constraintValidation.Item1)
                 {
@@ -197,43 +209,58 @@ namespace ComplianceMgmt.Api.Repository
             }
         }
 
-        private (bool isValid, string reason) ValidateBusinessRules(dynamic record)
+        private (bool isValid, string reason) ValidateBusinessRules(string tableName, dynamic record)
         {
             var reason = new StringBuilder();
 
-            // CIN Validation
-            if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
-                reason.AppendLine("CIN and PAN cannot both be blank.");
+            if (tableName == "stgborrowerdetail")
+            {
+                // Date Validation
+                if (record.Date == null)
+                    reason.AppendLine("Date cannot be blank.");
 
-            // PAN Conditional Validation
-            if (!string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
-                reason.AppendLine("PAN is mandatory if CIN is provided.");
+                // CIN Validation
+                if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
+                    reason.AppendLine("CIN and PAN cannot both be blank.");
 
-            // Date Validation
-            if (record.BDob == null || !DateTime.TryParseExact(record.BDob.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                reason.AppendLine("Invalid DOB or blank Date field.");
+                // PAN Conditional Validation
+                if (!string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
+                    reason.AppendLine("PAN is mandatory if CIN is provided.");
 
-            // Monthly Income Validation
-            if (record.nbmonthlyincome == null || record.BMonthlyIncome < 0)
-                reason.AppendLine("Monthly income must be numeric and >= 0.");
+                // DOB Validation
+                if (record.BDob == null)
+                    reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
+                else if (!DateTime.TryParseExact(record.BDob.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
+                    reason.AppendLine("Invalid value for Primary Borrower Date of Birth.");
 
-            // Other Field Validations
-            if (string.IsNullOrWhiteSpace(record.BName))
-                reason.AppendLine("Primary Borrower Name cannot be blank.");
-            //if (record.BDob == null || !DateTime.TryParse(record.BDob.ToString(), out DateTime _))
-            //    reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
-            if (string.IsNullOrWhiteSpace(record.Aadhaar))
-                reason.AppendLine("Aadhaar must not be blank.");
-            if (string.IsNullOrWhiteSpace(record.BGender))
-                reason.AppendLine("Gender must not be blank.");
+                // Monthly Income Validation
+                if (record.BMonthlyIncome == null || record.BMonthlyIncome < 0)
+                    reason.AppendLine("Monthly income must be numeric and >= 0.");
 
+                // Other Field Validations
+                if (string.IsNullOrWhiteSpace(record.BName))
+                    reason.AppendLine("Primary Borrower Name cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.BCitizenship))
+                    reason.AppendLine("Primary Borrower Citizenship cannot be blank.");
+                
+                //if (record.BDob == null || !DateTime.TryParse(record.BDob.ToString(), out DateTime _))
+                //    reason.AppendLine("Primary Borrower Date of Birth is invalid or blank.");
+                
+                if (string.IsNullOrWhiteSpace(record.Aadhaar))
+                    reason.AppendLine("Aadhaar cannot be blank.");
+
+                if (string.IsNullOrWhiteSpace(record.BGender))
+                    reason.AppendLine("Gender cannot be blank.");
+            }
             return (reason.Length == 0, reason.ToString());
         }
 
-        private (bool isValid, string reason) ValidateConstraints(dynamic record)
+        private (bool isValid, string reason) ValidateConstraints(string tableName, dynamic record, ref List<MasterData> masterData)
         {
             var reason = new StringBuilder();
 
+            /*
             // Example: Citizenship Validation (Check against Master Values)
             if (!IsValidMasterValue("Citizenship", record.BCitizenship))
                 reason.AppendLine("Invalid Citizenship value.");
@@ -245,6 +272,40 @@ namespace ComplianceMgmt.Api.Repository
             // Occupation Validation
             if (!IsValidMasterValue("Occupation", record.BOoccupation))
                 reason.AppendLine("Invalid Occupation value.");
+            */
+
+            if (tableName == "stgborrowerdetail")
+            {
+                // Other ID Type
+                if (record.IdType != null && record.IdType != "NULL" && !masterData.Any(data => string.Equals(data.MasterName, "Unique ID Type", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(data.Code, record.IdType, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Other ID Type value.");
+
+                // Citizenship
+                if (record.BCitizenship != null && !masterData.Any(data => string.Equals(data.MasterName, "Citizenship", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.BCitizenship, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Citizenship value.");
+
+                // Citizenship
+                if (record.BGender != null && !masterData.Any(data => string.Equals(data.MasterName, "Gender", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.BGender, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Gender value.");
+
+                // Occupation
+                if (record.BOoccupation != null && !masterData.Any(data => string.Equals(data.MasterName, "Occupation", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.BOoccupation, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Gender value.");
+
+                // Religion
+                if (record.BReligion != null && !masterData.Any(data => string.Equals(data.MasterName, "Religion", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.BReligion, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Religion value.");
+
+                // Cast
+                if (record.BCast != null && !masterData.Any(data => string.Equals(data.MasterName, "Cast", StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(data.Code, record.BCast, StringComparison.OrdinalIgnoreCase)))
+                    reason.AppendLine("Invalid Cast value.");
+            }
 
             return (reason.Length == 0, reason.ToString());
         }
