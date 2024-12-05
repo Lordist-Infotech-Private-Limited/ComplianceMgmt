@@ -39,19 +39,9 @@ namespace ComplianceMgmt.Api.Controllers
         [NonAction]
         public void OnInitReportOptions(ReportViewerOptions reportOption)
         {
-            //var connection = context.CreateConnection();
-            //var query = @"SELECT * FROM statemaster";
-            //var states = connection.Query<StateMaster>(query);
-            //reportOption.ReportModel.ProcessingMode = ProcessingMode.Local;
-            //string basePath = Path.Combine(hostingEnvironment.WebRootPath, "Resources");
-            //string reportPath = Path.Combine(basePath, reportOption.ReportModel.ReportPath);
-            //FileStream fileStream = new(reportPath, FileMode.Open, FileAccess.Read);
-            //MemoryStream stream = new();
-            //fileStream.CopyTo(stream);
-            //stream.Position = 0;
-            //stream.Close();
-            //reportOption.ReportModel.Stream = stream;
-            //reportOption.ReportModel.DataSources.Add(new BoldReports.Web.ReportDataSource { Name = "DataSource", Value = states });
+            reportOption.ReportModel.ReportServerCredential = new System.Net.NetworkCredential("a927ee_comlian", "P@ssw0rd");
+
+            reportOption.ReportModel.DataSourceCredentials.Add(new BoldReports.Web.DataSourceCredentials("DataSource", "a927ee_comlian", "P@ssw0rd"));
 
             string basePath = Path.Combine(hostingEnvironment.WebRootPath, "Resources");
             string reportPath = Path.Combine(basePath, "StateReport.rdl");

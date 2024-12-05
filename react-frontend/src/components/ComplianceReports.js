@@ -17,7 +17,7 @@ const ComplianceReports = () => {
       <h2 className="text-2xl font-bold mb-4">Compliance Reports</h2>
       <BoldReportViewerComponent
         id="reportviewer-container"
-        reportServiceUrl={"https://localhost:7275/ReportViewer"}
+        reportServiceUrl={"https://adfapi.lordist.in/ReportViewer"}
         reportPath={"StateReport.rdl"}
         viewReportClick={viewReportClick}
       ></BoldReportViewerComponent>
