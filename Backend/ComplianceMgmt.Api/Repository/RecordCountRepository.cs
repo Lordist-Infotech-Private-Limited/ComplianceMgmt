@@ -70,58 +70,115 @@ namespace ComplianceMgmt.Api.Repository
         {
             var tables = new List<MsgStructure>
             {
-                new()
-                {
-                    TableName = "stgborrowerdetail",
-                    RejectionTableNames="stgborrowerdetailrejection",
-                    MsgStruct = "Borrower Detail"
-                },
-                new()
-                {
-                    TableName = "stgborrowerloan",
-                    RejectionTableNames= "stgborrowerloanrejection",
-                    MsgStruct = "Borrower Loan"
-                },
-                new()
-                {
-                    TableName = "stgborrowermortgage",
-                    RejectionTableNames ="stgborrowermortgagerejection",
-                    MsgStruct = "Borrower Mortgage"
-                },
-                new()
-                {
-                    TableName = "stgborrowermortgageother",
-                    RejectionTableNames="stgborrowermortgageotherrejection",
-                    MsgStruct = "Borrower Mortgage Other"
-                },
-                new()
-                {
-                    TableName = "stgcoborrowerdetails",
-                    RejectionTableNames = "stgcoborrowerdetailsrejection",
-                    MsgStruct = "Co Borrower Details"
-                }
+                new() { TableName = "stgborrowerdetail", RejectionTableNames = "stgborrowerdetailrejection", MsgStruct = "Borrower Detail" },
+                new() { TableName = "stgborrowerloan", RejectionTableNames = "stgborrowerloanrejection", MsgStruct = "Borrower Loan" },
+                new() { TableName = "stgborrowermortgage", RejectionTableNames = "stgborrowermortgagerejection", MsgStruct = "Borrower Mortgage" },
+                new() { TableName = "stgborrowermortgageother", RejectionTableNames = "stgborrowermortgageotherrejection", MsgStruct = "Borrower Mortgage Other" },
+                new() { TableName = "stgcoborrowerdetails", RejectionTableNames = "stgcoborrowerdetailsrejection", MsgStruct = "Co Borrower Details" }
             };
 
             var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
 
             foreach (var server in serverDetails)
             {
-                using var clientConnection = context.CreateClientConnection(
-                    server.ServerIp,
-                    server.DbName,
-                    server.ServerName,
-                    server.ServerPassword);
-
-                foreach (var table in tables)
+                try
                 {
-                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
-                    var clientData = await clientConnection.QueryAsync<dynamic>(query);
-                    await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
+                    using var clientConnection = context.CreateClientConnection(
+                        server.ServerIp,
+                        server.DbName,
+                        server.ServerName,
+                        server.ServerPassword);
+
+                    foreach (var table in tables)
+                    {
+                        try
+                        {
+                            string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+
+                            // Try fetching data
+                            var clientData = await clientConnection.QueryAsync<dynamic>(query);
+
+                            // Bulk insert with validation
+                            await BulkInsertWithValidationAsync(
+                                context.CreateConnection().ConnectionString,
+                                table.TableName,
+                                table.RejectionTableNames,
+                                clientData,
+                                1);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log table-specific errors
+                            Log.Error(ex, "Error fetching or processing data for table {TableName} on server {ServerName}", table.TableName, server.ServerName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log server-specific errors
+                    Log.Error(ex, "Error connecting to server {ServerName} at IP {ServerIp}", server.ServerName, server.ServerIp);
                 }
             }
 
             return true;
         }
+
+        //public async Task<bool> FetchAndInsertAllTablesAsync()
+        //{
+        //    var tables = new List<MsgStructure>
+        //    {
+        //        new()
+        //        {
+        //            TableName = "stgborrowerdetail",
+        //            RejectionTableNames="stgborrowerdetailrejection",
+        //            MsgStruct = "Borrower Detail"
+        //        },
+        //        new()
+        //        {
+        //            TableName = "stgborrowerloan",
+        //            RejectionTableNames= "stgborrowerloanrejection",
+        //            MsgStruct = "Borrower Loan"
+        //        },
+        //        new()
+        //        {
+        //            TableName = "stgborrowermortgage",
+        //            RejectionTableNames ="stgborrowermortgagerejection",
+        //            MsgStruct = "Borrower Mortgage"
+        //        },
+        //        new()
+        //        {
+        //            TableName = "stgborrowermortgageother",
+        //            RejectionTableNames="stgborrowermortgageotherrejection",
+        //            MsgStruct = "Borrower Mortgage Other"
+        //        },
+        //        new()
+        //        {
+        //            TableName = "stgcoborrowerdetails",
+        //            RejectionTableNames = "stgcoborrowerdetailsrejection",
+        //            MsgStruct = "Co Borrower Details"
+        //        }
+        //    };
+
+        //    var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
+
+        //    foreach (var server in serverDetails)
+        //    {
+        //        using var clientConnection = context.CreateClientConnection(
+        //            server.ServerIp,
+        //            server.DbName,
+        //            server.ServerName,
+        //            server.ServerPassword);
+
+        //        foreach (var table in tables)
+        //        {
+        //            string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+        //            var clientData = await clientConnection.QueryAsync<dynamic>(query);
+        //            await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
+        //        }
+        //    }
+
+        //    return true;
+        //}
 
         public async Task BulkInsertWithValidationAsync(
                 string connectionString,
