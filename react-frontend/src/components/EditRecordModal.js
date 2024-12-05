@@ -158,7 +158,7 @@ const EditRecordModal = ({ record, tableName, onClose }) => {
             ))}
             <div className="flex items-end flex-col">
               <button
-                className="px-4 py-2 bg-blue-700 text-white border-none rounded-md cursor-pointer text-sm hover:bg-blue-800"
+                className="px-4 py-2 bg-[#001e4f] text-white border-none rounded-md cursor-pointer text-sm hover:bg-blue-800"
                 onClick={handleSave}
               >
                 Save

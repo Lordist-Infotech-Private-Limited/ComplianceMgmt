@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Actions = ({ onFetchData, selectedDate, setSelectedDate }) => {
   const handleDateChange = (e) => {
@@ -11,13 +11,13 @@ const Actions = ({ onFetchData, selectedDate, setSelectedDate }) => {
       <input
         type="date"
         id="referenceDate"
-        className="p-2 px-4 border border-gray-200 rounded-lg outline-none transition-colors duration-200"
+        className="p-2 px-4 border border-gray-200 rounded-lg outline-none transition-colors duration-200 w-full md:w-fit"
         value={selectedDate}
         onChange={handleDateChange}
       />
       <button
         onClick={() => onFetchData(selectedDate)}
-        className="px-4 py-2 bg-blue-700 text-white border-none rounded-md cursor-pointer text-sm"
+        className="px-4 py-2 bg-[#f26114] text-white border-none rounded-md cursor-pointer text-sm w-full md:w-fit"
       >
         Fetch Data
       </button>

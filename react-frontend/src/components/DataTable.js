@@ -11,22 +11,22 @@ const DataTable = ({
       <table className="w-full border-separate border-spacing-0">
         <thead>
           <tr className="bg-gray-100">
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Table Name
             </th>
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Total Records
             </th>
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Success
             </th>
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Constraint Rejection
             </th>
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Business Rejection
             </th>
-            <th className="bg-blue-700 p-4 text-left font-semibold text-white border-b border-gray-200">
+            <th className="bg-[#001e4f] p-4 text-left font-semibold text-white border-b border-gray-200">
               Action
             </th>
           </tr>

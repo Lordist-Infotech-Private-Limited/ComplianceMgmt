@@ -25,7 +25,7 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
 
   return (
     <div
-      className={`bg-gradient-to-b from-gray-100 via-white to-gray-300 text-black min-h-screen flex flex-col transition-all duration-300 ${
+      className={`bg-gradient-to-b from-gray-100 via-white to-gray-300 text-black min-h-screen md:flex flex-col transition-all duration-300 hidden  ${
         isCollapsed ? "w-20" : "w-56"
       } shadow-lg`}
     >

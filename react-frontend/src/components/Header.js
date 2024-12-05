@@ -38,7 +38,7 @@ const Header = ({ componentName, user, onLogout }) => {
         <img src={logo} alt="Small Logo" className="w-8" />
         <button
           onClick={toggleDropdown}
-          className="flex items-center space-x-2 bg-blue-500 px-4 rounded-md"
+          className="flex items-center space-x-2 bg-[#001e4f] px-4 rounded-md"
         >
           <FontAwesomeIcon icon={faUser} className="text-white" />
           <div>

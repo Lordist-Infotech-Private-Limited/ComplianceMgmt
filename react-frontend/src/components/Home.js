@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import Report from "./Report";
 import ManagementDashboard from "./ManagementDashboard";
 import ComplianceReports from "./ComplianceReports";
+import MobileSidebar from "./MobileSidebar";
 
 function Home({ user, onLogout }) {
   const [selectedComponent, setSelectedComponent] = useState("Dashboard");
@@ -28,21 +29,29 @@ function Home({ user, onLogout }) {
         onComponentChange={handleComponentChange}
         activeComponent={selectedComponent}
       />
+      <MobileSidebar
+        onComponentChange={handleComponentChange}
+        activeComponent={selectedComponent}
+        user={user}
+        onLogout={onLogout}
+      />
       <div className="flex-1 flex flex-col">
         <Header
           componentName={selectedComponent}
           user={user}
           onLogout={onLogout}
         />
-        {selectedComponent === "Dashboard" ? (
-          <Dashboard />
-        ) : selectedComponent === "Management Dashboard" ? (
-          <ManagementDashboard />
-        ) : selectedComponent === "MIS Reports" ? (
-          <Report />
-        ) : (
-          <ComplianceReports />
-        )}
+        <div className="mt-9 md:mt-0">
+          {selectedComponent === "Dashboard" ? (
+            <Dashboard />
+          ) : selectedComponent === "Management Dashboard" ? (
+            <ManagementDashboard />
+          ) : selectedComponent === "MIS Reports" ? (
+            <Report />
+          ) : (
+            <ComplianceReports />
+          )}
+        </div>
       </div>
     </div>
   );

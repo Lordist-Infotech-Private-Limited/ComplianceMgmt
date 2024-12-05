@@ -15,7 +15,6 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await loginUser({ mailId, password });
-      console.log("user ", response);
 
       if (response.UserID) {
         onLogin(response); // Call the onLogin prop with user data
