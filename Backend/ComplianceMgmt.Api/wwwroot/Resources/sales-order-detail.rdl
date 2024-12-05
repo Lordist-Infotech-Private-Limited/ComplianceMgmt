@@ -1599,7 +1599,7 @@
     <DataSource Name="AdventureWorks">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=dataplatformdemodata.syncfusion.com;Initial Catalog=AdventureWorks;</ConnectString>
+        <ConnectString>Data Source=dataplatformdemodata.syncfusion.com;Initial Catalog=AdventureWorks;user id=demoreadonly@data-platform-demo;password=N@c)=Y8s*1&dh;</ConnectString>
         <rd:IsDesignState>true</rd:IsDesignState>
       </ConnectionProperties>
       <rd:ImpersonateUser>false</rd:ImpersonateUser>

@@ -72,7 +72,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>StateId</Value>
+                                  <Value>ID</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -112,7 +112,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>StateCode</Value>
+                                  <Value>Code</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -152,7 +152,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>StateName</Value>
+                                  <Value>Name</Value>
                                   <Style>
                                     <FontFamily>Arial</FontFamily>
                                   </Style>
@@ -310,7 +310,17 @@
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>
-                  <Group Name="Details" />
+                  <Group Name="Details">
+                    <Filters>
+                      <Filter>
+                        <FilterExpression>=Fields!StateId.Value</FilterExpression>
+                        <Operator>Equal</Operator>
+                        <FilterValues>
+                          <FilterValue DataType="Integer">=Parameters!StateId.Value</FilterValue>
+                        </FilterValues>
+                      </Filter>
+                    </Filters>
+                  </Group>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
@@ -350,8 +360,8 @@
       <ConnectionProperties>
         <DataProvider>MySql</DataProvider>
         <ConnectString>Host=mysql5050.site4now.net;Port=3306;Database=db_a927ee_comlian;User Id=a927ee_comlian;Password=P@ssw0rd;</ConnectString>
+        <rd:IsDesignState>true</rd:IsDesignState>
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:ImpersonateUser>false</rd:ImpersonateUser>
     </DataSource>
   </DataSources>
@@ -386,10 +396,23 @@
       </Query>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="StateId">
+      <DataType>Integer</DataType>
+      <Prompt>StateId</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>StateId</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>

@@ -10,7 +10,6 @@ namespace ComplianceMgmt.Api.Controllers
     public class ReportViewerController(IMemoryCache memoryCache,
         IWebHostEnvironment hostingEnvironment, ComplianceMgmtDbContext context) : ControllerBase, IReportController
     {
-
         // Post action to process the report from server based json parameters and send the result back to the client.
         [HttpPost]
         public object PostReportAction([FromBody] Dictionary<string, object> jsonArray)

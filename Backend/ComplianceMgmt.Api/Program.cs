@@ -24,7 +24,7 @@ namespace ComplianceMgmt.Api
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000") // Allow only your React app
+                    policy.WithOrigins("https://adfapi.lordist.in") // Allow only your React app
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .WithMethods("GET", "POST", "OPTIONS");
@@ -201,7 +201,7 @@ namespace ComplianceMgmt.Api
             // Ensure endpoints support OPTIONS requests
             app.MapMethods("/ReportViewer/PostReportAction", new[] { "OPTIONS" }, (HttpContext context) =>
             {
-                context.Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:3000");
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "https://adfapi.lordist.in");
                 context.Response.Headers.Add("Access-Control-Allow-Methods", "POST, OPTIONS");
                 context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
                 context.Response.StatusCode = 204; // No content
