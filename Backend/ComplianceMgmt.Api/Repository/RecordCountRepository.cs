@@ -123,63 +123,6 @@ namespace ComplianceMgmt.Api.Repository
             return true;
         }
 
-        //public async Task<bool> FetchAndInsertAllTablesAsync()
-        //{
-        //    var tables = new List<MsgStructure>
-        //    {
-        //        new()
-        //        {
-        //            TableName = "stgborrowerdetail",
-        //            RejectionTableNames="stgborrowerdetailrejection",
-        //            MsgStruct = "Borrower Detail"
-        //        },
-        //        new()
-        //        {
-        //            TableName = "stgborrowerloan",
-        //            RejectionTableNames= "stgborrowerloanrejection",
-        //            MsgStruct = "Borrower Loan"
-        //        },
-        //        new()
-        //        {
-        //            TableName = "stgborrowermortgage",
-        //            RejectionTableNames ="stgborrowermortgagerejection",
-        //            MsgStruct = "Borrower Mortgage"
-        //        },
-        //        new()
-        //        {
-        //            TableName = "stgborrowermortgageother",
-        //            RejectionTableNames="stgborrowermortgageotherrejection",
-        //            MsgStruct = "Borrower Mortgage Other"
-        //        },
-        //        new()
-        //        {
-        //            TableName = "stgcoborrowerdetails",
-        //            RejectionTableNames = "stgcoborrowerdetailsrejection",
-        //            MsgStruct = "Co Borrower Details"
-        //        }
-        //    };
-
-        //    var serverDetails = await serverDetailRepository.GetServerDetailsAsync();
-
-        //    foreach (var server in serverDetails)
-        //    {
-        //        using var clientConnection = context.CreateClientConnection(
-        //            server.ServerIp,
-        //            server.DbName,
-        //            server.ServerName,
-        //            server.ServerPassword);
-
-        //        foreach (var table in tables)
-        //        {
-        //            string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
-        //            var clientData = await clientConnection.QueryAsync<dynamic>(query);
-        //            await BulkInsertWithValidationAsync(context.CreateConnection().ConnectionString, table.TableName, table.RejectionTableNames, clientData, 1);
-        //        }
-        //    }
-
-        //    return true;
-        //}
-
         public async Task BulkInsertWithValidationAsync(
                 string connectionString,
                 string tableName,
@@ -270,16 +213,42 @@ namespace ComplianceMgmt.Api.Repository
         private (bool isValid, string reason) ValidateBusinessRules(string tableName, dynamic record)
         {
             var reason = new StringBuilder();
+            Log.Debug($"Date property type: {record.Date?.GetType()}");
 
             if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
             {
                 // Date Validation
-                if ((record.Date is MySql.Data.Types.MySqlDateTime mySqlDate && (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)) ||
-                    (record.Date is string dateString && string.IsNullOrWhiteSpace(dateString)) || record.Date == null)
+                if (record.Date is MySql.Data.Types.MySqlDateTime mySqlDate)
                 {
+                    // Check if MySqlDateTime is null or invalid
+                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Date cannot be blank.");
+                    }
+                }
+                else if (record.Date is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Date cannot be blank.");
+                    }
+                }
+                else if (record.Date is string dateString)
+                {
+                    // Check if string is empty or whitespace
+                    if (string.IsNullOrWhiteSpace(dateString))
+                    {
+                        reason.AppendLine("Date cannot be blank.");
+                    }
+                }
+                else
+                {
+                    // Handle unexpected or null values
                     reason.AppendLine("Date cannot be blank.");
                 }
             }
+
 
             if (tableName == "stgborrowerdetail")
             {
@@ -293,10 +262,36 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("PAN is mandatory if CIN is not provided.");
 
                 // DOB Validation
-                if (record.BDob == null)
+                if (record.BDob is MySql.Data.Types.MySqlDateTime mySqlDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
+                    }
+                }
+                else if (record.BDob is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for Primary Borrower Date of Birth.");
+                    }
+                }
+                else if (record.BDob is string dateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(dateString) ||
+                        !DateTime.TryParseExact(dateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for Primary Borrower Date of Birth.");
+                    }
+                }
+                else
+                {
+                    // Fallback for unexpected or null values
                     reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
-                else if (!DateTime.TryParseExact(record.BDob.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for Primary Borrower Date of Birth.");
+                }
 
                 // Monthly Income Validation
                 if (record.BMonthlyIncome == null || record.BMonthlyIncome < 0)
@@ -346,11 +341,37 @@ namespace ComplianceMgmt.Api.Repository
                 if (record.SanctAmount == null || record.SanctAmount <= 0)
                     reason.AppendLine("Sanctioned Amount (Rs.) must be numeric and > 0.");
 
-                // Date of Sanction Validation
-                if (record.SanctDate == null)
+                // Sanction Date Validation
+                if (record.SanctDate is MySql.Data.Types.MySqlDateTime mySqlDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Date of Sanction cannot be blank.");
+                    }
+                }
+                else if (record.SanctDate is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for Date of Sanction.");
+                    }
+                }
+                else if (record.SanctDate is string dateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(dateString) ||
+                        !DateTime.TryParseExact(dateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for Date of Sanction.");
+                    }
+                }
+                else
+                {
+                    // Fallback for unexpected or null values
                     reason.AppendLine("Date of Sanction cannot be blank.");
-                else if (!DateTime.TryParseExact(record.SanctDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for Date of Sanction.");
+                }
 
                 if (record.MoratoriumPeriod == null || record.MoratoriumPeriod < 0)
                     reason.AppendLine("Moratorium Period must be numeric and >= 0.");
@@ -373,14 +394,86 @@ namespace ComplianceMgmt.Api.Repository
                 if (record.PreEmi != null || record.PreEmi < 0)
                     reason.AppendLine("Pre-EMI Interest (PEMI) must be numeric and >= 0.");
 
-                if (record.FirstDisbDate != null && !DateTime.TryParseExact(record.FirstDisbDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for Date of first Disbursement.");
+                // First Disbursement Date Validation
+                if (record.FirstDisbDate is MySql.Data.Types.MySqlDateTime myFirstSqlDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (myFirstSqlDate.IsNull || !myFirstSqlDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Invalid value for Date of first Disbursement.");
+                    }
+                }
+                else if (record.FirstDisbDate is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for Date of first Disbursement.");
+                    }
+                }
+                else if (record.FirstDisbDate is string dateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(dateString) ||
+                        !DateTime.TryParseExact(dateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for Date of first Disbursement.");
+                    }
+                }
 
-                if (record.EmiStartDate != null && !DateTime.TryParseExact(record.EmiStartDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for EMI Start Date.");
+                // EMI Start Date Validation
+                if (record.EmiStartDate is MySql.Data.Types.MySqlDateTime mySqlEmiDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (mySqlEmiDate.IsNull || !mySqlEmiDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Invalid value for EMI Start Date.");
+                    }
+                }
+                else if (record.EmiStartDate is DateTime emiDateTime)
+                {
+                    // Check if DateTime is default
+                    if (emiDateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for EMI Start Date.");
+                    }
+                }
+                else if (record.EmiStartDate is string emiDateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(emiDateString) ||
+                        !DateTime.TryParseExact(emiDateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for EMI Start Date.");
+                    }
+                }
 
-                if (record.PreEmiStartDate != null && !DateTime.TryParseExact(record.PreEmiStartDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
+                // Pre-EMI Start Date Validation
+                if (record.PreEmiStartDate is MySql.Data.Types.MySqlDateTime mySqlPreEmiDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (mySqlPreEmiDate.IsNull || !mySqlPreEmiDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
+                    }
+                }
+                else if (record.PreEmiStartDate is DateTime preEmiDateTime)
+                {
+                    // Check if DateTime is default
+                    if (preEmiDateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
+                    }
+                }
+                else if (record.PreEmiStartDate is string preEmiDateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(preEmiDateString) ||
+                        !DateTime.TryParseExact(preEmiDateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
+                    }
+                }
 
                 if (record.LoanDisbDuringMonth == null || record.LoanDisbDuringMonth < 0)
                     reason.AppendLine("Loan Amount Disbursed during the Month must be numeric and >= 0.");
@@ -433,10 +526,37 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.AssetCat))
                     reason.AppendLine("Asset Category/Classification (IRAC) cannot be blank.");
 
-                if (record.ClassDate == null)
+                // Classification Date Validation
+                if (record.ClassDate is MySql.Data.Types.MySqlDateTime myClassSqlDate)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    if (myClassSqlDate.IsNull || !myClassSqlDate.IsValidDateTime)
+                    {
+                        reason.AppendLine("Date of Classification cannot be blank.");
+                    }
+                }
+                else if (record.ClassDate is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Invalid value for Date of Classification.");
+                    }
+                }
+                else if (record.ClassDate is string dateString)
+                {
+                    // Validate string format
+                    if (string.IsNullOrWhiteSpace(dateString) ||
+                        !DateTime.TryParseExact(dateString, "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                    {
+                        reason.AppendLine("Invalid value for Date of Classification.");
+                    }
+                }
+                else
+                {
+                    // Fallback for unexpected or null values
                     reason.AppendLine("Date of Classification cannot be blank.");
-                else if (!DateTime.TryParseExact(record.ClassDate.ToString(), "dd-MM-yyyy hh:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
-                    reason.AppendLine("Invalid value for Date of Classification.");
+                }
 
                 if (record.Pd != null && record.Pd < 0)
                     reason.AppendLine("Probability of Default (PD) must be numeric and >= 0.");
@@ -721,6 +841,82 @@ namespace ComplianceMgmt.Api.Repository
             return (reason.Length == 0, reason.ToString());
         }
 
+        //private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
+        //{
+        //    if (!records.Any()) return;
+
+        //    var insertQuery = new StringBuilder();
+        //    var parameters = new List<MySqlParameter>();
+        //    int counter = 0;
+
+        //    // Use the first record as a reference for column names
+        //    dynamic firstItem = records.First();
+        //    if (firstItem is IDictionary<string, object> dictionary)
+        //    {
+        //        var columns = dictionary.Keys.ToArray();
+
+        //        // Build the insert query
+        //        insertQuery.Append($"INSERT INTO {tableName} (");
+        //        insertQuery.Append(string.Join(", ", columns));
+        //        insertQuery.Append(") VALUES ");
+
+        //        foreach (var record in records)
+        //        {
+        //            var values = new List<string>();
+        //            if (record is IDictionary<string, object> recordDictionary)
+        //            {
+        //                foreach (var column in columns)
+        //                {
+        //                    var paramName = $"@{column}{counter}";
+        //                    values.Add(paramName);
+
+        //                    var propertyValue = recordDictionary.ContainsKey(column)
+        //                        ? recordDictionary[column]
+        //                        : DBNull.Value;
+
+        //                    // Handle invalid DateTime values
+        //                    if (column == "Date" || column == "BDob")
+        //                    {
+        //                        if (propertyValue == null || !DateTime.TryParse(propertyValue.ToString(), out _))
+        //                            propertyValue = DBNull.Value;
+        //                    }
+
+        //                    parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+        //                }
+        //            }
+
+        //            insertQuery.Append($"({string.Join(", ", values)})");
+        //            if (counter < records.Count() - 1)
+        //                insertQuery.Append(", ");
+
+        //            counter++;
+        //        }
+
+        //        insertQuery.Append(";");
+
+        //        // Execute the insert query
+        //        using var command = new MySqlCommand(insertQuery.ToString(), connection);
+        //        command.Parameters.AddRange(parameters.ToArray());
+        //        command.CommandTimeout = 1800; 
+        //        Console.WriteLine($"Query: {insertQuery}");
+        //        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+        //        Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+
+        //        try
+        //        {
+        //            await command.ExecuteNonQueryAsync();
+        //        }
+        //        catch (MySqlException ex)
+        //        {
+        //            throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
+        //    }
+        //}
+
         private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
         {
             if (!records.Any()) return;
@@ -750,15 +946,19 @@ namespace ComplianceMgmt.Api.Repository
                             var paramName = $"@{column}{counter}";
                             values.Add(paramName);
 
-                            var propertyValue = recordDictionary.ContainsKey(column)
-                                ? recordDictionary[column]
-                                : DBNull.Value;
+                            var propertyValue = recordDictionary.ContainsKey(column) ? recordDictionary[column] : DBNull.Value;
 
-                            // Handle invalid DateTime values
-                            if (column == "Date" || column == "BDob")
+                            // Handle Date or Date-like columns
+                            if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
+                                column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (propertyValue == null || !DateTime.TryParse(propertyValue.ToString(), out _))
-                                    propertyValue = DBNull.Value;
+                                propertyValue = HandleDateValue(propertyValue);
                             }
 
                             parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
@@ -777,7 +977,8 @@ namespace ComplianceMgmt.Api.Repository
                 // Execute the insert query
                 using var command = new MySqlCommand(insertQuery.ToString(), connection);
                 command.Parameters.AddRange(parameters.ToArray());
-                command.CommandTimeout = 1800; 
+                command.CommandTimeout = 1800;
+
                 Console.WriteLine($"Query: {insertQuery}");
                 Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
                 Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
@@ -796,6 +997,24 @@ namespace ComplianceMgmt.Api.Repository
                 throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
             }
         }
+
+        private object HandleDateValue(object value)
+        {
+            // Check for MySqlDateTime or null values
+            if (value is MySql.Data.Types.MySqlDateTime mySqlDateTime)
+            {
+                return mySqlDateTime.IsNull ? DBNull.Value : mySqlDateTime.GetDateTime();
+            }
+
+            // Check for standard DateTime or invalid date strings
+            if (value == null || !DateTime.TryParse(value.ToString(), out var parsedDate))
+            {
+                return DBNull.Value;
+            }
+
+            return parsedDate;
+        }
+
 
         private bool IsValidMasterValue(string columnName, string value)
         {
