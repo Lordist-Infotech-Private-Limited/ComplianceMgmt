@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import Header from "./Header";
 import Dashboard from "./Dashboard";
 import Report from "./Report";
 import ManagementDashboard from "./ManagementDashboard";
@@ -36,22 +35,15 @@ function Home({ user, onLogout }) {
         onLogout={onLogout}
       />
       <div className="flex-1 flex flex-col">
-        {/* <Header
-          componentName={selectedComponent}
-          user={user}
-          onLogout={onLogout}
-        /> */}
-        <div className="mt-9 md:mt-0">
-          {selectedComponent === "Dashboard" ? (
-            <Dashboard user={user} onLogout={onLogout} />
-          ) : selectedComponent === "Management Dashboard" ? (
-            <ManagementDashboard user={user} onLogout={onLogout} />
-          ) : selectedComponent === "MIS Reports" ? (
-            <Report user={user} onLogout={onLogout} />
-          ) : (
-            <ComplianceReports user={user} onLogout={onLogout} />
-          )}
-        </div>
+        {selectedComponent === "Dashboard" ? (
+          <Dashboard user={user} onLogout={onLogout} />
+        ) : selectedComponent === "Management Dashboard" ? (
+          <ManagementDashboard user={user} onLogout={onLogout} />
+        ) : selectedComponent === "MIS Reports" ? (
+          <Report user={user} onLogout={onLogout} />
+        ) : (
+          <ComplianceReports user={user} onLogout={onLogout} />
+        )}
       </div>
     </div>
   );

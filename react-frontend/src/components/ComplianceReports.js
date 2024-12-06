@@ -26,7 +26,7 @@ const ComplianceReports = ({ user, onLogout }) => {
         user={user}
         onLogout={onLogout}
       />
-      <div className="p-4 flex flex-col flex-1">
+      <div className="p-4 flex flex-col flex-1 h-full">
         <BoldReportViewerComponent
           id="reportviewer-container"
           reportServiceUrl={"https://adfapi.lordist.in/ReportViewer"}
