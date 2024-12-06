@@ -1,14 +1,20 @@
 using BoldReports.Web;
+using ComplianceMgmt.Api.Exceptions;
+using ComplianceMgmt.Api.Filters;
 using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using ComplianceMgmt.Api.Repository;
 using ComplianceMgmt.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
+using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -19,7 +25,19 @@ namespace ComplianceMgmt.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add JSON configuration file
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            // Configure Serilog
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+
+            builder.Host.UseSerilog(); // Replace default logger with Serilog
+
             Bold.Licensing.BoldLicenseProvider.RegisterLicense("hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=");
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -96,6 +114,9 @@ namespace ComplianceMgmt.Api
 
             builder.Services.AddProblemDetails();
 
+
+           
+
             // Register DbContextFactory only
             builder.Services.AddTransient(x =>
               new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -159,13 +180,70 @@ namespace ComplianceMgmt.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-        
+
             // Add in-memory cache
             builder.Services.AddMemoryCache();
 
             ReportConfig.DefaultSettings = new ReportSettings().RegisterExtensions(["BoldReports.Data.MySQL"]);
             //builder.Services.AddHybridCache(); // Not shown: optional configuration API.
+
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(new ApiExceptionFilter());
+            });
+
             var app = builder.Build();
+
+            //var logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+            // Use a centralized exception handler
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    var exception = exceptionHandlerFeature?.Error;
+
+                    var statusCode = exception switch
+                    {
+                        NotFoundException => StatusCodes.Status404NotFound,
+                        ValidationException => StatusCodes.Status400BadRequest,
+                        UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                        MySqlException mysqlEx when mysqlEx.Message.Contains("Unable to convert MySQL date/time value to System.DateTime")
+                                                => StatusCodes.Status400BadRequest,
+                        DatabaseException => StatusCodes.Status500InternalServerError,
+                        _ => StatusCodes.Status500InternalServerError
+                    };
+
+                    // Log the exception with Serilog
+                    Log.Error(exception, "An unhandled exception occurred: {Message}", exception?.Message);
+
+                    var problemDetails = new ProblemDetails
+                    {
+                        Title = exception switch
+                        {
+                            NotFoundException => "Resource not found.",
+                            ValidationException => "Validation error occurred.",
+                            UnauthorizedAccessException => "Unauthorized access.",
+                            MySqlException mysqlEx when mysqlEx.Message.Contains("Unable to convert MySQL date/time value to System.DateTime")
+                    => "Invalid date/time value in the database.",
+                            DatabaseException => "A database error occurred.",
+                            _ => "An error occurred while processing your request."
+                        },
+                        Status = statusCode,
+                        Detail = app.Environment.IsDevelopment() ? exception?.ToString() : exception?.Message, // Include detailed information only if needed
+                        Instance = context.Request.Path
+                    };
+
+                    context.Response.ContentType = "application/json";
+                    context.Response.StatusCode = statusCode;
+
+                    await context.Response.WriteAsJsonAsync(problemDetails);
+                });
+            });
+
+            app.UseExceptionHandler();
+            app.UseStatusCodePages();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -174,7 +252,6 @@ namespace ComplianceMgmt.Api
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
             app.MapOpenApi();
@@ -203,7 +280,14 @@ namespace ComplianceMgmt.Api
 
             app.MapControllers();
 
-            app.Run();
+            try
+            {
+                app.Run();
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }

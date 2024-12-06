@@ -20,7 +20,7 @@ namespace ComplianceMgmt.Api.Infrastructure
 
         public IDbConnection CreateClientConnection(string serverIp, string dbName, string userName, string password)
         {
-            var connectionString = $"Server={serverIp};Database={dbName};User Id={userName};Password={password};Pooling=true;";
+            var connectionString = $"Server={serverIp};Database={dbName};User Id={userName};Password={password};Pooling=true;DefaultCommandTimeout=1200;convert zero datetime=True;Allow Zero Datetime=True;Connection Timeout=1200;";
             return new MySqlConnection(connectionString);
         }
     }
