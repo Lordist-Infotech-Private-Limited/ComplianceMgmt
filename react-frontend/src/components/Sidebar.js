@@ -48,7 +48,7 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
       <nav className="mt-8 flex-grow">
         <ul>
           <li
-            className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+            className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
             } ${
               activeComponent === "Dashboard"
@@ -57,20 +57,24 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
             }`}
             onClick={() => onComponentChange("Dashboard")}
           >
-            <a href="#" className="flex items-center">
+            <span className="flex items-center">
               <FontAwesomeIcon icon={faChartBar} className="mr-2" />
               {isCollapsed ? "" : "Dashboard"}
-            </a>
+            </span>
           </li>
           <li
-            className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+            className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
             } ${
-              activeComponent === "Report" ? "bg-gray-200 text-[#f26114]" : ""
+              activeComponent === "Compliance Reports" ||
+              activeComponent === "MIS Reports" ||
+              activeComponent === "Management Dashboard"
+                ? "bg-gray-200 text-[#f26114]"
+                : ""
             }`}
             onClick={toggleReportSubMenu}
           >
-            <a href="#" className="flex items-center justify-between">
+            <span className="flex items-center justify-between">
               <span className="flex items-center">
                 <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
                 {isCollapsed ? "" : "Report"}
@@ -81,50 +85,46 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
                   className="ml-2"
                 />
               )}
-            </a>
+            </span>
           </li>
           {isReportSubMenuOpen && !isCollapsed && (
             <ul className="ml-8">
               <li
-                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
                   activeComponent === "Compliance Reports"
                     ? "bg-gray-200 text-[#f26114]"
                     : ""
                 }`}
                 onClick={() => onComponentChange("Compliance Reports")}
               >
-                <a href="#" className="flex items-center">
-                  Compliance Reports
-                </a>
+                <span className="flex items-center">Compliance Reports</span>
               </li>
               <li
-                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
                   activeComponent === "MIS Reports"
                     ? "bg-gray-200 text-[#f26114]"
                     : ""
                 }`}
                 onClick={() => onComponentChange("MIS Reports")}
               >
-                <a href="#" className="flex items-center">
+                <span href="#" className="flex items-center">
                   MIS Reports
-                </a>
+                </span>
               </li>
               <li
-                className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+                className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
                   activeComponent === "Management Dashboard"
                     ? "bg-gray-200 text-[#f26114]"
                     : ""
                 }`}
                 onClick={() => onComponentChange("Management Dashboard")}
               >
-                <a href="#" className="flex items-center">
-                  Management Dashboard
-                </a>
+                <span className="flex items-center">Management Dashboard</span>
               </li>
             </ul>
           )}
           <li
-            className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
+            className={`p-4 hover:bg-gray-200 hover:text-[#f26114] cursor-pointer transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
             } ${
               activeComponent === "Configuration"
@@ -133,10 +133,10 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
             }`}
             onClick={() => onComponentChange("Configuration")}
           >
-            <a href="#" className="flex items-center">
+            <span className="flex items-center">
               <FontAwesomeIcon icon={faCogs} className="mr-2" />
               {isCollapsed ? "" : "Configuration"}
-            </a>
+            </span>
           </li>
         </ul>
       </nav>

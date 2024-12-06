@@ -149,7 +149,9 @@ const MobileSidebar = ({
                 transition-colors
                 my-2
                 ${
-                  activeComponent === "Report"
+                  activeComponent === "Compliance Reports" ||
+                  activeComponent === "MIS Reports" ||
+                  activeComponent === "Management Dashboard"
                     ? "bg-gray-200 text-[#f26114]"
                     : ""
                 }
