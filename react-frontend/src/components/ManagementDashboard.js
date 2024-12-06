@@ -1,11 +1,12 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+import Header from "./Header";
 
 // Register the necessary elements and plugins
 Chart.register(ArcElement, Tooltip, Legend);
 
-const ManagementDashboard = () => {
+const ManagementDashboard = ({ user, onLogout }) => {
   const data = {
     labels: [
       "Sum of ntotalloanout",
@@ -23,12 +24,18 @@ const ManagementDashboard = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Management Dashboard</h2>
-      <div className="w-1/2 mx-auto">
-        <Pie data={data} />
+    <>
+      <Header
+        componentName={"Management Dashboard"}
+        user={user}
+        onLogout={onLogout}
+      />
+      <div className="p-4">
+        <div className="w-1/2 mx-auto">
+          <Pie data={data} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ const Actions = ({ onFetchData, selectedDate, setSelectedDate }) => {
   };
 
   return (
-    <div className="flex gap-4 items-center justify-between flex-wrap p-2 bg-white rounded-xl shadow-sm">
+    <div className="flex gap-4 items-center justify-between flex-wrap bg-white rounded-xl shadow-sm">
       <input
         type="date"
         id="referenceDate"
@@ -17,7 +17,7 @@ const Actions = ({ onFetchData, selectedDate, setSelectedDate }) => {
       />
       <button
         onClick={() => onFetchData(selectedDate)}
-        className="px-4 py-2 bg-[#f26114] text-white border-none rounded-md cursor-pointer text-sm w-full md:w-fit"
+        className="px-4 py-2 font-medium bg-[#f26114] hover:bg-orange-500 text-white border-none rounded-md cursor-pointer text-sm w-full md:w-fit"
       >
         Fetch Data
       </button>

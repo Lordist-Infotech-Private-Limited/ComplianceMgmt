@@ -13,8 +13,9 @@ import {
   fetchBorrowerMortgageDetails,
   fetchBorrowerMortgageOtherDetails,
 } from "../utils/service";
+import Header from "./Header";
 
-function Dashboard() {
+function Dashboard({ user, onLogout }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -186,39 +187,49 @@ function Dashboard() {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <Actions
+    <>
+      <Header
+        componentName={"Dashboard"}
+        user={user}
+        onLogout={onLogout}
         onFetchData={handleFetchData}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      {loading && <Loader />}
-      <DataTable
-        data={paginatedData}
-        openEditModal={handleOpenEditModal}
-        openViewAllModal={handleOpenViewAllModal}
-        handleValidate={handleValidate}
-      />
-      {currentModal === "edit" && (
-        <EditRecordModal
-          record={editRecord}
-          tableName={currentTableName}
-          referenceDate={selectedDate}
-          onClose={handleCloseModal}
-          showLoader={showLoader}
-          hideLoader={hideLoader}
+      <div className="container mx-auto p-4">
+        {/* <Actions
+        onFetchData={handleFetchData}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      /> */}
+        {loading && <Loader />}
+        <DataTable
+          data={paginatedData}
+          openEditModal={handleOpenEditModal}
+          openViewAllModal={handleOpenViewAllModal}
+          handleValidate={handleValidate}
         />
-      )}
-      {currentModal === "viewAll" && (
-        <ViewAllRecordsModal
-          records={viewAllRecords}
-          tableName={currentTableName}
-          onClose={handleCloseModal}
-          showLoader={showLoader}
-          hideLoader={hideLoader}
-        />
-      )}
-    </div>
+        {currentModal === "edit" && (
+          <EditRecordModal
+            record={editRecord}
+            tableName={currentTableName}
+            referenceDate={selectedDate}
+            onClose={handleCloseModal}
+            showLoader={showLoader}
+            hideLoader={hideLoader}
+          />
+        )}
+        {currentModal === "viewAll" && (
+          <ViewAllRecordsModal
+            records={viewAllRecords}
+            tableName={currentTableName}
+            onClose={handleCloseModal}
+            showLoader={showLoader}
+            hideLoader={hideLoader}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
