@@ -40,7 +40,7 @@ namespace ComplianceMgmt.Api.Repository
             END IS NOT NULL;
     ";
 
-            var connection = context.CreateConnection();
+            var connection = await context.CreateDefaultConnectionAsync();
 
             var parameters = new { FilterType = filterType };
             return await connection.QueryAsync<StatewiseLoanSummary>(query, parameters);

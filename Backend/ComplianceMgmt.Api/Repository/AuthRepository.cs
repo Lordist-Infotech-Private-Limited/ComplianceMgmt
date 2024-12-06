@@ -14,7 +14,7 @@ namespace ComplianceMgmt.Api.Repository
             User user = null;
             string sql = "SELECT UserID, LoginId, UserName, MailId, MobileNo, Designation, CreatedBy, CreateDate, UpdatedBy, UpdatedDate, Password, IsActive, LastLogin FROM usermaster WHERE MailId = @MailId AND IsActive = 1";
 
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 try
                 {
@@ -67,7 +67,7 @@ namespace ComplianceMgmt.Api.Repository
                 (@LoginId, @UserName, @MailId, @MobileNo, @Designation, @CreatedBy, @Password, @IsActive);
                 SELECT LAST_INSERT_ID();"; // MySQL function to get the last auto-incremented ID
 
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 try
                 {
@@ -99,7 +99,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<bool> ValidateToken(string token)
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 var query = "SELECT COUNT(*) FROM sessioninfo WHERE Token = @Token AND ResetTime > @Now";
                 var count = await connection.ExecuteScalarAsync<int>(query, new { Token = token, Now = DateTime.Now });
@@ -110,7 +110,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task Logout(int userId)
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 var query = "DELETE FROM sessioninfo WHERE UserID = @UserID";
                 await connection.ExecuteAsync(query, new { UserID = userId });

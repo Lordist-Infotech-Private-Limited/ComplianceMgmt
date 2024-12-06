@@ -35,8 +35,10 @@ namespace ComplianceMgmt.Api
 
             builder.Host.UseSerilog(); // Replace default logger with Serilog
 
+            // Register BoldReports License
             Bold.Licensing.BoldLicenseProvider.RegisterLicense("hqtVyred0+U80CCsByBoE8h7o10O167TD7JGPrspwwk=");
-            
+
+            // CORS configuration
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -48,9 +50,10 @@ namespace ComplianceMgmt.Api
                 });
             });
 
+            // Configure OpenAPI (Swagger)
             builder.Services.AddOpenApi();
 
-            // Add services to the container.
+            // Add controllers with custom JSON options
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -61,7 +64,7 @@ namespace ComplianceMgmt.Api
 
             });
 
-            // Add other services
+            // Add repositories and services
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IRecordCountRepository, RecordCountRepository>();
             builder.Services.AddScoped<IServerDetailRepository, ServerDetailRepository>();
@@ -73,6 +76,7 @@ namespace ComplianceMgmt.Api
             builder.Services.AddScoped<IStatewiseLoanRepository, StatewiseLoanRepository>();
             builder.Services.AddScoped<IComplianceReportRepository, ComplianceReportRepository>();
 
+            // Configure JWT authentication
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
             builder.Services.AddSingleton<TokenService>();
 
@@ -111,6 +115,7 @@ namespace ComplianceMgmt.Api
                 };
             });
 
+            // Add ProblemDetails for consistent error responses
             builder.Services.AddProblemDetails();
 
             // use AddMySqlDataSource to configure MySqlConnector
@@ -118,7 +123,7 @@ namespace ComplianceMgmt.Api
               new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Register ComplianceMgmtDbContext for DI
-            builder.Services.AddScoped<ComplianceMgmtDbContext>();
+            builder.Services.AddTransient<ComplianceMgmtDbContext>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -157,38 +162,44 @@ namespace ComplianceMgmt.Api
                 });
             });
 
+            // Configure IIS server options
             builder.Services.Configure<IISServerOptions>(options =>
             {
                 options.MaxRequestBodySize = 100 * 1024 * 1024; // 100 MB
             });
 
+            // Configure form options
             builder.Services.Configure<FormOptions>(options =>
             {
                 options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 100 MB
             });
 
-            builder.Services.AddHttpContextAccessor();
-
             // Add services to the container.
-
             builder.Services.AddControllers();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Add in-memory cache
+            // Add HttpContextAccessor and in-memory cache
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddMemoryCache();
 
+            // BoldReports Configuration
             ReportConfig.DefaultSettings = new ReportSettings().RegisterExtensions(["BoldReports.Data.MySQL"]);
-            //builder.Services.AddHybridCache(); // Not shown: optional configuration API.
 
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new ApiExceptionFilter());
             });
 
-            // Register the background service
-            builder.Services.AddHostedService<MySqlKeepAliveService>();
+
+    //        builder.Services.AddHttpClient("MySqlClient")
+    //.AddTransientHttpErrorPolicy(policyBuilder =>
+    //    policyBuilder.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))));
+
+            // Register background service for MySQL keep-alive
+            //builder.Services.AddHostedService<MySqlKeepAliveService>();
 
             var app = builder.Build();
 
@@ -240,6 +251,7 @@ namespace ComplianceMgmt.Api
                 });
             });
 
+            // Exception handling and status code pages
             app.UseExceptionHandler();
             app.UseStatusCodePages();
 
@@ -252,11 +264,13 @@ namespace ComplianceMgmt.Api
             {
                 app.UseHsts();
             }
+
+            // Configure Swagger and OpenAPI UI
             app.MapOpenApi();
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            // Use CORS
+            // Use CORS policy
             app.UseCors("AllowSpecificOrigin");
 
             // Ensure endpoints support OPTIONS requests
@@ -269,15 +283,16 @@ namespace ComplianceMgmt.Api
                 return Task.CompletedTask;
             });
 
-            //app.UseCors("AllowAll");
+            // HTTPS redirection and static files
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            // Map controllers
             app.MapControllers();
 
+            // Run the application
             try
             {
                 app.Run();

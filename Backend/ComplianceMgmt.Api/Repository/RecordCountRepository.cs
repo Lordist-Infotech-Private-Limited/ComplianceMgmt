@@ -20,7 +20,7 @@ namespace ComplianceMgmt.Api.Repository
             {
                 var formattedDate = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
 
-                using (var connection = context.CreateConnection())
+                using (var connection = await context.CreateDefaultConnectionAsync())
                 {
                     // Call the stored procedure
                     var summaries = new List<TableSummary>();
@@ -83,24 +83,30 @@ namespace ComplianceMgmt.Api.Repository
             {
                 try
                 {
-                    using var clientConnection = context.CreateClientConnection(
-                        server.ServerIp,
-                        server.DbName,
-                        server.ServerName,
-                        server.ServerPassword);
-
                     foreach (var table in tables)
                     {
                         try
                         {
-                            string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
-
-                            // Try fetching data
-                            var clientData = await clientConnection.QueryAsync<dynamic>(query);
-
+                            IEnumerable<dynamic> clientData = null;
+                            try
+                            {
+                                using (var clientConnection = await context.CreateSecondaryConnectionAsync(server.ServerIp,
+                                                                                                server.DbName,
+                                                                                                server.ServerName,
+                                                                                                server.ServerPassword))
+                                {
+                                    string query = $"SELECT * FROM db_a927ee_stgcomp.{table.TableName}";
+                                    // Try fetching data
+                                    clientData = await clientConnection.QueryAsync<dynamic>(query);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log table-specific errors
+                                Log.Error(ex, "Error fetching data for table {TableName} on server {ServerName}", table.TableName, server.ServerName);
+                            }
                             // Bulk insert with validation
                             await BulkInsertWithValidationAsync(
-                                context.CreateConnection().ConnectionString,
                                 table.TableName,
                                 table.RejectionTableNames,
                                 clientData,
@@ -124,7 +130,6 @@ namespace ComplianceMgmt.Api.Repository
         }
 
         public async Task BulkInsertWithValidationAsync(
-                string connectionString,
                 string tableName,
                 string rejectionTableName,
                 IEnumerable<dynamic> data,
@@ -132,9 +137,6 @@ namespace ComplianceMgmt.Api.Repository
                 int batchSize = 1000)
         {
             if (data == null || !data.Any()) return;
-
-            using var connection = new MySqlConnection(connectionString);
-            await connection.OpenAsync();
 
             var validRecords = new List<dynamic>();
             var rejectedRecords = new List<dynamic>();
@@ -196,7 +198,7 @@ namespace ComplianceMgmt.Api.Repository
             {
                 foreach (var batch in validRecords.Batch(batchSize))
                 {
-                    await InsertRecordsAsync(connection, tableName, batch);
+                    await InsertRecordsAsync(tableName, batch);
                 }
             }
 
@@ -205,7 +207,7 @@ namespace ComplianceMgmt.Api.Repository
             {
                 foreach (var batch in rejectedRecords.Batch(batchSize))
                 {
-                    await InsertRecordsAsync(connection, rejectionTableName, batch);
+                    await InsertRecordsAsync(rejectionTableName, batch);
                 }
             }
         }
@@ -841,88 +843,13 @@ namespace ComplianceMgmt.Api.Repository
             return (reason.Length == 0, reason.ToString());
         }
 
-        //private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
-        //{
-        //    if (!records.Any()) return;
-
-        //    var insertQuery = new StringBuilder();
-        //    var parameters = new List<MySqlParameter>();
-        //    int counter = 0;
-
-        //    // Use the first record as a reference for column names
-        //    dynamic firstItem = records.First();
-        //    if (firstItem is IDictionary<string, object> dictionary)
-        //    {
-        //        var columns = dictionary.Keys.ToArray();
-
-        //        // Build the insert query
-        //        insertQuery.Append($"INSERT INTO {tableName} (");
-        //        insertQuery.Append(string.Join(", ", columns));
-        //        insertQuery.Append(") VALUES ");
-
-        //        foreach (var record in records)
-        //        {
-        //            var values = new List<string>();
-        //            if (record is IDictionary<string, object> recordDictionary)
-        //            {
-        //                foreach (var column in columns)
-        //                {
-        //                    var paramName = $"@{column}{counter}";
-        //                    values.Add(paramName);
-
-        //                    var propertyValue = recordDictionary.ContainsKey(column)
-        //                        ? recordDictionary[column]
-        //                        : DBNull.Value;
-
-        //                    // Handle invalid DateTime values
-        //                    if (column == "Date" || column == "BDob")
-        //                    {
-        //                        if (propertyValue == null || !DateTime.TryParse(propertyValue.ToString(), out _))
-        //                            propertyValue = DBNull.Value;
-        //                    }
-
-        //                    parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
-        //                }
-        //            }
-
-        //            insertQuery.Append($"({string.Join(", ", values)})");
-        //            if (counter < records.Count() - 1)
-        //                insertQuery.Append(", ");
-
-        //            counter++;
-        //        }
-
-        //        insertQuery.Append(";");
-
-        //        // Execute the insert query
-        //        using var command = new MySqlCommand(insertQuery.ToString(), connection);
-        //        command.Parameters.AddRange(parameters.ToArray());
-        //        command.CommandTimeout = 1800; 
-        //        Console.WriteLine($"Query: {insertQuery}");
-        //        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-        //        Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-
-        //        try
-        //        {
-        //            await command.ExecuteNonQueryAsync();
-        //        }
-        //        catch (MySqlException ex)
-        //        {
-        //            throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
-        //    }
-        //}
-
-        private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
+        private async Task InsertRecordsAsync(string tableName, IEnumerable<dynamic> records)
         {
-            await MySqlRetryHelper.ExecuteWithRetryAsync(async () =>
-            {
-                if (!records.Any()) return;
+            if (!records.Any()) return;
 
+            // Choose the database connection
+            using (var connection = await context.CreateDefaultConnectionAsync())
+            {
                 var insertQuery = new StringBuilder();
                 var parameters = new List<MySqlParameter>();
                 int counter = 0;
@@ -951,14 +878,7 @@ namespace ComplianceMgmt.Api.Repository
 
 
                                 // Handle Date or Date-like columns
-                                if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
-                                    column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
+                                if (IsDateColumn(column))
                                 {
                                     propertyValue = HandleDateValue(propertyValue);
                                 }
@@ -975,7 +895,11 @@ namespace ComplianceMgmt.Api.Repository
 
                     insertQuery.Append(";");
 
-                    using var command = new MySqlCommand(insertQuery.ToString(), connection);
+                    // Execute the command
+                    using var command = new MySqlCommand(insertQuery.ToString(), (MySqlConnection)connection)
+                    {
+                        CommandTimeout = 12000
+                    };
                     command.Parameters.AddRange(parameters.ToArray());
                     await command.ExecuteNonQueryAsync();
                 }
@@ -983,107 +907,50 @@ namespace ComplianceMgmt.Api.Repository
                 {
                     throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
                 }
-            });
+            }
         }
 
-        //private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
+        private static bool IsDateColumn(string columnName)
+        {
+            var dateColumns = new[]
+            {
+                "Date", "BDob", "SanctDate", "FirstDisbDate", "EmiStartDate",
+                "PreEmiStartDate", "ClassDate", "CbDob"
+            };
+            return dateColumns.Contains(columnName, StringComparer.OrdinalIgnoreCase);
+        }
+
+        //private static object HandleDateValue(object value)
         //{
-        //    if (!records.Any()) return;
-
-        //    var insertQuery = new StringBuilder();
-        //    var parameters = new List<MySqlParameter>();
-        //    int counter = 0;
-
-        //    // Use the first record as a reference for column names
-        //    dynamic firstItem = records.First();
-        //    if (firstItem is IDictionary<string, object> dictionary)
+        //    if (value is DateTime dateTime)
         //    {
-        //        var columns = dictionary.Keys.ToArray();
-
-        //        // Build the insert query
-        //        insertQuery.Append($"INSERT INTO {tableName} (");
-        //        insertQuery.Append(string.Join(", ", columns));
-        //        insertQuery.Append(") VALUES ");
-
-        //        foreach (var record in records)
-        //        {
-        //            var values = new List<string>();
-        //            if (record is IDictionary<string, object> recordDictionary)
-        //            {
-        //                foreach (var column in columns)
-        //                {
-        //                    var paramName = $"@{column}{counter}";
-        //                    values.Add(paramName);
-
-        //                    var propertyValue = recordDictionary.ContainsKey(column) ? recordDictionary[column] : DBNull.Value;
-
-        //                    // Handle Date or Date-like columns
-        //                    if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
-        //                        column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
-        //                    {
-        //                        propertyValue = HandleDateValue(propertyValue);
-        //                    }
-
-        //                    parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
-        //                }
-        //            }
-
-        //            insertQuery.Append($"({string.Join(", ", values)})");
-        //            if (counter < records.Count() - 1)
-        //                insertQuery.Append(", ");
-
-        //            counter++;
-        //        }
-
-        //        insertQuery.Append(";");
-
-        //        // Execute the insert query
-        //        using var command = new MySqlCommand(insertQuery.ToString(), connection);
-        //        command.Parameters.AddRange(parameters.ToArray());
-        //        command.CommandTimeout = 1800;
-
-        //        Console.WriteLine($"Query: {insertQuery}");
-        //        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-        //        Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-
-        //        try
-        //        {
-        //            await command.ExecuteNonQueryAsync();
-        //        }
-        //        catch (MySqlException ex)
-        //        {
-        //            throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
-        //        }
+        //        return dateTime.ToString("yyyy-MM-dd HH:mm:ss"); // Format for MySQL DATETIME
         //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
-        //    }
+        //    return value;
         //}
 
-        private object HandleDateValue(object value)
+        private static object HandleDateValue(object value)
         {
-            // Check for MySqlDateTime or null values
             if (value is MySqlDateTime mySqlDateTime)
             {
-                return mySqlDateTime.IsValidDateTime ? DBNull.Value : mySqlDateTime.GetDateTime();
+                if (mySqlDateTime.IsValidDateTime)
+                {
+                    return mySqlDateTime.GetDateTime(); // Convert to DateTime
+                }
+                else
+                {
+                    return DBNull.Value; // Handle invalid date by returning null equivalent
+                }
             }
-
-            // Check for standard DateTime or invalid date strings
-            if (value == null || !DateTime.TryParse(value.ToString(), out var parsedDate))
+            else if (value is DateTime dateTime)
             {
-                return DBNull.Value;
+                return dateTime; // Already a valid DateTime
             }
-
-            return parsedDate;
+            else
+            {
+                return value; // Return the original value if it's not a date
+            }
         }
-
 
         private bool IsValidMasterValue(string columnName, string value)
         {

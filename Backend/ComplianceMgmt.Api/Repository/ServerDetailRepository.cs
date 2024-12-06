@@ -5,11 +5,11 @@ using Dapper;
 
 namespace ComplianceMgmt.Api.Repository
 {
-    public class ServerDetailRepository(IConfiguration configuration, ComplianceMgmtDbContext context) : IServerDetailRepository
+    public class ServerDetailRepository(ComplianceMgmtDbContext context) : IServerDetailRepository
     {
         public async Task<IEnumerable<ServerDetail>> GetServerDetailsAsync()
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 var query = "SELECT * FROM serverdetails";
                 return await connection.QueryAsync<ServerDetail>(query);

@@ -9,7 +9,7 @@ namespace ComplianceMgmt.Api.Repository
     {
         public async Task<IEnumerable<BorrowerDetail>> GetAllReportsAsync()
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
 
             var query = "SELECT * FROM stgborrowerdetail";
             return await connection.QueryAsync<BorrowerDetail>(query);
@@ -17,14 +17,14 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<ComplianceReport> GetReportByIdAsync(int id)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
             var query = "SELECT * FROM ComplianceReports WHERE Id = @Id";
             return await connection.QueryFirstOrDefaultAsync<ComplianceReport>(query, new { Id = id });
         }
 
         public async Task<int> CreateReportAsync(ComplianceReport report)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
             var query = @"
             INSERT INTO ComplianceReports (ReportName, GeneratedDate, Status)
             VALUES (@ReportName, @GeneratedDate, @Status);
@@ -35,7 +35,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<bool> UpdateReportAsync(ComplianceReport report)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
             var query = @"
             UPDATE ComplianceReports
             SET ReportName = @ReportName, GeneratedDate = @GeneratedDate, Status = @Status
@@ -47,7 +47,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<bool> DeleteReportAsync(int id)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
             var query = "DELETE FROM ComplianceReports WHERE Id = @Id";
             var result = await connection.ExecuteAsync(query, new { Id = id });
             return result > 0;

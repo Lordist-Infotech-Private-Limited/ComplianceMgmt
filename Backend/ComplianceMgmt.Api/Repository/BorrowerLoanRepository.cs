@@ -13,7 +13,7 @@ namespace ComplianceMgmt.Api.Repository
     {
         public async Task<BorrowerLoan> GetByPrimaryKeyAsync(DateTime date)
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 var query = @"SELECT * FROM stgborrowerloan 
                       WHERE `Date` = @Date";
@@ -23,7 +23,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<IEnumerable<BorrowerLoan>> GetAllByDateAsync(DateTime date)
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
                 var query = @"SELECT * FROM stgborrowerloan WHERE `Date` = @Date";
                 return await connection.QueryAsync<BorrowerLoan>(query, new { Date = date });
@@ -32,7 +32,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task UpdateAsync(BorrowerLoan borrowerLoan)
         {
-            using (var connection = context.CreateConnection())
+            using (var connection = await context.CreateDefaultConnectionAsync())
             {
 
                 var query = @"UPDATE stgborrowerloan 
@@ -60,15 +60,14 @@ namespace ComplianceMgmt.Api.Repository
                 return dynamicRow;
             });
 
-            return await BulkUpdateAsync(context.CreateConnection().ConnectionString, "stgborrowerloan", borrowers);
+            return await BulkUpdateAsync("stgborrowerloan", borrowers);
         }
 
-        public async Task<bool> BulkUpdateAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
+        public async Task<bool> BulkUpdateAsync(string tableName, IEnumerable<dynamic> data)
         {
             if (data == null || !data.Any()) return false;
 
-            using var connection = new MySqlConnection(connectionString);
-            await connection.OpenAsync();
+            var connection = await context.CreateDefaultConnectionAsync();
 
             var updateQuery = new StringBuilder();
             var parameters = new List<MySqlParameter>();
@@ -121,7 +120,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // Execute the update query
-                using var command = new MySqlCommand(updateQuery.ToString(), connection);
+                using var command = new MySqlCommand(updateQuery.ToString(), (MySqlConnection)connection)
+                {
+                    CommandTimeout = 12000
+                };
                 command.Parameters.AddRange(parameters.ToArray());
 
                 try

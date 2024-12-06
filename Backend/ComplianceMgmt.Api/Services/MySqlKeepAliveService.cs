@@ -1,16 +1,19 @@
-﻿namespace ComplianceMgmt.Api.Services
-{
-    using Microsoft.Extensions.Hosting;
-    using MySqlConnector;
-    using System;
-    using System.Data;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using MySqlConnector;
+using System.Data;
 
+namespace ComplianceMgmt.Api.Services
+{
     public class MySqlKeepAliveService : BackgroundService
     {
-        private readonly string _connectionString = "Server=mysql5050.site4now.net;Database=db_a927ee_comlian;User Id=a927ee_comlian;Password=P@ssw0rd;Pooling=true;Keepalive=60;ConnectionTimeout=60;DefaultCommandTimeout=1200;MinPoolSize=5;MaxPoolSize=50;";
         private MySqlConnection _connection;
+        private readonly string _connectionString;
+
+        // Inject IConfiguration to access connection string
+        public MySqlKeepAliveService(IConfiguration configuration)
+        {
+            // Get the connection string from configuration (e.g., appsettings.json)
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

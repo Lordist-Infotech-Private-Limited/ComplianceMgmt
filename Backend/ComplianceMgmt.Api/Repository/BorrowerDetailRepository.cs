@@ -14,7 +14,7 @@ namespace ComplianceMgmt.Api.Repository
     {
         public async Task<BorrowerDetail> GetByPrimaryKeyAsync(DateTime date)
         {
-            using var connection = context.CreateConnection();
+            using var connection =await context.CreateDefaultConnectionAsync();
 
             var query = @"SELECT * FROM stgborrowerdetail 
                       WHERE `Date` = @Date";
@@ -23,7 +23,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task<IEnumerable<BorrowerDetail>> GetAllByDateAsync(DateTime date)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
 
             var query = @"SELECT * FROM stgborrowerdetail WHERE `Date` = @Date";
             return await connection.QueryAsync<BorrowerDetail>(query, new { Date = date });
@@ -31,7 +31,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task UpdateAsync(BorrowerDetail borrowerDetail)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
 
             var query = @"UPDATE stgborrowerdetail 
                       SET BName = @BName, BDob = @BDob, sbCitizenship = @sbCitizenship, BPanNo = @BPanNo,
@@ -97,7 +97,7 @@ namespace ComplianceMgmt.Api.Repository
                 return dynamicRow;
             });
 
-            return await BulkUpdateAsync(context.CreateConnection().ConnectionString, "stgborrowerdetail", borrowers);
+            return await BulkUpdateAsync("stgborrowerdetail", borrowers);
         }
 
         public async Task<bool> BulkInsertAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
@@ -175,12 +175,11 @@ namespace ComplianceMgmt.Api.Repository
             return true;
         }
 
-        public async Task<bool> BulkUpdateAsync(string connectionString, string tableName, IEnumerable<dynamic> data)
+        public async Task<bool> BulkUpdateAsync(string tableName, IEnumerable<dynamic> data)
         {
             if (data == null || !data.Any()) return false;
 
-            using var connection = new MySqlConnection(connectionString);
-            await connection.OpenAsync();
+            using var connection = await context.CreateDefaultConnectionAsync();
 
             var updateQuery = new StringBuilder();
             var parameters = new List<MySqlParameter>();
@@ -233,7 +232,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // Execute the update query
-                using var command = new MySqlCommand(updateQuery.ToString(), connection);
+                using var command = new MySqlCommand(updateQuery.ToString(), (MySqlConnection)connection)
+                {
+                    CommandTimeout = 12000
+                };
                 command.Parameters.AddRange(parameters.ToArray());
 
                 try
@@ -257,7 +259,7 @@ namespace ComplianceMgmt.Api.Repository
 
         public async Task ValidateAsync(BorrowerDetailValidationRequest request)
         {
-            using var connection = context.CreateConnection();
+            using var connection = await context.CreateDefaultConnectionAsync();
             // Parameters to pass to the stored procedure
             var parameters = new DynamicParameters();
             parameters.Add("@V_DATE", request.Date, DbType.Date);
