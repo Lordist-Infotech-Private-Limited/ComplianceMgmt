@@ -33,19 +33,28 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
         <div className={`${isCollapsed ? "hidden" : "block"}`}>
           <img src={fullLogo} alt="Large Logo" className="w-32" />
         </div>
-        <div className={`${!isCollapsed ? "hidden" : "block"}`}>
+        <div
+          className={`${!isCollapsed ? "hidden" : "block cursor-pointer"}`}
+          onClick={toggleSidebar}
+        >
           <img src={logo} alt="Small Logo" className="w-8" />
         </div>
-        <button onClick={toggleSidebar} className="text-xl">
-          <FontAwesomeIcon icon={faBars} />
-        </button>
+        {!isCollapsed && (
+          <button onClick={toggleSidebar} className="text-xl">
+            <FontAwesomeIcon icon={faBars} />
+          </button>
+        )}
       </div>
       <nav className="mt-8 flex-grow">
         <ul>
           <li
             className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
-            } ${activeComponent === "Dashboard" ? "bg-gray-200" : ""}`}
+            } ${
+              activeComponent === "Dashboard"
+                ? "bg-gray-200 text-[#f26114]"
+                : ""
+            }`}
             onClick={() => onComponentChange("Dashboard")}
           >
             <a href="#" className="flex items-center">
@@ -56,7 +65,9 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
           <li
             className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
-            } ${activeComponent === "Report" ? "bg-gray-200" : ""}`}
+            } ${
+              activeComponent === "Report" ? "bg-gray-200 text-[#f26114]" : ""
+            }`}
             onClick={toggleReportSubMenu}
           >
             <a href="#" className="flex items-center justify-between">
@@ -76,7 +87,9 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
             <ul className="ml-8">
               <li
                 className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
-                  activeComponent === "Compliance Reports" ? "bg-gray-200" : ""
+                  activeComponent === "Compliance Reports"
+                    ? "bg-gray-200 text-[#f26114]"
+                    : ""
                 }`}
                 onClick={() => onComponentChange("Compliance Reports")}
               >
@@ -86,7 +99,9 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
               </li>
               <li
                 className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
-                  activeComponent === "MIS Reports" ? "bg-gray-200" : ""
+                  activeComponent === "MIS Reports"
+                    ? "bg-gray-200 text-[#f26114]"
+                    : ""
                 }`}
                 onClick={() => onComponentChange("MIS Reports")}
               >
@@ -97,7 +112,7 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
               <li
                 className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
                   activeComponent === "Management Dashboard"
-                    ? "bg-gray-200"
+                    ? "bg-gray-200 text-[#f26114]"
                     : ""
                 }`}
                 onClick={() => onComponentChange("Management Dashboard")}
@@ -111,7 +126,11 @@ const Sidebar = ({ onComponentChange, activeComponent }) => {
           <li
             className={`p-4 hover:bg-gray-200 transition-all duration-200 rounded-md mx-2 my-2 ${
               isCollapsed ? "text-center" : ""
-            } ${activeComponent === "Configuration" ? "bg-gray-200" : ""}`}
+            } ${
+              activeComponent === "Configuration"
+                ? "bg-gray-200 text-[#f26114]"
+                : ""
+            }`}
             onClick={() => onComponentChange("Configuration")}
           >
             <a href="#" className="flex items-center">

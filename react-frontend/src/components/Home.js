@@ -36,20 +36,20 @@ function Home({ user, onLogout }) {
         onLogout={onLogout}
       />
       <div className="flex-1 flex flex-col">
-        <Header
+        {/* <Header
           componentName={selectedComponent}
           user={user}
           onLogout={onLogout}
-        />
+        /> */}
         <div className="mt-9 md:mt-0">
           {selectedComponent === "Dashboard" ? (
-            <Dashboard />
+            <Dashboard user={user} onLogout={onLogout} />
           ) : selectedComponent === "Management Dashboard" ? (
-            <ManagementDashboard />
+            <ManagementDashboard user={user} onLogout={onLogout} />
           ) : selectedComponent === "MIS Reports" ? (
-            <Report />
+            <Report user={user} onLogout={onLogout} />
           ) : (
-            <ComplianceReports />
+            <ComplianceReports user={user} onLogout={onLogout} />
           )}
         </div>
       </div>

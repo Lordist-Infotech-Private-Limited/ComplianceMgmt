@@ -126,7 +126,11 @@ const MobileSidebar = ({
                 rounded 
                 transition-colors
                 my-2
-                ${activeComponent === "Dashboard" ? "bg-gray-200" : ""}
+                ${
+                  activeComponent === "Dashboard"
+                    ? "bg-gray-200 text-[#f26114]"
+                    : ""
+                }
               `}
               onClick={() => handleComponentChange("Dashboard")}
             >
@@ -144,7 +148,11 @@ const MobileSidebar = ({
                 rounded 
                 transition-colors
                 my-2
-                ${activeComponent === "Report" ? "bg-gray-200" : ""}
+                ${
+                  activeComponent === "Report"
+                    ? "bg-gray-200 text-[#f26114]"
+                    : ""
+                }
               `}
               onClick={toggleReportSubMenu}
             >
@@ -170,7 +178,7 @@ const MobileSidebar = ({
                     transition-colors
                     ${
                       activeComponent === "Compliance Reports"
-                        ? "bg-gray-200"
+                        ? "bg-gray-200 text-[#f26114]"
                         : ""
                     }
                   `}
@@ -184,7 +192,11 @@ const MobileSidebar = ({
                     hover:bg-gray-100 
                     rounded 
                     transition-colors
-                    ${activeComponent === "MIS Reports" ? "bg-gray-200" : ""}
+                    ${
+                      activeComponent === "MIS Reports"
+                        ? "bg-gray-200 text-[#f26114]"
+                        : ""
+                    }
                   `}
                   onClick={() => handleComponentChange("MIS Reports")}
                 >
@@ -198,7 +210,7 @@ const MobileSidebar = ({
                     transition-colors
                     ${
                       activeComponent === "Management Dashboard"
-                        ? "bg-gray-200"
+                        ? "bg-gray-200 text-[#f26114]"
                         : ""
                     }
                   `}
@@ -217,7 +229,11 @@ const MobileSidebar = ({
                 rounded 
                 transition-colors
                 my-2
-                ${activeComponent === "Configuration" ? "bg-gray-200" : ""}
+                ${
+                  activeComponent === "Configuration"
+                    ? "bg-gray-200 text-[#f26114]"
+                    : ""
+                }
               `}
               onClick={() => handleComponentChange("Configuration")}
             >

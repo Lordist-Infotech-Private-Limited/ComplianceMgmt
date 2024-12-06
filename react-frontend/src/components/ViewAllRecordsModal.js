@@ -168,18 +168,18 @@ const ViewAllRecordsModal = ({
         <table className="w-full border-separate border-spacing-0">
           <thead>
             <tr>
-              <th className="bg-[#001e4f] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap">
+              <th className="bg-[#0e3a7b] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap">
                 Edit
               </th>
               {fields.map((field) => (
                 <th
                   key={field.name}
-                  className="bg-[#001e4f] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap"
+                  className="bg-[#0e3a7b] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap"
                 >
                   {field.name}
                 </th>
               ))}
-              <th className="bg-[#001e4f] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap">
+              <th className="bg-[#0e3a7b] font-bold text-white text-left px-2 py-[1px] border border-gray-300 whitespace-nowrap">
                 Actions
               </th>
             </tr>
@@ -238,7 +238,7 @@ const ViewAllRecordsModal = ({
                   <button
                     data-tooltip-id="my-tooltip"
                     data-tooltip-content="Save"
-                    className="bg-[#001e4f] hover:bg-blue-800 border-none text-sm text-white cursor-pointer rounded-md px-4 py-[1px]"
+                    className="bg-[#f26114] hover:bg-orange-500 border-none text-sm text-white cursor-pointer rounded-md px-4 py-[1px]"
                     onClick={() => handleSaveRecord(index)}
                   >
                     <i className="fas fa-save"></i>
@@ -326,7 +326,7 @@ const ViewAllRecordsModal = ({
             />
           </div>
           <button
-            className="border-none text-sm text-white cursor-pointer rounded-md px-4 py-2 bg-[#001e4f] font-medium hover:bg-blue-800"
+            className="border-none text-sm text-white cursor-pointer rounded-md px-4 py-2 bg-[#f26114] font-medium hover:bg-orange-800"
             onClick={onClose}
           >
             X
@@ -344,14 +344,19 @@ const ViewAllRecordsModal = ({
             pageRangeDisplayed={5}
             onPageChange={handlePageChange}
             containerClassName={"flex gap-1"}
-            activeClassName={"bg-blue-500 text-white rounded-md px-2 py-1"}
+            activeClassName={
+              "bg-[#f26114] hover:bg-orange-500 text-white rounded-md px-2 py-1"
+            }
             previousClassName={"pagination-previous  px-2 py-1"}
             nextClassName={"pagination-next px-2 py-1"}
             pageClassName={"pagination-page px-2 py-1"}
             disabledClassName={"pagination-disabled"}
             forcePage={currentPage}
           />
-          <button className="bg-blue-500 text-white p-2 rounded-md" onclick="">
+          <button
+            className="bg-[#f26114] hover:bg-orange-500 text-white p-2 rounded-md"
+            onclick=""
+          >
             Push to NHB Stagging
           </button>
         </div>

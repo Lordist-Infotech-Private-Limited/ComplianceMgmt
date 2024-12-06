@@ -116,7 +116,7 @@ const EditRecordModal = ({ record, tableName, onClose }) => {
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Edit Record</h2>
             <button
-              className="border-none text-sm text-white cursor-pointer rounded-md px-4 py-2 bg-blue-700 font-medium hover:bg-blue-800"
+              className="border-none text-sm text-white cursor-pointer rounded-md px-4 py-2 bg-[#f26114] hover:bg-orange-500 font-medium"
               onClick={onClose}
             >
               X
@@ -158,7 +158,7 @@ const EditRecordModal = ({ record, tableName, onClose }) => {
             ))}
             <div className="flex items-end flex-col">
               <button
-                className="px-4 py-2 bg-[#001e4f] text-white border-none rounded-md cursor-pointer text-sm hover:bg-blue-800"
+                className="px-4 py-2 bg-[#f26114] hover:bg-orange-500 text-white border-none rounded-md cursor-pointer text-sm"
                 onClick={handleSave}
               >
                 Save

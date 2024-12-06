@@ -1,8 +1,9 @@
 /* eslint-disable */
 
 import React from "react";
+import Header from "./Header";
 
-const ComplianceReports = () => {
+const ComplianceReports = ({ user, onLogout }) => {
   function viewReportClick(event) {
     let reportParams = [];
     reportParams.push({
@@ -19,17 +20,23 @@ const ComplianceReports = () => {
   }
   var parameters = [{ name: "StateId", values: [1], nullable: false }];
   return (
-    <div className="p-4 flex flex-col flex-1">
-      <h2 className="text-2xl font-bold mb-4">Compliance Reports</h2>
-      <BoldReportViewerComponent
-        id="reportviewer-container"
-        reportServiceUrl={"https://adfapi.lordist.in/ReportViewer"}
-        reportPath={"StateReport.rdl"}
-        viewReportClick={viewReportClick}
-        renderingComplete={fitPage}
-        parameters={parameters}
-      ></BoldReportViewerComponent>
-    </div>
+    <>
+      <Header
+        componentName={"Compliance Reports"}
+        user={user}
+        onLogout={onLogout}
+      />
+      <div className="p-4 flex flex-col flex-1">
+        <BoldReportViewerComponent
+          id="reportviewer-container"
+          reportServiceUrl={"https://adfapi.lordist.in/ReportViewer"}
+          reportPath={"StateReport.rdl"}
+          viewReportClick={viewReportClick}
+          renderingComplete={fitPage}
+          parameters={parameters}
+        ></BoldReportViewerComponent>
+      </div>
+    </>
   );
 };
 
