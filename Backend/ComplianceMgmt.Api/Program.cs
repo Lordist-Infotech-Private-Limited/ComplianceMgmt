@@ -114,11 +114,8 @@ namespace ComplianceMgmt.Api
             builder.Services.AddProblemDetails();
 
             // use AddMySqlDataSource to configure MySqlConnector
-            builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-            // Register DbContextFactory only
-            //builder.Services.AddSingleton(x =>
-            //  new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddTransient(x =>
+              new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Register ComplianceMgmtDbContext for DI
             builder.Services.AddScoped<ComplianceMgmtDbContext>();
