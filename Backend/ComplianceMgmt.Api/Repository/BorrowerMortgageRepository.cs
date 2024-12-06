@@ -2,10 +2,10 @@
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
-using MySql.Data.MySqlClient;
 using System.Dynamic;
 using System.Text;
 using MiniExcelLibs;
+using MySqlConnector;
 
 namespace ComplianceMgmt.Api.Repository
 {

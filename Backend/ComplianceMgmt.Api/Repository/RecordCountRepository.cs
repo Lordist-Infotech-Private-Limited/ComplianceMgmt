@@ -3,7 +3,7 @@ using ComplianceMgmt.Api.Infrastructure;
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Newtonsoft.Json;
 using Serilog;
 using System.Dynamic;
@@ -218,10 +218,10 @@ namespace ComplianceMgmt.Api.Repository
             if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
             {
                 // Date Validation
-                if (record.Date is MySql.Data.Types.MySqlDateTime mySqlDate)
+                if (record.Date is MySqlDateTime mySqlDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
                     {
                         reason.AppendLine("Date cannot be blank.");
                     }
@@ -262,10 +262,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("PAN is mandatory if CIN is not provided.");
 
                 // DOB Validation
-                if (record.BDob is MySql.Data.Types.MySqlDateTime mySqlDate)
+                if (record.BDob is MySqlDateTime mySqlDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
                     {
                         reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
                     }
@@ -342,10 +342,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("Sanctioned Amount (Rs.) must be numeric and > 0.");
 
                 // Sanction Date Validation
-                if (record.SanctDate is MySql.Data.Types.MySqlDateTime mySqlDate)
+                if (record.SanctDate is MySqlDateTime mySqlDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsNull || !mySqlDate.IsValidDateTime)
+                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
                     {
                         reason.AppendLine("Date of Sanction cannot be blank.");
                     }
@@ -395,10 +395,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("Pre-EMI Interest (PEMI) must be numeric and >= 0.");
 
                 // First Disbursement Date Validation
-                if (record.FirstDisbDate is MySql.Data.Types.MySqlDateTime myFirstSqlDate)
+                if (record.FirstDisbDate is MySqlDateTime myFirstSqlDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (myFirstSqlDate.IsNull || !myFirstSqlDate.IsValidDateTime)
+                    if (myFirstSqlDate.IsValidDateTime || !myFirstSqlDate.IsValidDateTime)
                     {
                         reason.AppendLine("Invalid value for Date of first Disbursement.");
                     }
@@ -422,10 +422,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // EMI Start Date Validation
-                if (record.EmiStartDate is MySql.Data.Types.MySqlDateTime mySqlEmiDate)
+                if (record.EmiStartDate is MySqlDateTime mySqlEmiDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlEmiDate.IsNull || !mySqlEmiDate.IsValidDateTime)
+                    if (mySqlEmiDate.IsValidDateTime || !mySqlEmiDate.IsValidDateTime)
                     {
                         reason.AppendLine("Invalid value for EMI Start Date.");
                     }
@@ -449,10 +449,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // Pre-EMI Start Date Validation
-                if (record.PreEmiStartDate is MySql.Data.Types.MySqlDateTime mySqlPreEmiDate)
+                if (record.PreEmiStartDate is MySqlDateTime mySqlPreEmiDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlPreEmiDate.IsNull || !mySqlPreEmiDate.IsValidDateTime)
+                    if (mySqlPreEmiDate.IsValidDateTime || !mySqlPreEmiDate.IsValidDateTime)
                     {
                         reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
                     }
@@ -527,10 +527,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("Asset Category/Classification (IRAC) cannot be blank.");
 
                 // Classification Date Validation
-                if (record.ClassDate is MySql.Data.Types.MySqlDateTime myClassSqlDate)
+                if (record.ClassDate is MySqlDateTime myClassSqlDate)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (myClassSqlDate.IsNull || !myClassSqlDate.IsValidDateTime)
+                    if (myClassSqlDate.IsValidDateTime || !myClassSqlDate.IsValidDateTime)
                     {
                         reason.AppendLine("Date of Classification cannot be blank.");
                     }
@@ -919,91 +919,160 @@ namespace ComplianceMgmt.Api.Repository
 
         private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
         {
-            if (!records.Any()) return;
-
-            var insertQuery = new StringBuilder();
-            var parameters = new List<MySqlParameter>();
-            int counter = 0;
-
-            // Use the first record as a reference for column names
-            dynamic firstItem = records.First();
-            if (firstItem is IDictionary<string, object> dictionary)
+            await MySqlRetryHelper.ExecuteWithRetryAsync(async () =>
             {
-                var columns = dictionary.Keys.ToArray();
+                if (!records.Any()) return;
 
-                // Build the insert query
-                insertQuery.Append($"INSERT INTO {tableName} (");
-                insertQuery.Append(string.Join(", ", columns));
-                insertQuery.Append(") VALUES ");
+                var insertQuery = new StringBuilder();
+                var parameters = new List<MySqlParameter>();
+                int counter = 0;
 
-                foreach (var record in records)
+                dynamic firstItem = records.First();
+                if (firstItem is IDictionary<string, object> dictionary)
                 {
-                    var values = new List<string>();
-                    if (record is IDictionary<string, object> recordDictionary)
+                    var columns = dictionary.Keys.ToArray();
+                    insertQuery.Append($"INSERT INTO {tableName} (");
+                    insertQuery.Append(string.Join(", ", columns));
+                    insertQuery.Append(") VALUES ");
+
+                    foreach (var record in records)
                     {
-                        foreach (var column in columns)
+                        var values = new List<string>();
+                        if (record is IDictionary<string, object> recordDictionary)
                         {
-                            var paramName = $"@{column}{counter}";
-                            values.Add(paramName);
-
-                            var propertyValue = recordDictionary.ContainsKey(column) ? recordDictionary[column] : DBNull.Value;
-
-                            // Handle Date or Date-like columns
-                            if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
-                                column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
+                            foreach (var column in columns)
                             {
-                                propertyValue = HandleDateValue(propertyValue);
-                            }
+                                var paramName = $"@{column}{counter}";
+                                values.Add(paramName);
 
-                            parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+                                var propertyValue = recordDictionary.ContainsKey(column)
+                                    ? recordDictionary[column]
+                                    : DBNull.Value;
+
+
+                                // Handle Date or Date-like columns
+                                if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
+                                    column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    propertyValue = HandleDateValue(propertyValue);
+                                }
+                                parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+                            }
                         }
+
+                        insertQuery.Append($"({string.Join(", ", values)})");
+                        if (counter < records.Count() - 1)
+                            insertQuery.Append(", ");
+
+                        counter++;
                     }
 
-                    insertQuery.Append($"({string.Join(", ", values)})");
-                    if (counter < records.Count() - 1)
-                        insertQuery.Append(", ");
+                    insertQuery.Append(";");
 
-                    counter++;
-                }
-
-                insertQuery.Append(";");
-
-                // Execute the insert query
-                using var command = new MySqlCommand(insertQuery.ToString(), connection);
-                command.Parameters.AddRange(parameters.ToArray());
-                command.CommandTimeout = 1800;
-
-                Console.WriteLine($"Query: {insertQuery}");
-                Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-                Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
-
-                try
-                {
+                    using var command = new MySqlCommand(insertQuery.ToString(), connection);
+                    command.Parameters.AddRange(parameters.ToArray());
                     await command.ExecuteNonQueryAsync();
                 }
-                catch (MySqlException ex)
+                else
                 {
-                    throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
+                    throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
-            }
+            });
         }
+
+        //private async Task InsertRecordsAsync(MySqlConnection connection, string tableName, IEnumerable<dynamic> records)
+        //{
+        //    if (!records.Any()) return;
+
+        //    var insertQuery = new StringBuilder();
+        //    var parameters = new List<MySqlParameter>();
+        //    int counter = 0;
+
+        //    // Use the first record as a reference for column names
+        //    dynamic firstItem = records.First();
+        //    if (firstItem is IDictionary<string, object> dictionary)
+        //    {
+        //        var columns = dictionary.Keys.ToArray();
+
+        //        // Build the insert query
+        //        insertQuery.Append($"INSERT INTO {tableName} (");
+        //        insertQuery.Append(string.Join(", ", columns));
+        //        insertQuery.Append(") VALUES ");
+
+        //        foreach (var record in records)
+        //        {
+        //            var values = new List<string>();
+        //            if (record is IDictionary<string, object> recordDictionary)
+        //            {
+        //                foreach (var column in columns)
+        //                {
+        //                    var paramName = $"@{column}{counter}";
+        //                    values.Add(paramName);
+
+        //                    var propertyValue = recordDictionary.ContainsKey(column) ? recordDictionary[column] : DBNull.Value;
+
+        //                    // Handle Date or Date-like columns
+        //                    if (column.Equals("Date", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("BDob", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("SanctDate", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("FirstDisbDate", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("EmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("PreEmiStartDate", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("ClassDate", StringComparison.OrdinalIgnoreCase) ||
+        //                        column.Equals("CbDob", StringComparison.OrdinalIgnoreCase))
+        //                    {
+        //                        propertyValue = HandleDateValue(propertyValue);
+        //                    }
+
+        //                    parameters.Add(new MySqlParameter(paramName, propertyValue ?? DBNull.Value));
+        //                }
+        //            }
+
+        //            insertQuery.Append($"({string.Join(", ", values)})");
+        //            if (counter < records.Count() - 1)
+        //                insertQuery.Append(", ");
+
+        //            counter++;
+        //        }
+
+        //        insertQuery.Append(";");
+
+        //        // Execute the insert query
+        //        using var command = new MySqlCommand(insertQuery.ToString(), connection);
+        //        command.Parameters.AddRange(parameters.ToArray());
+        //        command.CommandTimeout = 1800;
+
+        //        Console.WriteLine($"Query: {insertQuery}");
+        //        Console.WriteLine($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+        //        Log.Information($"Parameters: {string.Join(", ", parameters.Select(p => $"{p.ParameterName}: {p.Value}"))}");
+
+        //        try
+        //        {
+        //            await command.ExecuteNonQueryAsync();
+        //        }
+        //        catch (MySqlException ex)
+        //        {
+        //            throw new Exception($"MySQL Error: {ex.Message}\nQuery: {insertQuery}", ex);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new InvalidOperationException("The first item in the data is not of expected type IDictionary<string, object>.");
+        //    }
+        //}
 
         private object HandleDateValue(object value)
         {
             // Check for MySqlDateTime or null values
-            if (value is MySql.Data.Types.MySqlDateTime mySqlDateTime)
+            if (value is MySqlDateTime mySqlDateTime)
             {
-                return mySqlDateTime.IsNull ? DBNull.Value : mySqlDateTime.GetDateTime();
+                return mySqlDateTime.IsValidDateTime ? DBNull.Value : mySqlDateTime.GetDateTime();
             }
 
             // Check for standard DateTime or invalid date strings

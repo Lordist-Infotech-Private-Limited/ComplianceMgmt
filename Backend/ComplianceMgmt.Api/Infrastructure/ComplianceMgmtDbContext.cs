@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlConnector;
 using System.Data;
 
 namespace ComplianceMgmt.Api.Infrastructure
@@ -20,7 +20,7 @@ namespace ComplianceMgmt.Api.Infrastructure
 
         public IDbConnection CreateClientConnection(string serverIp, string dbName, string userName, string password)
         {
-            var connectionString = $"Server={serverIp};Database={dbName};User Id={userName};Password={password};Pooling=true;DefaultCommandTimeout=1200;convert zero datetime=True;Allow Zero Datetime=True;Connection Timeout=1200;";
+            var connectionString = $"Server={serverIp};Database={dbName};User Id={userName};Password={password};Pooling=true;DefaultCommandTimeout=1200;convert zero datetime=True;Allow Zero Datetime=True;Connection Timeout=1200;Keepalive=300;";
             return new MySqlConnection(connectionString);
         }
     }

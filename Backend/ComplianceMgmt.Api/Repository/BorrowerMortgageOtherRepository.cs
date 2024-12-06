@@ -2,7 +2,7 @@
 using ComplianceMgmt.Api.IRepository;
 using ComplianceMgmt.Api.Models;
 using Dapper;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System.Dynamic;
 using System.Text;
 using MiniExcelLibs;

@@ -10,10 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -114,12 +113,12 @@ namespace ComplianceMgmt.Api
 
             builder.Services.AddProblemDetails();
 
-
-           
+            // use AddMySqlDataSource to configure MySqlConnector
+            builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection"));
 
             // Register DbContextFactory only
-            builder.Services.AddTransient(x =>
-              new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //builder.Services.AddSingleton(x =>
+            //  new MySqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Register ComplianceMgmtDbContext for DI
             builder.Services.AddScoped<ComplianceMgmtDbContext>();
@@ -171,7 +170,6 @@ namespace ComplianceMgmt.Api
                 options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 100 MB
             });
 
-
             builder.Services.AddHttpContextAccessor();
 
             // Add services to the container.
@@ -191,6 +189,9 @@ namespace ComplianceMgmt.Api
             {
                 options.Filters.Add(new ApiExceptionFilter());
             });
+
+            // Register the background service
+            builder.Services.AddHostedService<MySqlKeepAliveService>();
 
             var app = builder.Build();
 
