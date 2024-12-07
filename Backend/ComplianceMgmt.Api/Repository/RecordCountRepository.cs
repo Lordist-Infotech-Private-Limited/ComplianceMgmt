@@ -6,6 +6,7 @@ using Dapper;
 using MySqlConnector;
 using Newtonsoft.Json;
 using Serilog;
+using System;
 using System.Dynamic;
 using System.Globalization;
 using System.Text;
@@ -155,8 +156,8 @@ namespace ComplianceMgmt.Api.Repository
             // Validate each record and segregate
             foreach (var record in data)
             {
-                var businessValidation = ValidateBusinessRules(tableName,record);
-                var constraintValidation = ValidateConstraints(tableName,record, ref masterData);
+                var constraintValidation = ValidateConstraints(tableName, record, ref masterData);
+                var businessValidation = ValidateBusinessRules(tableName,record, ref masterData);
 
                 if (businessValidation.Item1 && constraintValidation.Item1)
                 {
@@ -212,49 +213,13 @@ namespace ComplianceMgmt.Api.Repository
             }
         }
 
-        private (bool isValid, string reason) ValidateBusinessRules(string tableName, dynamic record)
+        private (bool isValid, string reason) ValidateBusinessRules(string tableName, dynamic record, ref List<MasterData> masterData)
         {
             var reason = new StringBuilder();
             Log.Debug($"Date property type: {record.Date?.GetType()}");
 
-            if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
-            {
-                // Date Validation
-                if (record.Date is MySqlDateTime mySqlDate)
-                {
-                    // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Date cannot be blank.");
-                    }
-                }
-                else if (record.Date is DateTime dateTime)
-                {
-                    // Check if DateTime is default
-                    if (dateTime == default(DateTime))
-                    {
-                        reason.AppendLine("Date cannot be blank.");
-                    }
-                }
-                else if (record.Date is string dateString)
-                {
-                    // Check if string is empty or whitespace
-                    if (string.IsNullOrWhiteSpace(dateString))
-                    {
-                        reason.AppendLine("Date cannot be blank.");
-                    }
-                }
-                else
-                {
-                    // Handle unexpected or null values
-                    reason.AppendLine("Date cannot be blank.");
-                }
-            }
-
-
             if (tableName == "stgborrowerdetail")
             {
-
                 // CIN Validation
                 if (string.IsNullOrWhiteSpace(record.Cin) && string.IsNullOrWhiteSpace(record.BPanNo))
                     reason.AppendLine("CIN and PAN cannot both be blank.");
@@ -264,13 +229,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("PAN is mandatory if CIN is not provided.");
 
                 // DOB Validation
-                if (record.BDob is MySqlDateTime mySqlDate)
+                if (record.BDob is MySqlDateTime mySqlDate && !mySqlDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
-                    }
+                    reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
                 }
                 else if (record.BDob is DateTime dateTime)
                 {
@@ -289,14 +251,9 @@ namespace ComplianceMgmt.Api.Repository
                         reason.AppendLine("Invalid value for Primary Borrower Date of Birth.");
                     }
                 }
-                else
-                {
-                    // Fallback for unexpected or null values
-                    reason.AppendLine("Primary Borrower Date of Birth cannot be blank.");
-                }
 
                 // Monthly Income Validation
-                if (record.BMonthlyIncome == null || record.BMonthlyIncome < 0)
+                if (record.BMonthlyIncome == null && record.BMonthlyIncome < 0)
                     reason.AppendLine("Monthly income must be numeric and >= 0.");
 
                 // Other Field Validations
@@ -333,24 +290,21 @@ namespace ComplianceMgmt.Api.Repository
                     // Number of Dwelling Unit(DU)
                     string loanPurpose = record.LoanPurpose;
 
-                    if (new[] { "POL-01", "POL-02", "POL-03", "POL-04", "POL-05" }.Contains(loanPurpose))
+                    if (masterData.Any(data => string.Equals(data.Code, loanPurpose, StringComparison.OrdinalIgnoreCase)))
                     {
                         if (string.IsNullOrWhiteSpace(record.DwellingUnit))
                             reason.AppendLine("Number of Dwelling Unit (DU) cannot be blank.");
                     }
                 }
 
-                if (record.SanctAmount == null || record.SanctAmount <= 0)
+                if (record.SanctAmount == null && record.SanctAmount < 0)
                     reason.AppendLine("Sanctioned Amount (Rs.) must be numeric and > 0.");
 
                 // Sanction Date Validation
-                if (record.SanctDate is MySqlDateTime mySqlDate)
+                if (record.SanctDate is MySqlDateTime mySqlDate && !mySqlDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlDate.IsValidDateTime || !mySqlDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Date of Sanction cannot be blank.");
-                    }
+                    reason.AppendLine("Date of Sanction cannot be blank.");
                 }
                 else if (record.SanctDate is DateTime dateTime)
                 {
@@ -369,41 +323,33 @@ namespace ComplianceMgmt.Api.Repository
                         reason.AppendLine("Invalid value for Date of Sanction.");
                     }
                 }
-                else
-                {
-                    // Fallback for unexpected or null values
-                    reason.AppendLine("Date of Sanction cannot be blank.");
-                }
 
-                if (record.MoratoriumPeriod == null || record.MoratoriumPeriod < 0)
+                if (record.MoratoriumPeriod == null && record.MoratoriumPeriod < 0)
                     reason.AppendLine("Moratorium Period must be numeric and >= 0.");
 
-                if (record.LoanTenCont == null || record.LoanTenCont < 0)
+                if (record.LoanTenCont == null && record.LoanTenCont < 0)
                     reason.AppendLine("Loan Tenure - Contractual must be numeric and >= 0.");
 
-                if (record.LoanTenResidual == null || record.LoanTenResidual < 0)
+                if (record.LoanTenResidual == null && record.LoanTenResidual < 0)
                     reason.AppendLine("Loan Tenure - Residual must be numeric and >= 0.");
 
-                if (record.Roi == null || record.Roi <= 0)
+                if (record.Roi == null && record.Roi < 0)
                     reason.AppendLine("Rate of Interest must be numeric and > 0.00");
 
                 if (string.IsNullOrWhiteSpace(record.IntType))
                     reason.AppendLine("Type of Interest cannot be blank.");
 
-                if (record.Emi != null || record.Emi < 0)
-                    reason.AppendLine("Equated Monthly Installment (EMI) must be numeric and >= 0.");
+                //if (record.Emi != null || record.Emi > 0)
+                //    reason.AppendLine("Equated Monthly Installment (EMI) must be numeric and >= 0.");
 
-                if (record.PreEmi != null || record.PreEmi < 0)
-                    reason.AppendLine("Pre-EMI Interest (PEMI) must be numeric and >= 0.");
+                //if (record.PreEmi != null || record.PreEmi > 0)
+                //    reason.AppendLine("Pre-EMI Interest (PEMI) must be numeric and >= 0.");
 
                 // First Disbursement Date Validation
-                if (record.FirstDisbDate is MySqlDateTime myFirstSqlDate)
+                if (record.FirstDisbDate is MySqlDateTime myFirstSqlDate && !myFirstSqlDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (myFirstSqlDate.IsValidDateTime || !myFirstSqlDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Invalid value for Date of first Disbursement.");
-                    }
+                    reason.AppendLine("Invalid value for Date of first Disbursement.");
                 }
                 else if (record.FirstDisbDate is DateTime dateTime)
                 {
@@ -424,13 +370,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // EMI Start Date Validation
-                if (record.EmiStartDate is MySqlDateTime mySqlEmiDate)
+                if (record.EmiStartDate is MySqlDateTime mySqlEmiDate && !mySqlEmiDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlEmiDate.IsValidDateTime || !mySqlEmiDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Invalid value for EMI Start Date.");
-                    }
+                    reason.AppendLine("Invalid value for EMI Start Date.");
                 }
                 else if (record.EmiStartDate is DateTime emiDateTime)
                 {
@@ -451,13 +394,10 @@ namespace ComplianceMgmt.Api.Repository
                 }
 
                 // Pre-EMI Start Date Validation
-                if (record.PreEmiStartDate is MySqlDateTime mySqlPreEmiDate)
+                if (record.PreEmiStartDate is MySqlDateTime mySqlPreEmiDate && !mySqlPreEmiDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (mySqlPreEmiDate.IsValidDateTime || !mySqlPreEmiDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
-                    }
+                    reason.AppendLine("Invalid value for Pre-EMI interest (PEMI) Start Date.");
                 }
                 else if (record.PreEmiStartDate is DateTime preEmiDateTime)
                 {
@@ -477,22 +417,22 @@ namespace ComplianceMgmt.Api.Repository
                     }
                 }
 
-                if (record.LoanDisbDuringMonth == null || record.LoanDisbDuringMonth < 0)
+                if (record.LoanDisbDuringMonth == null && record.LoanDisbDuringMonth < 0)
                     reason.AppendLine("Loan Amount Disbursed during the Month must be numeric and >= 0.");
 
-                if (record.CummuLoanDisb == null || record.CummuLoanDisb < 0)
+                if (record.CummuLoanDisb == null && record.CummuLoanDisb < 0)
                     reason.AppendLine("Cumulative Loan Disbursed must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.LoanStatus))
                     reason.AppendLine("Loan Status cannot be blank.");
 
-                if (record.AmtUnderCons != null || record.AmtUnderCons < 0)
+                if (record.AmtUnderCons == null || record.AmtUnderCons < 0)
                     reason.AppendLine("Amount outstanding under consideration must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.PartyName))
                     reason.AppendLine("Counter Party cannot be blank.");
 
-                if (record.AmoutUnderGuar != null || record.AmoutUnderGuar < 0)
+                if (record.AmoutUnderGuar == null && record.AmoutUnderGuar < 0)
                     reason.AppendLine("Amount outstanding under Guarantee must be numeric and >= 0.");
 
                 if (record.TotalLoanOut == null)
@@ -507,19 +447,19 @@ namespace ComplianceMgmt.Api.Repository
                 if (record.OtherDueOut == null)
                     reason.AppendLine("Other Dues cannot be blank.");
 
-                if (record.LoanRepayDurMth == null || record.LoanRepayDurMth < 0)
+                if (record.LoanRepayDurMth == null && record.LoanRepayDurMth < 0)
                     reason.AppendLine("Loan Repayment During the Month must be numeric and >= 0.");
 
-                if (record.TotalLoanOverDue == null || record.TotalLoanOverDue < 0)
+                if (record.TotalLoanOverDue == null && record.TotalLoanOverDue < 0)
                     reason.AppendLine("Total Loan Overdue must be numeric and >= 0.");
 
-                if (record.POverDue == null || record.POverDue < 0)
+                if (record.POverDue == null && record.POverDue < 0)
                     reason.AppendLine("Principal Overdue must be numeric and >= 0.");
 
-                if (record.IOverDue == null || record.IOverDue < 0)
+                if (record.IOverDue == null && record.IOverDue < 0)
                     reason.AppendLine("Interest Overdue must be numeric and >= 0.");
 
-                if (record.OtherOverDue == null || record.OtherOverDue < 0)
+                if (record.OtherOverDue == null && record.OtherOverDue < 0)
                     reason.AppendLine("Other Dues Overdues must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.AccntClosedDurMth))
@@ -529,13 +469,10 @@ namespace ComplianceMgmt.Api.Repository
                     reason.AppendLine("Asset Category/Classification (IRAC) cannot be blank.");
 
                 // Classification Date Validation
-                if (record.ClassDate is MySqlDateTime myClassSqlDate)
+                if (record.ClassDate is MySqlDateTime myClassSqlDate && !myClassSqlDate.IsValidDateTime)
                 {
                     // Check if MySqlDateTime is null or invalid
-                    if (myClassSqlDate.IsValidDateTime || !myClassSqlDate.IsValidDateTime)
-                    {
-                        reason.AppendLine("Date of Classification cannot be blank.");
-                    }
+                    reason.AppendLine("Date of Classification cannot be blank.");
                 }
                 else if (record.ClassDate is DateTime dateTime)
                 {
@@ -554,23 +491,18 @@ namespace ComplianceMgmt.Api.Repository
                         reason.AppendLine("Invalid value for Date of Classification.");
                     }
                 }
-                else
-                {
-                    // Fallback for unexpected or null values
-                    reason.AppendLine("Date of Classification cannot be blank.");
-                }
 
-                if (record.Pd != null && record.Pd < 0)
+                if (record.Pd == null && record.Pd < 0)
                     reason.AppendLine("Probability of Default (PD) must be numeric and >= 0.");
 
-                if (record.Lgd != null && record.Lgd < 0)
+                if (record.Lgd == null && record.Lgd < 0)
                     reason.AppendLine("Loss Given Default (LGD) must be numeric and >= 0.");
 
-                if (record.ProvAmt == null || record.ProvAmt < 0)
+                if (record.ProvAmt == null && record.ProvAmt < 0)
                     reason.AppendLine("Provisions(Rs.) must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.RefFromNhb))
-                    reason.AppendLine("Refinance from NHB cannot be blank.");
+                    reason.AppendLine("Reference from NHB cannot be blank.");
 
                 if (string.IsNullOrWhiteSpace(record.UnderPmayClss))
                     reason.AppendLine("Benefit Availed under PMAY-CLSS cannot be blank.");
@@ -595,7 +527,7 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.CbAadhaar))
                     reason.AppendLine("Aadhaar cannot be blank.");
 
-                if (record.CbMonthlyIncome != null || record.CbMonthlyIncome < 0)
+                if (record.CbMonthlyIncome == null && record.CbMonthlyIncome < 0)
                     reason.AppendLine("Co-Borrower Monthly income must be numeric and >= 0.");
             }
             else if (tableName == "stgborrowermortgage")
@@ -612,10 +544,10 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.PropAdd))
                     reason.AppendLine("Asset / Property Address cannot be blank.");
 
-                if (record.LandArea != null && record.LandArea < 0)
+                if (record.LandArea == null && record.LandArea <= 0)
                     reason.AppendLine("Area of Land must be numeric and >= 0.");
 
-                if (record.BuildingArea != null && record.BuildingArea < 0)
+                if (record.BuildingArea == null && record.BuildingArea <= 0)
                     reason.AppendLine("Carpet Area of Building must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.TownName))
@@ -627,16 +559,16 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.State))
                     reason.AppendLine("State cannot be blank.");
 
-                if (record.Pin != null && record.Pin >= 100000 && record.Pin <= 999999)
+                if (record.Pin == null && record.Pin >= 100000 && record.Pin <= 999999)
                     reason.AppendLine("Pincode must be of 6 digits.");
 
                 if (string.IsNullOrWhiteSpace(record.RuralUrban))
                     reason.AppendLine("Urban or Rural cannot be blank.");
 
-                if (record.PropValAtSanct == null || record.PropValAtSanct < 0)
+                if (record.PropValAtSanct == null && record.PropValAtSanct < 0)
                     reason.AppendLine("Value of Property at the Time of Sanction must be numeric and >= 0.");
 
-                if (record.PresentValue != null || record.PresentValue < 0)
+                if (record.PresentValue == null || record.PresentValue < 0)
                     reason.AppendLine("Present Value of Property must be numeric and >= 0.");
 
                 if (string.IsNullOrWhiteSpace(record.Insurance))
@@ -653,12 +585,11 @@ namespace ComplianceMgmt.Api.Repository
                 if (string.IsNullOrWhiteSpace(record.CollType))
                     reason.AppendLine("Type of Other Collateral cannot be blank.");
 
-                if (record.ValueAtSanct == null || record.ValueAtSanct < 0)
+                if (record.ValueAtSanct == null && record.ValueAtSanct < 0)
                     reason.AppendLine("Value at the Time of Sanction must be numeric and >= 0.");
 
-                if (record.PresentValue != null || record.PresentValue < 0)
+                if (record.PresentValue == null || record.PresentValue < 0)
                     reason.AppendLine("Present Value must be numeric and >= 0.");
-
             }
 
             return (reason.Length == 0, reason.ToString());
@@ -667,6 +598,33 @@ namespace ComplianceMgmt.Api.Repository
         private (bool isValid, string reason) ValidateConstraints(string tableName, dynamic record, ref List<MasterData> masterData)
         {
             var reason = new StringBuilder();
+
+            if (new[] { "stgborrowerdetail", "stgborrowerloan", "stgcoborrowerdetails", "stgborrowermortgage", "stgborrowermortgageother" }.Contains(tableName))
+            {
+                // Date Validation
+                if (record.Date is MySqlDateTime mySqlDate && !mySqlDate.IsValidDateTime)
+                {
+                    // Check if MySqlDateTime is null or invalid
+                    reason.AppendLine("Date cannot be blank.");
+                }
+                else if (record.Date is DateTime dateTime)
+                {
+                    // Check if DateTime is default
+                    if (dateTime == default(DateTime))
+                    {
+                        reason.AppendLine("Date cannot be blank.");
+                    }
+                }
+                else if (record.Date is string dateString)
+                {
+                    // Check if string is empty or whitespace
+                    if (string.IsNullOrWhiteSpace(dateString))
+                    {
+                        reason.AppendLine("Date cannot be blank.");
+                    }
+                }
+            }
+
             if (tableName == "stgborrowerdetail")
             {
                 // Other ID Type
@@ -751,22 +709,22 @@ namespace ComplianceMgmt.Api.Repository
                 string.Equals(data.Code, record.Ecl, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Expected Credit Loss (ECL) value.");
 
-                // Refinance from NHB
+                // Reference from NHB
                 if (record.RefFromNhb != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(data.Code, record.RefFromNhb, StringComparison.OrdinalIgnoreCase)))
-                    reason.AppendLine("Invalid Refinance from NHB value.");
+                    reason.AppendLine("Invalid Reference from NHB value.");
 
-                // Refinance from NHB
+                // Reference from NHB
                 if (record.UnderPmayClss != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(data.Code, record.UnderPmayClss, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Benefit Availed under PMAY-CLSS value.");
 
-                // Refinance from NHB
+                // Reference from NHB
                 if (record.SerfaseiAct != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(data.Code, record.SerfaseiAct, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid Notice(s) issued u/s 13(2) SARFAESI Act value.");
 
-                // Refinance from NHB
+                //Reference from NHB
                 if (record.StayGranted != null && !masterData.Any(data => string.Equals(data.MasterName, "Yes/No", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(data.Code, record.StayGranted, StringComparison.OrdinalIgnoreCase)))
                     reason.AppendLine("Invalid value for stay has been granted by DRT/DRAT.");
@@ -902,6 +860,7 @@ namespace ComplianceMgmt.Api.Repository
                     };
                     command.Parameters.AddRange(parameters.ToArray());
                     await command.ExecuteNonQueryAsync();
+                    Console.WriteLine($"Inserted records {records.Count()} for table {tableName}");
                 }
                 else
                 {
